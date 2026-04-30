@@ -1,0 +1,90 @@
+version: "1.0"
+projectName: Test schema
+
+choices:
+  property_type:
+    - Residential
+    - Commercial
+    - Mixed Use
+    - Industrial
+  business_type:
+    - IT Services
+    - Retail
+    - Manufacturing
+    - Healthcare
+    - Education
+    - Consulting
+  contractor_type:
+    - Plumbing
+    - Electrical
+    - Cleaning
+    - Security
+    - HVAC
+    - General Maintenance
+  work_order_type:
+    - Plumbing
+    - Electrical
+    - HVAC
+    - Cleaning
+    - Pest Control
+    - Structural
+    - General
+  unit_status:
+    - Available
+    - Reserved
+    - Occupied
+    - Under Maintenance
+  rental_status:
+    - Draft
+    - Active
+    - Terminated
+    - Expired
+  lead_status:
+    - New
+    - Contacted
+    - Site Visit Scheduled
+    - Negotiating
+    - Lost
+    - Converted
+  request_status:
+    - Open
+    - In Progress
+    - Cancelled
+    - Completed
+  invoice_type:
+    - Rent
+    - Maintenance
+    - Security Deposit
+    - Late Fee
+  payment_status:
+    - Pending
+    - Partially Paid
+    - Overdue
+    - Paid
+  payment_method:
+    - Cash
+    - Cheque
+    - Bank Transfer
+    - UPI
+    - Card
+
+resources:
+  our_vendors:
+    type: resource
+    columns:
+      - name:*:+
+      - contractor_type:select:*
+      - notes:multiline
+    fieldChoices:
+      contractor_type: contractor_type
+
+  your_schools:
+    type: resource
+    columns:
+      - name:*:+
+      - contractor_type:select:*
+      - notes:multiline
+    fieldChoices:
+      contractor_type: contractor_type      
+
+

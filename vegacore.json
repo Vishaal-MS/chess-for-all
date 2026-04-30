@@ -1,0 +1,70 @@
+{
+  "configVersion": 1,
+  "name": "chess-for-all",
+  "title": "Chess For All",
+  "regional": {
+    "defaultCurrency": "USD",
+    "defaultLocale": "en-IN"
+  },
+  "branding": {
+    "logo": "vegacore_logo.png",
+    "theme": "soft",
+    "layout": "vertical"
+  },
+  "auth": {
+    "version": 2,
+    "passkeys": true,
+    "session": {
+      "enabled": true,
+      "timeoutMinutes": 30,
+      "warningMinutes": 5,
+      "ttlHours": 24
+    }
+  },
+  "files": {
+    "type": "r2"
+  },
+  "notifications": {
+    "email": {
+      "type": "gmail",
+      "region": ""
+    }
+  },
+  "_meta": {
+    "resources": {
+      "protected": [
+        "history",
+        "users",
+        "document_templates",
+        "digital_signatures",
+        "session_records"
+      ]
+    },
+    "templateId": "starter"
+  },
+  "environments": {
+    "dev": {
+      "data": {
+        "type": "gsheet",
+        "ref": "12z9wbYuzbWwZlL851hPT_3xle4I8f4WNQ4B40Kt42o8"
+      },
+      "files": {
+        "type": "r2",
+        "ref": "VC_BUCKET"
+      },
+      "notifications": {
+        "email": {
+          "type": "gmail",
+          "region": "us-east-1",
+          "senderEmail": "vegacore@mahaswami.com"
+        }
+      },
+      "service": {
+        "url": "https://swan-backend-preview.upkeep-plosive0o.workers.dev"
+      },
+      "domains": [
+        "localhost"
+      ]
+    }
+  }
+}

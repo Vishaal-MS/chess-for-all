@@ -1,0 +1,20 @@
+import wP from './wP.png';
+import wN from './wN.png';
+import wB from './wB.png';
+import wR from './wR.png';
+import wQ from './wQ.png';
+import wK from './wK.png';
+import bP from './bP.png';
+import bN from './bN.png';
+import bB from './bB.png';
+import bR from './bR.png';
+import bQ from './bQ.png';
+import bK from './bK.png';
+import darkSquare from './dark-square.png';
+import lightSquare from './light-square.png';
+import boardBackground from './border.png';
+
+export const pieceImages = {wP, wN, wB, wR, wQ, wK, bP, bN, bB, bR, bQ, bK};
+export const DarkSquare = darkSquare;
+export const LightSquare = lightSquare;
+export const BoardBackground = boardBackground;

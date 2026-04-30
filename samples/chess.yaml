@@ -1,0 +1,612 @@
+version: "1.0"
+projectName: Coach Chess AI
+
+choices:
+  game_categories:
+    - Bullet
+    - Blitz
+    - Rapid
+    - Classical
+
+  block_types:
+    - Animated Tutorial
+    - Guided Exercise
+    - Exercise
+    - MCQ
+    - PGN
+    - Plain Question & Answer
+
+  languages:
+    - English
+    - Hindi
+    - Kannada
+    - Spanish
+    - Tamil
+    - Telugu
+
+  genders:
+    - Male
+    - Female
+
+resources:
+#  time_controls:
+#    type: resource
+#    columns:
+#      - name:select:*
+#      - base_time_number:*
+#      - increment_time_number:*
+#      - description:*:multiline
+#    fieldChoices:
+#      name: game_categories
+#
+#  standards:
+#    type: resource
+#    columns:
+#      - name:*
+#
+#  standard_grades:
+#    type: resource
+#    columns:
+#      - name:*
+#      - code:+
+#      - standard_id
+#
+#  standard_categories:
+#    type: resource
+#    columns:
+#      - name:*
+#      - code:+
+#      - standard_id
+#
+#  standard_sections:
+#    type: resource
+#    columns:
+#      - code:+
+#      - content_type
+#      - item
+#      - description:multiline
+#      - standard_grade_id
+#      - standard_category_id
+#      - standard_id
+#
+#  cognitive_skills:
+#    type: resource
+#    columns:
+#      - name:*
+#
+#  academy_types:
+#    type: resource
+#    columns:
+#      - name:*
+#
+#  certificate_templates:
+#    type: resource
+#    columns:
+#      - name:*
+#      - is_active
+#      - created_date
+#      - attachment_file_id
+#
+#  schedule_types:
+#    type: resource
+#    columns:
+#      - name:*
+#
+#  teaching_modes:
+#    type: resource
+#    columns:
+#      - name:*
+#
+#  client_types:
+#    type: resource
+#    columns:
+#      - name:*
+#
+#  divisions:
+#    type: resource
+#    columns:
+#      - name
+
+#  clients:
+#    type: resource
+#    columns:
+#      - name:*
+#      - primary_contact_name
+#      - primary_contact_number
+#      - email:*
+#      - address_line
+#      - area
+#      - city
+#      - state
+#      - zipcode
+#      - country
+#      - image_file_id
+#      - client_type_id
+#      - division_id
+#      - standard_id
+
+#  lesson_blocks:
+#    type: resource
+#    columns:
+#      - name
+#      - block_type
+#      - is_game_engine_active
+#      - starting_board
+#      - board_title
+#      - board_subtitle
+#      - additional_visuals
+#      - animated_tutorial
+#      - help
+#      - solution
+#      - goals
+#      - game_engine_guidance
+#      - choice_title
+#      - choice_hint
+#      - choice_1_text
+#      - choice_1_feedback
+#      - is_choice_1_correct
+#      - choice_2_text
+#      - choice_2_feedback
+#      - is_choice_2_correct
+#      - choice_3_text
+#      - choice_3_feedback
+#      - is_choice_3_correct
+#      - pgn
+#      - block_description
+#      - division_id
+#      - tag_ids
+#      - ccai_pub_id
+#      - question
+#      - number_of_lines
+#      - number_of_words
+#      - expected_answer
+#      - is_hide_board
+#      - sound_attachment_file_id
+#      - sound_sprites_json
+#      - sound_message_keys
+#      - voice_key
+#    fieldChoices:
+#      block_type: block_types
+#
+#  lessons:
+#    type: resource
+#    columns:
+#      - name:*:+
+#      - language:*:select
+#      - tag_ids
+#      - division_id
+#      - is_limit_to_show_single_section
+#      - content:*:rich
+#    fieldChoices:
+#      language: languages
+#
+#  lesson_block_mappings:
+#    type: resource
+#    columns:
+#      - lesson_id
+#      - lesson_block_id
+#
+#  tags:
+#    type: resource
+#    columns:
+#      - name
+#
+#  levels:
+#    type: resource
+#    columns:
+#      - name
+#
+#  trophy_types:
+#    type: resource
+#    columns:
+#      - name
+#      - is_active
+#      - created_date
+#
+#  background_musics:
+#    type: resource
+#    columns:
+#      - name
+#      - music_attachment_file_id
+#
+#  ai_block_logs:
+#    type: resource
+#    columns:
+#      - log_timestamp
+#      - user_command
+#      - ai_response
+#      - feedback_text
+#      - feedback_status
+#      - notes
+#      - is_ai_error
+#      - stack_trace
+#      - is_archived
+#      - user_id
+#      - division_id
+#      - name
+#      - lesson_block_id
+#      - ai_usage
+#
+#  coaches:
+#    type: resource
+#    columns:
+#      - user_id
+#      - rating
+#      - years_of_experience
+#      - special_skills
+#      - country
+#      - contact_number
+#      - gender:select
+#      - division_id
+#    fieldChoices:
+#      gender: genders
+#
+#  curriculums:
+#    type: master-detail
+#    columns:
+#      - name
+#      - description:multiline
+#      - duration
+#      - level_id
+#      - image_file_id
+#      - status
+#      - division_id
+#      - standard_id
+#      - language:select
+#      - is_background_music_enabled
+#      - background_music_id
+#    fieldChoices:
+#      language: languages
+#    details:
+#      - name: curriculum_lessons
+#        columns:
+#          - lesson_id
+#          - position_number
+#          - mapping1_standard_section_id
+#          - mapping2_standard_section_id
+#          - mapping3_standard_section_id
+#          - mapping1_cognitive_skill_id
+#          - mapping2_cognitive_skill_id
+#          - mapping3_cognitive_skill_id
+#          - is_limit_to_show_single_section
+#          - is_game_sound_enabled
+#          - is_voice_over_enabled
+#
+#  classes:
+#    type: wizard
+#    columns:
+#      - coach_id
+#      - start_date:*
+#      - end_date:*
+#      - status
+#      - name:*
+#      - teaching_mode_id
+#      - description
+#      - division_id
+#      - standard_grade_id
+#      - client_id
+#      - is_school_class
+#    steps:
+#      - name: Schedules
+#        label: Schedules
+#        columns:
+#          - schedule_type_id:*
+#          - days
+#          - start_date:*
+#          - end_date:*
+#          - start_datetime:*
+#          - time_of_start:*
+#          - end_datetime:*
+#          - time_of_end:*
+#          - timezone:*
+#          - details:multiline
+#          - calendar_links
+#          - google_calendar_id_value
+#          - is_google_calendar_enabled
+#
+#    snippets_libraries:
+#      columns:
+#        - type
+#        - title
+#        - content
+#        - position_number
+#        - is_advanced
+#        - is_active
+#        - tag_ids
+#        - is_game_engine_active
+#        - starting_board
+#        - board_title
+#        - board_subtitle
+#        - additional_visuals
+#        - animated_tutorial
+#        - help
+#        - solution
+#        - goals
+#        - game_engine_guidance
+#        - choice_title
+#        - choice_hint
+#        - choice_1_text
+#        - choice_1_feedback
+#        - is_choice_1_correct
+#        - choice_2_text
+#        - choice_2_feedback
+#        - is_choice_2_correct
+#        - choice_3_text
+#        - choice_3_feedback
+#        - is_choice_3_correct
+#
+#  students:
+#    type: resource
+#    columns:
+#      - user_id
+#      - client_id
+#      - gender
+#      - date_of_birth
+#      - country
+#      - parent_user_id
+#      - emergency_contact
+#      - grade
+#      - phone_number
+#      - method_of_going_home
+#      - is_integrated_parental_engagement
+#      - division_id
+#      - standard_grade_id
+#
+#    subscribables:
+#      type: resource
+#      columns:
+#        - curriculum_id
+#        - published_date
+#        - is_active
+#        - one_time_amount
+#        - publisher_tenant_id
+#        - rating
+#        - monthly_amount
+#        - is_unlisted
+#
+#    subscribers:
+#      type: resource
+#      columns:
+#        - subscribable_id
+#        - subscriber_tenant_id
+#        - start_date
+#        - end_date
+#        - subscription_type
+#
+#    subscriptions:
+#      type: resource
+#      columns:
+#        - subscribable_id
+#        - subscriber_tenant_id
+#        - start_date
+#        - end_date
+#        - division_id
+#
+#    subscription_invoices:
+#      type: resource
+#      columns:
+#        - subscription_id
+#        - invoice_date
+#        - amount
+#        - status
+
+    trophies:
+      type: resource
+      columns:
+        - trophy_type_id
+        - coach_id
+        - student_id
+        - client_id
+        - status
+        - ordered_date
+        - received_date
+        - issued_date
+        - image_file_id
+        - details
+#
+#  games:
+#    type: resource
+#    columns:
+#      - event
+#      - feedback_status
+#      - is_feedback_requested
+#      - method_of_entry
+#      - result
+#      - pgn
+#      - status
+#      - player1_student_id
+#      - player2_student_id
+#      - player1_name
+#      - player2_name
+#      - bot_difficulty
+#      - event_date
+#      - pgn_attachment_file_id
+#      - created_date
+#      - class_id
+#      - user_id
+#      - division_id
+#      - time_control_id
+#      - player1_time_number
+#      - player2_time_number
+#      - last_move_time
+#
+#  discussion_topics:
+#    type: resource
+#    columns:
+#      - class_id
+#      - created_by_user_id
+#      - created_date
+#      - topic
+#      - feedback_status
+#      - is_feedback_requested
+#      - move_number
+#      - game_id
+#
+#  replies:
+#    type: resource
+#    columns:
+#      - discussion_topic_id
+#      - reply
+#      - replied_date
+#      - replied_by_user_id
+#
+#  discussion_read_statuses:
+#    type: resource
+#    columns:
+#      - user_id
+#      - discussion_topic_id
+#      - reply_id
+#      - is_read
+#      - read_date
+#
+#  parent_notes:
+#    type: resource
+#    columns:
+#      - note
+#      - created_date
+#      - parent_user_id
+#      - coach_id
+#      - class_id
+#      - student_id
+#
+#  assignments:
+#    type: resource
+#    columns:
+#      - class_id
+#      - lesson_id
+#      - student_id
+#      - status
+#      - completed_blocks
+#      - total_blocks
+#      - unique_direct_assignment_identifier
+#      - assigned_timestamp
+#      - completed_date
+#      - last_accessed_date
+#      - time_spent
+#      - is_assessment
+#
+#  assignment_blocks:
+#    type: resource
+#    columns:
+#      - assignment_id
+#      - lesson_block_id
+#      - status
+#      - last_accessed_date
+#      - started_date
+#      - completed_date
+#      - fen_position
+#      - mcq
+#      - description
+#      - retry_count
+#
+#  certificates:
+#    type: resource
+#    columns:
+#      - certificate_template_id
+#      - coach_id
+#      - student_id
+#      - curriculum_id
+#      - client_id
+#      - status
+#      - ordered_date
+#      - received_date
+#      - issued_date
+#      - attachment_file_id
+#      - image_file_id
+#
+#  class_progresses:
+#    type: resource
+#    columns:
+#      - class_id
+#      - lesson_id
+#      - status
+#      - start_date
+#      - completion_date
+#      - is_assigned
+#      - position_number
+#      - mapping1_standard_section_id
+#      - mapping2_standard_section_id
+#      - mapping3_standard_section_id
+#      - mapping1_cognitive_skill_id
+#      - mapping2_cognitive_skill_id
+#      - mapping3_cognitive_skill_id
+#      - is_limit_to_show_single_section
+#      - is_game_sound_enabled
+#      - background_music_id
+#      - is_voice_over_enabled
+#
+#  class_schedules:
+#    type: resource
+#    columns:
+#      - class_id
+#      - schedule_type_id
+#      - days
+#      - start_date
+#      - end_date
+#      - start_datetime
+#      - time_of_start
+#      - end_datetime
+#      - time_of_end
+#      - timezone
+#      - details
+#      - calendar_links
+#      - google_calendar_id_value
+#      - is_google_calendar_enabled
+#
+#  enrollments:
+#    type: resource
+#    columns:
+#      - class_id
+#      - student_id
+#      - enrollment_date
+#      - completion_date
+#      - grade
+#      - status
+#      - is_certificate_due
+#
+#  invoices:
+#    type: resource
+#    columns:
+#      - coach_id
+#      - client_id
+#      - class_id
+#      - invoice_date
+#      - date
+#      - amount
+#      - status
+#
+#  reviews:
+#    type: resource
+#    columns:
+#      - subscribable_id
+#      - review_date
+#      - user_id
+#      - title
+#      - review
+#      - rating
+#      - is_read
+#      - subscriber_tenant_id
+#      - publisher_tenant_id
+#
+#    payments:
+#      type: resource
+#      columns:
+#        - invoice_id
+#        - coach_id
+#        - client_id
+#        - class_id
+#        - date
+#        - amount
+#
+#    timesheets:
+#      type: resource
+#      columns:
+#        - coach_id
+#        - class_id
+#        - timesheet_date
+#        - hours
+#        - description
+#        - is_archived
+#        - created_by_user_id
+#        - created_date
+#        - division_id

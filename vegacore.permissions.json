@@ -1,0 +1,207 @@
+{
+    "roles": {
+        "super_admin": {
+            "name": "Super Admin",
+            "description": "Super Admins have access to everything"
+        },
+        "admin": {
+            "name": "Admin",
+            "description": "Admins have access to most things"
+        },
+        "pro_coach": {
+            "name": "Pro Coach",
+            "description": "Pro Coaches have access Curriculum, Classes and Client Management"
+        },
+        "pro_coach_plus": {
+            "name": "Pro Coach Plus",
+            "description": "Pro Coach Plus have access to Pro Coach features plus Content Publishing"
+        },
+        "pro_coach_minus_coaching": {
+            "name": "Content Publisher",
+            "description": "Content Publisher have access to content creation and publishing"
+        },
+        "org_admin": {
+            "name": "Organization Admin",
+            "description": "Organization Admins have access to Class, Coach and Client Management"
+        },
+        "org_coach": {
+            "name": "Organization Coach",
+            "description": "Organization Coaches have access to coaching features"
+        },
+        "student": {
+            "name": "Student",
+            "description": "Students have access to their own classes and progress"
+        },
+        "parent": {
+            "name": "Parent",
+            "description": "Parents have access to their children's classes and progress"
+        }
+    },
+    "permissions": {
+        "super_admin": {
+            "*": [
+                "*"
+            ]
+        },
+        "admin": {
+            "document_templates": [
+                "*"
+            ],
+            "digital_signatures": [
+                "*"
+            ],
+            "error_logs": [
+                "list"
+            ],
+            "history": [
+                "list",
+                "show",
+                "restoreHistory"
+            ],
+            "users": [
+                "*"
+            ],
+            "time_controls": [
+                "*"
+            ],
+            "standards": [
+                "*"
+            ],
+            "standard_grades": [
+                "*"
+            ],
+            "standard_categories": [
+                "*"
+            ],
+            "standard_sections": [
+                "*"
+            ],
+            "cognitive_skills": [
+                "*"
+            ],
+            "academy_types": [
+                "*"
+            ],
+            "certificate_templates": [
+                "*"
+            ],
+            "schedule_types": [
+                "*"
+            ],
+            "teaching_modes": [
+                "*"
+            ],
+            "client_types": [
+                "*"
+            ],
+            "divisions": [
+                "*"
+            ],
+            "clients": [
+                "*"
+            ],
+            "lessons": [
+                "*"
+            ],
+            "lesson_block_mappings": [
+                "*"
+            ],
+            "tags": [
+                "*"
+            ],
+            "levels": [
+                "*"
+            ],
+            "trophy_types": [
+                "*"
+            ],
+            "coaches": [
+                "*"
+            ],
+            "curriculums": [
+                "*"
+            ],
+            "curriculum_lessons": [
+                "*"
+            ],
+            "classes": [
+                "*"
+            ],
+            "students": [
+                "*"
+            ],
+            "subscribables": [
+                "*"
+            ],
+            "subscribers": [
+                "*"
+            ],
+            "subscriptions": [
+                "*"
+            ],
+            "subscription_invoices": [
+                "*"
+            ],
+            "trophies": [
+                "*"
+            ],
+            "games": [
+                "*"
+            ],
+            "discussion_topics": [
+                "*"
+            ],
+            "replies": [
+                "*"
+            ],
+            "discussion_read_statuses": [
+                "*"
+            ],
+            "parent_notes": [
+                "*"
+            ],
+            "assignments": [
+                "*"
+            ],
+            "assignment_blocks": [
+                "*"
+            ],
+            "certificates": [
+                "*"
+            ],
+            "class_progresses": [
+                "*"
+            ],
+            "class_schedules": [
+                "*"
+            ],
+            "enrollments": [
+                "*"
+            ],
+            "invoices": [
+                "*"
+            ],
+            "reviews": [
+                "*"
+            ],
+            "lesson_blocks": [
+                "*"
+            ],
+            "snippets_librarys": [
+                "*"
+            ],
+            "background_musics": [
+                "*"
+            ],
+            "payments": [
+                "*"
+            ],
+            "timesheets": [
+                "*"
+            ],
+            "ai_block_logs": [
+                "*"
+            ]
+        }
+    }
+}

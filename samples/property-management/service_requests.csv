@@ -1,0 +1,5 @@
+id,customer_id,rental_agreement_id,request_type,request_date,status,completed_date
+1,1,1,plumbing,2026-02-15,completed,2026-02-16
+2,2,2,electrical,2026-03-05,completed,2026-03-06
+3,3,3,plumbing,2026-04-01,in_progress,
+4,5,6,hvac,2026-03-20,open,
