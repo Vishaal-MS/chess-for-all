@@ -135,7 +135,7 @@ export const configureMenus = (permissions: any) => {
                 {/*<ClientTypesMenu />*/}
                 {/*<DivisionsMenu />*/}
                 <ClientsMenu />
-                {/*<LessonBlocksMenu />*/}
+                <LessonBlocksMenu />
                 <LessonsMenu />
                 {/*<LessonBlockMappingsMenu />*/}
                 {/*<TagsMenu />*/}

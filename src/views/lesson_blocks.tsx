@@ -1,11 +1,33 @@
-import { Resource, createDefaults, tableDefaults,
-	editDefaults, formDefaults, listDefaults,
-	showDefaults, RowActions, DataTable, SimpleShowLayout, SimpleForm,
-	type ResourceActionDefs, type FieldSchema, SimpleFileField, SimpleFileInput, CardGrid, createReferenceField, createReferenceInput, BooleanLiveFilter, ReferenceLiveFilter, TextLiveFilter} from '@mahaswami/vc-frontend';
+import {
+    Resource,
+    createDefaults,
+    tableDefaults,
+    editDefaults,
+    listDefaults,
+    showDefaults,
+    DataTable,
+    SimpleShowLayout,
+    SimpleForm,
+    type ResourceActionDefs,
+    type FieldSchema,
+    CardGrid,
+    createReferenceField,
+    createReferenceInput,
+    BooleanLiveFilter,
+    ReferenceLiveFilter,
+    TextLiveFilter,
+} from '@mahaswami/vc-frontend';
 import { School } from '@mui/icons-material';
-import { Create, Edit, List, Menu, Show,
-    type ListProps, TextField, TextInput, BooleanField, BooleanInput, SelectField} from "react-admin";
-import { DivisionsReferenceField, DivisionsReferenceInput } from './divisions.js';
+import {
+    Create, Edit, List, Menu, Show,
+    type ListProps, TextInput, BooleanField, BooleanInput, ReferenceArrayInput, AutocompleteArrayInput,
+    SelectField, TopToolbar, Button, SelectInput, WithRecord, FormDataConsumer, NumberInput, TextField
+} from "react-admin";
+import {useLocation, useNavigate} from "react-router-dom";
+import AddIcon from '@mui/icons-material/Add';
+import {Typography, Box} from "@mui/material";
+import {LessonBlockForm} from "./curriculum/LessonBlockForm.tsx";
+
 
 export const RESOURCE = "lesson_blocks"
 export const ICON = School
@@ -29,46 +51,39 @@ const filters = [
     <BooleanLiveFilter source="is_hide_board" label="Hide Board" />
 ]
 
+const LessonBlockListActions = () => {
+    const navigate = useNavigate();
+
+    return(
+        <TopToolbar>
+            <Button startIcon={<AddIcon />} label={"AI Lesson Block"} onClick={() => navigate("/lesson_blocks/create?param=AI_NEW")}/>
+            <Button startIcon={<AddIcon />} label={"Advanced Lesson Block"} onClick={() => navigate("/lesson_blocks/create?param=ADVANCE_NEW")}/>
+        </TopToolbar>
+    );
+}
+
+const CustomEmptyList = () => {
+    return (
+        <Box
+            display="flex"
+            flexDirection="column"
+            justifyContent="center"
+            alignItems="center"
+            height="calc(100vh - 200px)"
+        >
+            <Typography sx={{color: 'grey'}} variant="h4" gutterBottom>
+                No Lesson Blocks yet
+            </Typography>
+            <LessonBlockListActions/>
+        </Box>
+    )};
+
 export const LessonBlocksList = (props: ListProps) => {
     return (
-        <List {...listDefaults(props)}>
+        <List {...listDefaults(props)} actions={<LessonBlockListActions/>} empty={<CustomEmptyList/>} redirect={"edit"}>
             <DataTable {...tableDefaults(RESOURCE)} hiddenColumns={['board_subtitle', 'additional_visuals', 'animated_tutorial', 'help', 'solution', 'goals', 'game_engine_guidance', 'choice_title', 'choice_hint', 'choice_1_text', 'choice_1_feedback', 'is_choice_1_correct', 'choice_2_text', 'choice_2_feedback', 'is_choice_2_correct', 'choice_3_text', 'choice_3_feedback', 'is_choice_3_correct', 'pgn', 'block_description', 'division_id', 'tag_ids', 'ccai_pub_id', 'question', 'number_of_lines', 'number_of_words', 'expected_answer', 'is_hide_board', 'sound_sprites_json', 'sound_message_keys', 'voice_key']} >
                 <DataTable.Col source="name" />
                 <DataTable.Col source="block_type" />
-                <DataTable.Col source="is_game_engine_active" field={BooleanField}/>
-                <DataTable.Col source="starting_board" />
-                <DataTable.Col source="board_title" />
-                <DataTable.Col source="board_subtitle" />
-                <DataTable.Col source="additional_visuals" />
-                <DataTable.Col source="animated_tutorial" />
-                <DataTable.Col source="help" />
-                <DataTable.Col source="solution" />
-                <DataTable.Col source="goals" />
-                <DataTable.Col source="game_engine_guidance" />
-                <DataTable.Col source="choice_title" />
-                <DataTable.Col source="choice_hint" />
-                <DataTable.Col source="choice_1_text" />
-                <DataTable.Col source="choice_1_feedback" />
-                <DataTable.Col source="is_choice_1_correct" field={BooleanField}/>
-                <DataTable.Col source="choice_2_text" />
-                <DataTable.Col source="choice_2_feedback" />
-                <DataTable.Col source="is_choice_2_correct" field={BooleanField}/>
-                <DataTable.Col source="choice_3_text" />
-                <DataTable.Col source="choice_3_feedback" />
-                <DataTable.Col source="is_choice_3_correct" field={BooleanField}/>
-                <DataTable.Col source="pgn" />
-                <DataTable.Col source="block_description" />
-                <DataTable.Col source="division_id" field={DivisionsReferenceField}/>
-                <DataTable.Col source="tag_ids" />
-                <DataTable.Col source="question" />
-                <DataTable.Col source="number_of_lines" />
-                <DataTable.Col source="number_of_words" />
-                <DataTable.Col source="expected_answer" />
-                <DataTable.Col source="is_hide_board" field={BooleanField}/>
-                <DataTable.Col source="sound_sprites_json" />
-                <DataTable.Col source="sound_message_keys" />
-                <DataTable.Col source="voice_key" />
-                <RowActions/>
             </DataTable>
         </List>
     )
@@ -85,63 +100,133 @@ export const LessonBlocksCardList = (props: ListProps) => {
     )
 }
 
-const LessonBlockForm = (props: any) => {
-    return (
-        <SimpleForm {...formDefaults(props)} display="grid"  gridTemplateColumns={{ xs: '1fr', md: '1fr 1fr' }}  gap="1rem" >
-            <TextInput source="name" />
-            <TextInput source="block_type" />
-            <BooleanInput source="is_game_engine_active" />
-            <TextInput source="starting_board" />
-            <TextInput source="board_title" />
-            <TextInput source="board_subtitle" />
-            <TextInput source="additional_visuals" />
-            <TextInput source="animated_tutorial" />
-            <TextInput source="help" />
-            <TextInput source="solution" />
-            <TextInput source="goals" />
-            <TextInput source="game_engine_guidance" />
-            <TextInput source="choice_title" />
-            <TextInput source="choice_hint" />
-            <TextInput source="choice_1_text" />
-            <TextInput source="choice_1_feedback" />
-            <BooleanInput source="is_choice_1_correct" />
-            <TextInput source="choice_2_text" />
-            <TextInput source="choice_2_feedback" />
-            <BooleanInput source="is_choice_2_correct" />
-            <TextInput source="choice_3_text" />
-            <TextInput source="choice_3_feedback" />
-            <BooleanInput source="is_choice_3_correct" />
-            <TextInput source="pgn" />
-            <TextInput source="block_description" />
-            <DivisionsReferenceInput source="division_id" />
-            <TextInput source="tag_ids" />
-            <CcaiPubsReferenceInput source="ccai_pub_id" />
-            <TextInput source="question" />
-            <TextInput source="number_of_lines" />
-            <TextInput source="number_of_words" />
-            <TextInput source="expected_answer" />
-            <BooleanInput source="is_hide_board" />
-            <SimpleFileInput source="sound_attachment_file_id" />
-            <SimpleFileField source="sound_attachment_file_id" title="sound_attachment_file_name" />
-            <TextInput source="sound_sprites_json" />
-            <TextInput source="sound_message_keys" />
-            <TextInput source="voice_key" />
-        </SimpleForm>
-    )
-}
 
 const LessonBlockEdit = (props: any) => {
     return (
-        <Edit {...editDefaults(props)}>
-            <LessonBlockForm />
+        <Edit {...editDefaults(props)}  mutationMode="pessimistic" >
+            <WithRecord render={record => {
+                const location = useLocation();
+                const params = new URLSearchParams(location.search);
+                const paramMode = params.get("param");
+                if (!record.block_description || paramMode == "DEBUG_ADVANCED_EDIT") {
+                    return <AdvanceForm editForm={true}/>
+                } else {
+                    return <LessonBlockForm recordData={record} formMode={"AI_EDIT"}/>
+                }
+            }} />
         </Edit>
     )
 }
 
+const fenStartingBoard = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR"
+
+const ChoiceCorrect = ({rest, index, data}) => {
+    const currentIndex = [1,2,3].find(i => data[`is_choice_${i}_correct`]);
+
+    return <BooleanInput readOnly={currentIndex && currentIndex !== index} source={`is_choice_${index}_correct`} label={`Correct`} {...rest} sx={{p: "0.5rem"}}/> ;
+}
+
+const BoardFields = (
+    <>
+        <TextInput required source="board_title" label="Board Title" />
+        <TextInput source="board_subtitle" label="Board Subtitle" />
+        <TextInput source="starting_board" label="Starting Board" defaultValue={fenStartingBoard}/>
+        <BooleanInput source="is_game_engine_active" defaultValue={true} label="Game Engine?" />
+        <TextInput multiline source="additional_visuals" label="Additional Visuals" maxRows={8}/>
+    </>
+)
+
+export const AdvanceForm = ({editForm}) => (
+    <SimpleForm id="lesson_block" sx={{px: editForm ? 2 : 0, padding: editForm ? '1em' : 0}} toolbar={!editForm  ? false : undefined}>
+        {editForm && <TextInput required source="name" />}
+        <SelectInput required source="block_type" label="Block Type" choices={blockTypeChoices} defaultValue={'pgn'} />
+        <ReferenceArrayInput source="tag_ids" reference="tags" queryOptions={{meta: {scopingEscapeHatch: true}}}
+                             perPage={1000} sort={{field: 'name', order: 'ASC'}}>
+            <AutocompleteArrayInput label="Tags" source="tag_ids"
+                                    onChange={(value) => {
+                                        const hiddenInput = document.getElementById("tag_ids_hidden");
+                                        if (hiddenInput) {
+                                            hiddenInput.value = JSON.stringify(value);
+                                        }
+                                    }}
+            />
+        </ReferenceArrayInput>
+        <input type="hidden" name="tag_ids" id="tag_ids_hidden" />
+        <FormDataConsumer>
+            {({ formData, ...rest }) => formData.block_type === 'mcq' && (
+                <BooleanInput source="is_hide_board" defaultValue={false} label="Hide Board?" key={"hide_board"} />
+            )}
+        </FormDataConsumer>
+        <FormDataConsumer>
+            {({ formData, ...rest }) => formData.block_type == "mcq" &&
+                formData.is_hide_board == false && (BoardFields)}
+        </FormDataConsumer>
+        <FormDataConsumer>
+            {({ formData, ...rest }) => !["pgn", "pqa", "mcq"].includes(formData.block_type) && (BoardFields)}
+        </FormDataConsumer>
+        <FormDataConsumer>
+            {({ formData, ...rest }) =>
+                formData.block_type === 'animated_tutorial' && (
+                    <TextInput multiline source="animated_tutorial" label="Animated Tutorial" {...rest} maxRows={8}/>
+                )}
+        </FormDataConsumer>
+        <FormDataConsumer>
+            {({ formData, ...rest }) => formData.block_type === 'guided_exercise' && (
+                <>
+                    <TextInput multiline source="goals" {...rest} maxRows={8}/>
+                    <TextInput source="help" {...rest} />
+                    <TextInput source="solution" {...rest} />
+                </>
+            )}
+        </FormDataConsumer>
+        <FormDataConsumer>
+            {({ formData, ...rest }) => formData.block_type === 'exercise' && (
+                <>
+                    <TextInput multiline source="goals" {...rest} maxRows={8}/>
+                    <TextInput source="game_engine_guidance" label="Game Engine Guidance" {...rest} />
+                </>
+            )}
+        </FormDataConsumer>
+        <FormDataConsumer>
+            {({ formData, ...rest }) => formData.block_type === 'mcq' && (
+                <>
+                    {formData.block_type == "mcq" && formData.is_hide_board == false && <TextInput multiline source="goals" {...rest} maxRows={8}/>}
+                    <TextInput label="MCQ title" source="choice_title" {...rest} />
+                    <TextInput label="MCQ hint" source="choice_hint" {...rest} />
+                    {/* Show a group of inputs - 'Text', 'Feedback', 'Correct' (true or false) for each input*/}
+                    {[1,2,3].map((index) => (
+                        <Box key={index} sx={{ display: 'flex', flexDirection: 'row', marginBottom: "1rem" }}>
+                            <TextInput source={`choice_${index}_text`} label={`MCQ ${index}`} {...rest} sx={{p: "0.5rem"}}/>
+                            <TextInput source={`choice_${index}_feedback`} label={`Feedback ${index}`} {...rest} sx={{p: "0.5rem"}}/>
+                            <ChoiceCorrect rest={rest} index={index} data={formData}/>
+                        </Box>))}
+                </>
+            )}
+        </FormDataConsumer>
+        <FormDataConsumer>
+            {({ formData, ...rest }) => formData.block_type === 'pgn' && (
+                <TextInput source="pgn" multiline label="PGN" {...rest} rows={12}/>
+            )}
+        </FormDataConsumer>
+        <FormDataConsumer>
+            {({ formData, ...rest }) => ["pqa"].includes(formData.block_type) && (
+                <>
+                    <TextInput multiline minRows={3} source="question" label="Question?" {...rest} />
+                    <TextInput multiline minRows={3} source="expected_answer" label="Expected Answer" {...rest} />
+                    <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2, width: "100%" }}>
+                        <NumberInput source="number_of_lines" label="Number of Lines" {...rest} />
+                        <NumberInput source="number_of_words" label="Number of Words" {...rest} />
+                    </Box>
+                </>
+            )}
+        </FormDataConsumer>
+    </SimpleForm>
+);
+
 const LessonBlockCreate = (props: any) => {
     return (
-    	<Create {...createDefaults(props)}>
-            <LessonBlockForm />
+        <Create {...createDefaults(props)} title={"New Lesson Block"}>
+            <LessonBlockForm formMode={"AI_NEW"}/>
         </Create>
     )
 }
@@ -152,40 +237,7 @@ const LessonBlockShow = (props: any) => {
             <SimpleShowLayout display="grid"  gridTemplateColumns={{ xs: '1fr', md: '1fr 1fr' }}  gap="1rem" >
                 <TextField source="name" />
                 <TextField source="block_type" />
-                <BooleanField source="is_game_engine_active" />
-                <TextField source="starting_board" />
-                <TextField source="board_title" />
-                <TextField source="board_subtitle" />
-                <TextField source="additional_visuals" />
                 <TextField source="animated_tutorial" />
-                <TextField source="help" />
-                <TextField source="solution" />
-                <TextField source="goals" />
-                <TextField source="game_engine_guidance" />
-                <TextField source="choice_title" />
-                <TextField source="choice_hint" />
-                <TextField source="choice_1_text" />
-                <TextField source="choice_1_feedback" />
-                <BooleanField source="is_choice_1_correct" />
-                <TextField source="choice_2_text" />
-                <TextField source="choice_2_feedback" />
-                <BooleanField source="is_choice_2_correct" />
-                <TextField source="choice_3_text" />
-                <TextField source="choice_3_feedback" />
-                <BooleanField source="is_choice_3_correct" />
-                <TextField source="pgn" />
-                <TextField source="block_description" />
-                <DivisionsReferenceField source="division_id" />
-                <TextField source="tag_ids" />
-                <TextField source="question" />
-                <TextField source="number_of_lines" />
-                <TextField source="number_of_words" />
-                <TextField source="expected_answer" />
-                <BooleanField source="is_hide_board" />
-                <SimpleFileField source="sound_attachment_file_id" title="sound_attachment_file_name" />
-                <TextField source="sound_sprites_json" />
-                <TextField source="sound_message_keys" />
-                <TextField source="voice_key" />
             </SimpleShowLayout>
         </Show>
     )
@@ -276,7 +328,7 @@ export const LessonBlocksResource = (
         create={<LessonBlockCreate/>}
         edit={<LessonBlockEdit/>}
         show={<LessonBlockShow/>}
-        hasDialog
+        // hasDialog
         hasLiveUpdate
         hasFilterChooser
         cardList={<LessonBlocksCardList/>}
