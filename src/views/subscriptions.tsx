@@ -1,16 +1,17 @@
-import { Resource, createDefaults, tableDefaults,
+import { Resource, createDefaults,
 	editDefaults, formDefaults, listDefaults,
-	showDefaults, RowActions, DataTable, SimpleShowLayout, SimpleForm,
+	showDefaults, SimpleShowLayout, SimpleForm,
 	type ResourceActionDefs, type FieldSchema, CardGrid, recordRep, createReferenceField, createReferenceInput, ReferenceLiveFilter, DateLiveFilter, TextLiveFilter} from '@mahaswami/vc-frontend';
 import { ShoppingCart } from '@mui/icons-material';
 import { Create, Edit, List, Menu, Show,
     type ListProps, DateField, DateInput} from "react-admin";
 import { SubscribablesReferenceField, SubscribablesReferenceInput } from './subscribables.js';
 import { DivisionsReferenceField, DivisionsReferenceInput } from './divisions.js';
+import {SubscriptionsList} from "./subscriptions/subscriptions.tsx";
 
 export const RESOURCE = "subscriptions"
 export const ICON = ShoppingCart
-export const PREFETCH: string[] = ["subscribables", "subscriber_tenants", "divisions"]
+export const PREFETCH: string[] = ["subscribables"]
 
 export const SubscriptionsReferenceField = createReferenceField(RESOURCE, PREFETCH);
 export const SubscriptionsReferenceInput = createReferenceInput(RESOURCE, PREFETCH);
@@ -24,20 +25,6 @@ const filters = [
     <DateLiveFilter source="end_date" label="End" />,
     <ReferenceLiveFilter source="division_id" reference="divisions" label="Division" />
 ]
-
-export const SubscriptionsList = (props: ListProps) => {
-    return (
-        <List {...listDefaults(props)}>
-            <DataTable {...tableDefaults(RESOURCE)}>
-                <DataTable.Col source="subscribable_id" field={SubscribablesReferenceField}/>
-                <DataTable.Col source="start_date" field={DateField}/>
-                <DataTable.Col source="end_date" field={DateField}/>
-                <DataTable.Col source="division_id" field={DivisionsReferenceField}/>
-                <RowActions/>
-            </DataTable>
-        </List>
-    )
-}
 
 export const SubscriptionsCardList = (props: ListProps) => {
     return (
@@ -120,5 +107,5 @@ export const SubscriptionsResource = (
     />
 )
 export const SubscriptionsMenu = () => (
-    <Menu.Item to={`/${RESOURCE}`} primaryText="Subscriptions" leftIcon={<ICON />} />
+    <Menu.Item to={`/${RESOURCE}`} primaryText="Subscribed Curriculums" leftIcon={<ICON />} />
 )

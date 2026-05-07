@@ -1,15 +1,17 @@
-import { Resource, createDefaults, tableDefaults,
-	editDefaults, formDefaults, listDefaults,
-	showDefaults, RowActions, DataTable, SimpleShowLayout, SimpleForm,
-	type ResourceActionDefs, type FieldSchema, MoneyField, MoneyInput, CardGrid, recordRep, createReferenceField, createReferenceInput, BooleanLiveFilter, ReferenceLiveFilter, DateLiveFilter, MoneyLiveFilter, TextLiveFilter} from '@mahaswami/vc-frontend';
+import { Resource, createDefaults, editDefaults, formDefaults, listDefaults, SimpleForm,
+	type ResourceActionDefs, type FieldSchema, MoneyField, MoneyInput, CardGrid, recordRep,
+    createReferenceField, createReferenceInput, BooleanLiveFilter, ReferenceLiveFilter, DateLiveFilter,
+    MoneyLiveFilter, TextLiveFilter
+} from '@mahaswami/vc-frontend';
 import { Group } from '@mui/icons-material';
-import { Create, Edit, List, Menu, Show,
-    type ListProps, TextField, TextInput, DateField, DateInput, BooleanField, BooleanInput} from "react-admin";
+import { Create, Edit, List, Menu,
+    type ListProps, TextInput, DateField, DateInput, BooleanField, BooleanInput} from "react-admin";
 import {CurriculumLessonsReferenceInput, CurriculumsReferenceField} from "./curriculums.tsx";
+import {SubscribableList, SubscribableShow} from "./subscriptions/subscribables.tsx";
 
 export const RESOURCE = "subscribables"
 export const ICON = Group
-export const PREFETCH: string[] = ["curricula", "publisher_tenants"]
+export const PREFETCH: string[] = []
 
 export const SubscribablesReferenceField = createReferenceField(RESOURCE, PREFETCH);
 export const SubscribablesReferenceInput = createReferenceInput(RESOURCE, PREFETCH);
@@ -28,23 +30,6 @@ const filters = [
     <MoneyLiveFilter source="monthly_amount" label="Monthly" currency="USD" />,
     <BooleanLiveFilter source="is_unlisted" label="Unlisted" />
 ]
-
-export const SubscribablesList = (props: ListProps) => {
-    return (
-        <List {...listDefaults(props)}>
-            <DataTable {...tableDefaults(RESOURCE)} hiddenColumns={['rating', 'monthly_amount', 'is_unlisted']} >
-                <DataTable.Col source="curriculum_id" field={CurriculumsReferenceField}/>
-                <DataTable.Col source="published_date" field={DateField}/>
-                <DataTable.Col source="is_active" field={BooleanField}/>
-                <DataTable.Col source="one_time_amount" field={OneTimeAmountMoneyField}/>
-                <DataTable.Col source="rating" />
-                <DataTable.Col source="monthly_amount" field={MonthlyAmountMoneyField}/>
-                <DataTable.Col source="is_unlisted" field={BooleanField}/>
-                <RowActions/>
-            </DataTable>
-        </List>
-    )
-}
 
 export const SubscribablesCardList = (props: ListProps) => {
     return (
@@ -87,21 +72,21 @@ const SubscribableCreate = (props: any) => {
     )
 }
 
-const SubscribableShow = (props: any) => {
-    return (
-        <Show {...showDefaults(props)}>
-            <SimpleShowLayout display="grid"  gridTemplateColumns={{ xs: '1fr', md: '1fr 1fr' }}  gap="1rem" >
-                <CurriculumsReferenceField source="curriculum_id" />
-                <DateField source="published_date" />
-                <BooleanField source="is_active" />
-                <MoneyField source="one_time_amount" currency="USD" />
-                <TextField source="rating" />
-                <MoneyField source="monthly_amount" currency="USD" />
-                <BooleanField source="is_unlisted" />
-            </SimpleShowLayout>
-        </Show>
-    )
-}
+// const SubscribableShow = (props: any) => {
+//     return (
+//         <Show {...showDefaults(props)}>
+//             <SimpleShowLayout display="grid"  gridTemplateColumns={{ xs: '1fr', md: '1fr 1fr' }}  gap="1rem" >
+//                 <CurriculumsReferenceField source="curriculum_id" />
+//                 <DateField source="published_date" />
+//                 <BooleanField source="is_active" />
+//                 <MoneyField source="one_time_amount" currency="USD" />
+//                 <TextField source="rating" />
+//                 <MoneyField source="monthly_amount" currency="USD" />
+//                 <BooleanField source="is_unlisted" />
+//             </SimpleShowLayout>
+//         </Show>
+//     )
+// }
 
 const subscribablesFieldSchema: FieldSchema = {
     curriculum_id: { resource: 'curricula' },
@@ -128,11 +113,10 @@ export const SubscribablesResource = (
         searchableFields={ subscribablesSearchableFields}
         filters={filters}
         filtersPlacement="top"
-        list={<SubscribablesList/>}
+        list={<SubscribableList/>}
         create={<SubscribableCreate/>}
         edit={<SubscribableEdit/>}
         show={<SubscribableShow/>}
-        hasDialog
         hasLiveUpdate
         hasFilterChooser
         cardList={<SubscribablesCardList/>}

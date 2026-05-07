@@ -6,7 +6,7 @@ import {useState} from "react";
 import { LessonBlockField } from "../../fields/ai_lesson/lesson_block_field.tsx";
 import { clearChessBoards, loadChessBoards } from "../../fields/ai_lesson/ai_lesson_utils.ts";
 import {closeDialog, openDialog} from "@mahaswami/vc-frontend";
-import {Empty} from "../../common/empty.tsx";
+import {Empty} from "../common/empty.tsx";
 
 const blockFilters = [
   <SearchInput source="q" alwaysOn />,

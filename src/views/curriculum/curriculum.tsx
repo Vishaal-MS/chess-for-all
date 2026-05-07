@@ -1,20 +1,17 @@
 import {
     AutocompleteInput,
     Button,
-    Datagrid,
     EditButton, FunctionField,
-    ReferenceField, ReferenceInput,
     ReferenceManyField,
     required,
     SearchInput,
     ShowButton,
-    SimpleForm,
     TextInput,
     TopToolbar,
     useGetRecordId, useNotify,
     useRecordContext,
     useRefresh, SelectInput, useSidebarState, Link,
-    BooleanInput, FormDataConsumer, useGetList
+    BooleanInput, FormDataConsumer, useGetList, List, Edit, Show, Create
 } from 'react-admin';
 import {
     Box,
@@ -33,25 +30,35 @@ import {
     isRegularSchoolFlavored,
     isSchoolStandardLinked
 } from "../../businessLogic";
-import {closeDialog, openDialog, PER_PAGE, remoteLog, SensibleDefaultPagination, SimpleFileInput, SimpleImageField} from "@mahaswami/vc-frontend";
+import {
+    closeDialog, createDefaults, DataTable,
+    editDefaults, formDefaults, listDefaults,
+    openDialog,
+    PER_PAGE,
+    remoteLog,
+    SensibleDefaultPagination, showDefaults,
+    SimpleFileInput, SimpleForm,
+    SimpleImageField
+} from "@mahaswami/vc-frontend";
 import {AddLessons} from "../class/addLessons";
 import {useUnique} from "../../helpers/useUnique.ts";
 import {ListTitle, RecordTitle} from "../../components/Title.tsx";
 import KeyboardReturnIcon from "@mui/icons-material/KeyboardReturn";
 import {useNavigate} from "react-router-dom";
-import {Empty} from '../common/empty.tsx';
-import {ClassLessonsSorter} from "../common/draggableLessons.tsx";
 import {CurriculumListView} from "./curriculumListView.tsx";
 import {CurriculumShowView} from "./curriculumShowView.tsx";
 import {getLanguagesMap} from "../../utils.ts";
 import {ChessAIInput} from "../../fields/ai_lesson/ChessAIInput.tsx";
-import { SwanCreate, SwanEdit, SwanList, SwanShow } from '../swan_crud/SwanCrud.tsx';
-import CloseIcon from "@mui/icons-material/Close";
 import {ChessAIField} from "../../fields/ai_lesson/ChessAIField.tsx";
 import {DuplicateDialog} from "../../components/DuplicateDialog.tsx";
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import {Empty} from "../common/empty.tsx";
+import {ClassLessonsSorter} from "../common/draggableLessons.tsx";
+import {CurriculumsReferenceField} from "../curriculums.tsx";
+import {StandardsReferenceInput} from "../standards.tsx";
+import {BackgroundMusicsReferenceInput} from "../background_musics.tsx";
 
-export const CurriculumList = () => {
+export const CurriculumList = (props: any) => {
     const [defaultFilter, setDefaultFilter] = useState({});
     const [subscribableList, setSubscribableList] = useState("loading");
     const [refreshState, setRefreshState] = useState(0);
@@ -74,7 +81,7 @@ export const CurriculumList = () => {
         const dataProvider = window.swanAppFunctions.dataProvider;
         const isPublish =  isAllowPublishing()
         async function fetchData() {
-            const {data} = await dataProvider.getList("subscribables", {
+            const { data } = await dataProvider.getList("subscribables", {
                 filter: {publisher_tenant_id: currentTenantId()},
                 meta: {scopingEscapeHatch: true},
                 pagination: {page: 1, perPage: 10000},
@@ -87,16 +94,13 @@ export const CurriculumList = () => {
     }, [refreshState]);
 
     return(
-        <SwanList title={<ListTitle resourceName="Curriculum List"/>} resource={"curriculum"} filter={defaultFilter} disableSyncWithLocation
+        <List {...listDefaults(props)} title={<ListTitle resourceName="Curriculum List"/>} resource={"curriculum"} filter={defaultFilter} disableSyncWithLocation
               pagination={<SensibleDefaultPagination />}  sort={{field: "name", order: "ASC"}}
-              filters={filters} perPage={PER_PAGE} exporter={false} empty={<Empty emptyText="No Curriculum found." showCreateIfApplicable={true}/>}>
-            <Datagrid  sx={{
-                '& .RaDatagrid-headerCell': { display: 'none' },
-            }}
-                      bulkActionButtons={false}>
+              perPage={PER_PAGE} exporter={false} empty={<Empty emptyText="No Curriculum found." showCreateIfApplicable={true}/>}>
+            <DataTable bulkActionButtons={false}>
                 <CurriculumListView currentView={"curriculum"} subscribables={subscribableList} setRefreshState={setRefreshState} />
-            </Datagrid>
-        </SwanList>
+            </DataTable>
+        </List>
     );
 };
 
@@ -123,7 +127,7 @@ const BackgroundMusicPreview = ({backgroundMusics, isLoading}) => {
     );
 }
 
-export const CurriculumEdit = () => {
+export const CurriculumEdit = (props: any) => {
     const recordId= Number(useGetRecordId());
     const refresh= useRefresh();
     const navigate = useNavigate();
@@ -151,8 +155,8 @@ export const CurriculumEdit = () => {
     );
 
     return (
-        <SwanEdit actions={<EditActions />} title={<RecordTitle resourceName="Curriculum Edit"/>} mutationMode="optimistic">
-            <SimpleForm>
+        <Edit { ...editDefaults(props) } actions={<EditActions />} mutationMode="optimistic">
+            <SimpleForm { ...formDefaults(props) }>
                 <TextInput source="name" validate={[required(), unique()]}/>
                 <SelectInput
                     source="language"
@@ -161,21 +165,18 @@ export const CurriculumEdit = () => {
                     fullWidth
                 />
                 {isSchoolStandardLinked() &&
-                    <ReferenceInput source={'standard_id'} reference={'standards'}
-                                    queryOptions={{meta: {scopingEscapeHatch: true}}}>
-                        <AutocompleteInput optionText={'name'} label={'Standard'}/>
-                    </ReferenceInput>
+                    <StandardsReferenceInput source={'standard_id'} queryOptions={{meta: {scopingEscapeHatch: true}}} />
                 }
                 <ChessAIInput source="description" fullWidth/>
                 <Grid container display="flex" gap="1rem" alignItems="center">
                     <FormDataConsumer>
                         {({formData, ...rest}) => (
                             <Grid item md={5} xs={6}>
-                                <ReferenceInput name={"BackGround Music"} source={"background_music_id"} perPage={1000}
-                                                queryOptions={{meta: {scopingEscapeHatch: true}}} reference={"background_music"}>
+                                <BackgroundMusicsReferenceInput source={"background_music_id"} perPage={1000}
+                                                queryOptions={{meta: {scopingEscapeHatch: true}}}>
                                     <AutocompleteInput readOnly={!formData?.is_background_music_enabled} optionText={"name"}
                                            validate={formData?.is_background_music_enabled && required("Background Music is required")}/>
-                                </ReferenceInput>
+                                </BackgroundMusicsReferenceInput>
                             </Grid>
                         )}
                     </FormDataConsumer>
@@ -196,7 +197,7 @@ export const CurriculumEdit = () => {
                 </ReferenceManyField>
                 <Button onClick={addLessonsAction}  variant="contained" sx={{justifyContent: 'end', marginTop: 1 }}>Add</Button>
             </SimpleForm>
-        </SwanEdit>
+        </Edit>
     );
 }
 
@@ -296,7 +297,7 @@ const CurriculumUnlinkToggle = ({curriculumId}: { curriculumId: number | string 
     );
 }
 
-export const CurriculumShow = () => {
+export const CurriculumShow = (props: any) => {
     const navigate = useNavigate();
     const isPublisher = isAllowPublishing();
 
@@ -326,9 +327,9 @@ export const CurriculumShow = () => {
     )
 
     return (
-        <SwanShow actions={<ShowActions />} title={<RecordTitle resourceName="Curriculum Show"/>}>
+        <Show {...showDefaults(props)} actions={<ShowActions />} title={<RecordTitle resourceName="Curriculum Show"/>}>
             <CurriculumShowView currentView={"curriculum"}/>
-        </SwanShow>
+        </Show>
     )};
 
 const AddButton = ({onSelect}) => {
@@ -341,28 +342,18 @@ const AddButton = ({onSelect}) => {
     return <Button  variant="contained" label="Add" onClick={callSelection}></Button>
 }
 
-export const CurriculumCreate = () => {
+export const CurriculumCreate = (props) => {
     const unique = useUnique();
 
     return(
-        <SwanCreate title={<ListTitle resourceName="New Curriculum"/>}>
+        <Create { ...createDefaults(props)} title={<ListTitle resourceName="New Curriculum"/>}>
             <SimpleForm defaultValues={isRegularSchoolFlavored() ? {standard_id: getStandardId()} : {}}>
                 <TextInput source="name" validate={[required(), unique()]}/>
-                <SelectInput
-                    source="language"
-                    label="Language"
-                    choices={getLanguagesMap()}
-                    fullWidth
-                />
-                {isSchoolStandardLinked() &&
-                    <ReferenceInput source={'standard_id'} reference={'standards'}
-                                    queryOptions={{meta: {scopingEscapeHatch: true}}}>
-                        <AutocompleteInput optionText={'name'} label={'Standard'}/>
-                    </ReferenceInput>
-                }
+                <SelectInput source="language" choices={getLanguagesMap()} fullWidth/>
+                {isSchoolStandardLinked() && <StandardsReferenceInput source='standard_id' /> }
                 <ChessAIInput source="description" fullWidth/>
             </SimpleForm>
-        </SwanCreate>
+        </Create>
     );
 }
 
@@ -497,7 +488,7 @@ export const CurriculumImageField = ({source, width, height,}: {
         );
     } else if (record?.curriculum?.image_file_id && source === "curriculum.image_file_id") {
         return (
-            <ReferenceField source="curriculum_id" reference="curriculum" link={false}>
+            <CurriculumsReferenceField source="curriculum_id" link={false}>
                 <SimpleImageField
                     source="image_file_id"
                     src="src"
@@ -510,7 +501,7 @@ export const CurriculumImageField = ({source, width, height,}: {
                     }}
                     label={""}
                 />
-            </ReferenceField>
+            </CurriculumsReferenceField>
         );
 
     } else {

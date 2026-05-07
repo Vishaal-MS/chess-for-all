@@ -8,7 +8,7 @@ import {
 } from "../../businessLogic";
 import { useEffect, useState } from "react";
 import { getClassIdByStudentId } from "../../backend/clients";
-import {Empty} from "../../common/empty.tsx";
+import {Empty} from "../common/empty.tsx";
 
 export const StudentClasses = ({studentId}: {studentId? : number}) => {
 

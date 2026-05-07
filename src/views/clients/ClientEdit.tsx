@@ -21,7 +21,7 @@ import {useParams} from "react-router-dom";
 import {Box} from "@mui/material";
 import {ClientTypes, getSetupLabel} from "../../helpers/constants.ts";
 import {ExtendedClientFields} from "./ExtendedClientFields.tsx";
-import {Empty} from "../../common/empty.tsx";
+import {Empty} from "../common/empty.tsx";
 import {UsersReferenceField} from "../users.tsx";
 import {AvatarField} from "../../fields/AvatarField.tsx";
 import {isSchoolStandardLinked} from "../../businessLogic.ts";
@@ -103,25 +103,34 @@ const ClientEdit = (props: any) => {
                         <ClientDetails/>
                     </TabbedForm.Tab>
                     <TabbedForm.Tab label={"students"}>
-                        <ReferenceManyField pagination={<SensibleDefaultPagination />} perPage={PER_PAGE} reference="students" target="client_id" label="Students" queryOptions={{meta: {prefetch: ['users']}}}>
-                            <DataTable rowClick={ (value) => { showStudentEditDialog(value) }} bulkActionButtons={false} empty={<Empty emptyText={'No Students added yet'}/>}>
-                                <UsersReferenceField source="user_id" link={false} label={"Profile"}>
-                                    <AvatarField />
-                                </UsersReferenceField>
-                                <UsersReferenceField source="user_id" reference="users" link={false} label={"First Name"}>
-                                    <TextField source="first_name" />
-                                </UsersReferenceField>
-                                <UsersReferenceField source="user_id" reference="users" link={false} label={"Last Name"}>
-                                    <TextField source="last_name" />
-                                </UsersReferenceField>
-                                <UsersReferenceField source="user_id" reference="users" link={false} label={"Email"}>
-                                    <EmailField source="email"/>
-                                </UsersReferenceField>
+                        <ReferenceManyField pagination={<SensibleDefaultPagination />} perPage={PER_PAGE} reference="students"
+                                            target="client_id" label="Students" queryOptions={{meta: {prefetch: ['users']}}}>
+                            <DataTable rowClick={ (value) => { showStudentEditDialog(value) }} bulkActionButtons={false}
+                                       empty={<Empty emptyText={'No Students added yet'}/>}>
+                                <DataTable.Col label='Profile'>
+                                    <UsersReferenceField source="user_id" link={false} label={"Profile"}>
+                                        <AvatarField />
+                                    </UsersReferenceField>
+                                </DataTable.Col>
+                                <DataTable.Col label='First Name'>
+                                    <UsersReferenceField source="user_id" reference="users" link={false} label={"First Name"}>
+                                        <TextField source="first_name" />
+                                    </UsersReferenceField>
+                                </DataTable.Col>
+                                <DataTable.Col label='Last Name'>
+                                    <UsersReferenceField source="user_id" reference="users" link={false} label={"Last Name"}>
+                                        <TextField source="last_name" />
+                                    </UsersReferenceField>
+                                </DataTable.Col>
+                                <DataTable.Col label='Email'>
+                                    <UsersReferenceField source="user_id" reference="users" link={false} label={"Email"}>
+                                        <EmailField source="email"/>
+                                    </UsersReferenceField>
+                                </DataTable.Col>
                                 {isSchoolStandardLinked() ?
                                     <StandardGradesReferenceInput source={"standard_grade_id"} reference={"standard_grades"} label={"Grade"} /> :
                                     <TextField source={'grade'} label={"grade"}/>
                                 }
-                                <DeleteButton label={false} redirect={`/clients/${recordId}/1`}/>
                             </DataTable>
                         </ReferenceManyField>
                         <AddStudentButton />

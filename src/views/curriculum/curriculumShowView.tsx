@@ -1,4 +1,4 @@
-import {Box, Button, Card, Grid, Link, Rating, Typography} from "@mui/material";
+import {Box, Button, Card, Grid, Rating, Typography} from "@mui/material";
 import {
     Datagrid,
     DateField,
@@ -16,14 +16,15 @@ import {
 } from "./curriculum.tsx";
 import {useRecordContext} from "ra-core";
 import {formatCurrency, formatDateWithShortYear} from "../../utils.ts";
-import {ReviewDetail} from "../reviews/Reviews.tsx";
-import {PublisherProfileDialog} from "../profiles/publisherProfileDialog.tsx";
+// import {ReviewDetail} from "../reviews/Reviews.tsx";
+// import {PublisherProfileDialog} from "../profiles/publisherProfileDialog.tsx";
 import React, {useEffect, useState} from "react";
 import {TenantConfigNames} from "../../helpers/constants.ts";
 import {StarRating} from "../../components/NumberedStar.tsx";
 import { useLocation } from "react-router-dom";
 import {currentTenantId, getUserId} from "../../businessLogic.ts";
 import {Empty} from "../common/empty.tsx";
+import {ReviewDetail} from "../reviews/Reviews.tsx";
 
 const cardStyles = (theme) => ({
     background: `linear-gradient(45deg, 
@@ -46,11 +47,12 @@ export const CurriculumShowView = ({currentView}: CurriculumShowViewProps) => {
     const record = useRecordContext();
     const [loading, setLoading] = useState(true);
     const [settingsData, setSettingsData] = useState([]);
+
     useEffect(() => {
         const getPublisherRatings = async () => {
             const {data: tenantSettings} = await dataProvider.getList('settings', {
                 filter: {tenant_id: record?.publisher_tenant_id},
-                pagination: {page: 1, perPage: 10000}
+                pagination: false
             });
             setSettingsData(tenantSettings);
             setLoading(false)
@@ -166,8 +168,7 @@ const SubscribablesTabs = ({recordData}) => {
                             </Box>
                         ) : (
                             <ReferenceManyField reference={"reviews"} target="subscribable_id"
-                                                filter={{type: 'message', user_id: getUserId()}}
-                                                pagination={<SensibleDefaultPagination/>} perPage={PER_PAGE}>
+                                                filter={{type: 'message', user_id: getUserId()}}>
                                 <Datagrid bulkActionButtons={false} expand={<ReviewDetail/>}
                                           empty={<Empty emptyText={"No Messages Yet"} showIcon={false}/>}
                                           sx={{fontSize: '0.5rem'}}>

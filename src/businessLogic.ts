@@ -47,6 +47,12 @@ import { AiBlockLogsLogic } from './logic/ai_block_logs.ts';
 import { getLocalStorage, remoteLog, swanAPI } from '@mahaswami/vc-frontend';
 import {TenantTypes, UserRoles} from "./constants.ts";
 import {DataProvider} from "react-admin";
+import {
+    getParentEmailTemplate,
+    getStudentEmailTemplateWithCredential,
+    getStudentEmailTemplateWithoutCredential
+} from "./helpers/emailTemplates.ts";
+import {TenantConfigNames} from "./helpers/constants.ts";
 
 export const businessLogic = () => {
     return [
@@ -212,6 +218,19 @@ export const getTenantName = () => {
     return getLocalStorage("tenant_name");
 }
 
+export async function getCurrentUserCoachId(dataProvider) {
+    try {
+        if(!isProCoach() && !isOrgCoach()) return;
+        const {data: coaches} = await dataProvider.getList('coaches', {
+            filter: {user_id: getUserId()},
+            sort: {field: 'id', order: 'ASC'}
+        });
+        return coaches.map(coachRecord => coachRecord.id);
+    } catch (error) {
+        remoteLog("Error sending on getCurrentUserCoachId: ", error);
+    }
+}
+
 export const isLargeAcademy = () => {
     const largeAcademy = getLocalStorage("tenant_large_academy");
     return largeAcademy?.toUpperCase() === 'TRUE';
@@ -239,6 +258,67 @@ export const isIndianTenant = () => {
     const country = getTenantCountry();
     const isIndia = ['in','ind','india'].includes(country?.toLowerCase());
     return isIndia;
+}
+
+export const getGoogleCalendarId = async (dataProvider) => {
+    try {
+        const {data: settings} = await dataProvider.getList('settings', {filter:{tenant_id: currentTenantId(), config_name: TenantConfigNames.GOOGLE_CALENDER_ID}});
+        return settings?.[0]?.config_value;
+    } catch (error) {
+        remoteLog("Error sending on getGoogleCalendarId: ", error);
+    }
+}
+
+export const getTeachingModes = async (dataProvider: any) => {
+    try {
+        const {data: teachingModes} = await dataProvider.getList('teaching_modes', {
+            pagination: {page: 1, perPage: 1000},
+            meta: {scopingEscapeHatch: true}
+        });
+        return teachingModes;
+    } catch (error) {
+        remoteLog("Error sending on getTeachingModes: ", error);
+    }
+}
+
+export const filterByDivisionId = async (params, dataProvider) => {
+    let newParams = params;
+    if(!newParams) {
+        newParams = {};
+    }
+    if (!isLargeAcademy()) return newParams;
+    if (newParams.meta?.scopingEscapeDivision) return newParams;
+    const divisionId = await getDivisionId();
+    newParams.filter = {...newParams.filter, division_id: divisionId};
+    return newParams;
+}
+
+export const isTenantAllowedCoaching = () => {
+    const tenantAllowedCoaching = getLocalStorage('tenant_allowed_coaching');
+    if (tenantAllowedCoaching) {
+        return tenantAllowedCoaching.toLowerCase() === "true";
+    }
+    return false;
+}
+
+export const sendEmailToStudentAndParent = async (user: any, withCredentials?:boolean, className?: string) => {
+    try {
+        const userEmail = user.email;
+        if (user.is_active) {
+            if (user.role === UserRoles.STUDENT) {
+                const messageTemplate = withCredentials ?
+                    getStudentEmailTemplateWithCredential(user, className)
+                    : getStudentEmailTemplateWithoutCredential(user, className);
+                await sendEmail({to: userEmail, ...messageTemplate});
+            } else if (user.role === UserRoles.PARENT) {
+                const messageTemplate = getParentEmailTemplate(user);
+                await sendEmail({to: userEmail, ...messageTemplate});
+            }
+        }
+    } catch (error) {
+        console.error("Error sending email: ", error);
+        remoteLog("Error sending student email:", error)
+    }
 }
 
 export async function getCurrentParentStudent(dataProvider: DataProvider) {
@@ -276,5 +356,20 @@ export const sendEmail = async (emailBody: any) => {
     } catch (error) {
         console.error("Failed to sendEmail: ", error);
         remoteLog("Error sending on sendEmail: ", error);
+    }
+}
+
+export async function getCurrentUserStudentId(dataProvider) {
+    try {
+        if(!isStudent()) return;
+        if (getLocalStorage('direct_assignment_mode'))
+            return getLocalStorage('current_assignment_student_id') || '';
+        const {data: students} = await dataProvider.getList('students', {
+            filter: {user_id: getUserId()},
+            sort: {field: 'id', order: 'ASC'},pagination: { page: 1, perPage: 1000 },
+        });
+        return students.map(studentRecord => studentRecord.id);
+    } catch (error) {
+        remoteLog("Error sending on getCurrentUserStudentId: ", error);
     }
 }

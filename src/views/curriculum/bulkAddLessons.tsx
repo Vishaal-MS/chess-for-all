@@ -72,7 +72,7 @@ export const BulkAddLessonsButton = ({
                     is_limit_to_show_single_section: false,
                     is_game_sound_enabled: false,
                     is_voice_over_enabled: false,
-                    is_preview_enabled: false
+                    // is_preview_enabled: false
                 }
                 const createPromise = dataProvider.create('curriculum_lessons', {data: payload})
                     .then((data) => {
@@ -113,7 +113,6 @@ export const BulkAddLessonsButton = ({
     }
 
     return (
-        <Button label="Add Lessons" variant="contained" onClick={handleClick} loading={loading}>
-        </Button>
+        <Button label="Add Lessons" variant="contained" onClick={handleClick} loading={loading} />
     );
 }

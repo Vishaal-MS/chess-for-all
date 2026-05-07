@@ -118,7 +118,7 @@
             "coaches": [
                 "*"
             ],
-            "curriculums": [
+            "curriculum": [
                 "*"
             ],
             "curriculum_lessons": [
@@ -190,7 +190,7 @@
             "snippets_librarys": [
                 "*"
             ],
-            "background_musics": [
+            "background_music": [
                 "*"
             ],
             "payments": [

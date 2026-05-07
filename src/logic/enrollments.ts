@@ -1,13 +1,15 @@
 import { RESOURCE } from "../views/enrollments"
+import {
+    addBusinessLogicForEnrollments, afterCreateEnrollments,
+    afterDeleteEnrollements, updateUsersInActiveStatusByDeleteEnrollments
+} from "../backend/enrollments.ts";
 
 export const EnrollmentsLogic: any = {
     resource: RESOURCE,
-    afterCreate: [],
-    afterDelete: [],
+    afterCreate: [afterCreateEnrollments],
+    afterDelete: [updateUsersInActiveStatusByDeleteEnrollments, afterDeleteEnrollements],
     afterDeleteMany: [],
-    afterGetList: [(params: any) => {
-        return params;
-    }],
+    afterGetList: [],
     afterGetMany: [],
     afterGetManyReference: [],
     afterGetOne: [],
@@ -24,5 +26,5 @@ export const EnrollmentsLogic: any = {
     beforeUpdateMany: [],
     beforeSave: [],
     afterRead: [],
-    afterSave: [],
+    afterSave: [addBusinessLogicForEnrollments],
 }

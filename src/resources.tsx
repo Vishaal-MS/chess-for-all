@@ -1,11 +1,10 @@
-
 import { HistoryMenu, HistoryResource } from './views/history.tsx';
 import { UsersMenu, UsersResource } from './views/users.tsx';
 import { DocumentTemplatesMenu, DocumentTemplatesResource } from './views/document_templates.tsx';
 import { DigitalSignaturesResource } from './views/digital_signatures.tsx';
 import { isHistoryModuleActive, isDocumentGenerationModuleActive, AutoLayoutMenu, NestedMenu } from '@mahaswami/vc-frontend';
 import GearIcon from '@mui/icons-material/Settings';
-import { TimeControlsResource, TimeControlsMenu } from './views/time_controls.tsx';
+import { TimeControlsResource } from './views/time_controls.tsx';
 import { StandardsResource, StandardsMenu } from './views/standards.tsx';
 import { StandardGradesResource, StandardGradesMenu } from './views/standard_grades.tsx';
 import { StandardCategoriesResource, StandardCategoriesMenu } from './views/standard_categories.tsx';
@@ -120,6 +119,7 @@ export const configureMenus = (permissions: any) => {
 
     const adminMenusAll =
         <>
+            <ClassesMenu />
             <AutoLayoutMenu>
                 {/* {{VC:INSERT:MENU_ENTRY}} */}
                 {/*<TimeControlsMenu />*/}
@@ -162,7 +162,7 @@ export const configureMenus = (permissions: any) => {
                 {/*<ReviewsMenu />*/}
                 {/*<SubscribablesMenu />*/}
                 {/*<SubscribersMenu />*/}
-                {/*<SubscriptionsMenu />*/}
+                <SubscriptionsMenu />
                 {/*<SubscriptionInvoicesMenu />*/}
                 {/*<PaymentsMenu />*/}
                 {/*<TimesheetsMenu />*/}

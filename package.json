@@ -9,6 +9,7 @@
     "format": "prettier --write ./src"
   },
   "dependencies": {
+    "@hello-pangea/dnd": "^18.0.1",
     "@mahaswami/vc-frontend": "^2.2.0",
     "@mui/x-charts": "^7.24.1",
     "@simplewebauthn/browser": "^13.3.0",
@@ -22,6 +23,7 @@
     "events": "^3.3.0",
     "file-saver": "^2.0.5",
     "fuzzysort": "^3.1.0",
+    "google-timezones-json": "^1.2.0",
     "howler": "^2.2.4",
     "image-blob-reduce": "^4.1.0",
     "inflection": "^3.0.2",

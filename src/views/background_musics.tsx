@@ -6,7 +6,7 @@ import { Category } from '@mui/icons-material';
 import { Create, Edit, List, Menu, Show,
     type ListProps, TextField, TextInput} from "react-admin";
 
-export const RESOURCE = "background_musics"
+export const RESOURCE = "background_music"
 export const ICON = Category
 export const PREFETCH: string[] = []
 

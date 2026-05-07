@@ -73,8 +73,8 @@ const customEnglishMessages: TranslationMessages = {
         curriculum_lessons: {
             name: 'Curriculum Lessons',
         },
-        curriculums: {
-            name: 'Curriculums',
+        curriculum: {
+            name: 'Curriculum',
         },
         coaches: {
             name: 'Coaches',
@@ -82,7 +82,7 @@ const customEnglishMessages: TranslationMessages = {
         ai_block_logs: {
             name: 'Ai Block Logs',
         },
-        background_musics: {
+        background_music: {
             name: 'Background Musics',
         },
         trophy_types: {

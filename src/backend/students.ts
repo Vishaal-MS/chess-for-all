@@ -19,22 +19,54 @@ export const getDOBDateRange = () => {
     return { minDOBDateStr, maxDOBDateStr };
 }
 
+export const getUnEnrollmentStudents = async (dataProvider, enrollmentStudentIds, classRecord) => {
+    try {
+        let filter = { 'id_neq_any': enrollmentStudentIds };
+        if (classRecord?.is_school_class){
+            filter.client_id = classRecord?.client_id;
+        }
+
+        const { data: students } = await dataProvider.getList('students', {
+            filter: {...filter},
+            pagination: { page: 1, perPage: 1000 }
+        });
+        return students;
+    } catch (error) {
+        remoteLog('Error on getAllStudents: ', error);
+        console.error('Error on getAllStudents: ', error);
+    }
+}
+
+export async function  getStudentsForClient(dataProvider, clientId) {
+    try {
+        const {data: students} = await dataProvider.getList('students', {
+            filter: {client_id: clientId},
+            sort: {field: 'id', order: 'ASC'},
+            pagination: { page: 1, perPage: 1000 },
+        });
+        const studentIds = new Set(students.map(student => student.id));
+        return studentIds;
+    } catch (error) {
+        remoteLog("Error sending on getStudentsForClient: ", error);
+    }
+}
+
 export const beforeCreateStudentUserAndParentUser = async (params: any) => {
     console.log("Student before: ", params)
     const { data, meta } =  params;
     if (data.client_id) {
-        console.log("before createUser : ", params)
+        const studentUser = data.user;
         const userData = await createUser({
-            first_name: meta.studentUser.first_name,
-            last_name: meta.studentUser.last_name,
-            email: meta.studentUser.email,
+            first_name: studentUser.first_name,
+            last_name: studentUser.last_name,
+            email: studentUser.email,
             role: UserRoles.STUDENT,
             is_active: false
         })
         console.log("userData 123: ", userData)
         data.user_id = userData.id;
         //Create User Account for Parent
-        const parentUser = meta?.parentUser;
+        const parentUser = data?.parent_user;
         if (parentUser && parentUser.first_name) {
             const parent = await createUser({
                 first_name: parentUser.first_name,
@@ -49,11 +81,16 @@ export const beforeCreateStudentUserAndParentUser = async (params: any) => {
                 await sendEmailToStudentAndParent(parent, undefined);
             }
             data.parent_user_id = parent ? parent.id : null;
+
+            console.log("Data: ", data);
         }
+        data.user = undefined;
+        data.parent_user = undefined;
 //         data.parent_name = parentUser?.fullName;
 //         data.parent_email = parentUser?.email;
     }
     params.data =  data;
+    console.log("BEFORE ______ ", params)
     return params;
 }
 

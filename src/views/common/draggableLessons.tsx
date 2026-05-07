@@ -1,7 +1,6 @@
 import React, {useEffect, useMemo} from "react";
 import {Box, Grid, Typography} from "@mui/material";
 import {
-    List,
     Datagrid,
     ReferenceField,
     TextField,
@@ -17,16 +16,16 @@ import { useListContext } from 'react-admin';
 import { useState } from 'react';
 import {useNotify } from 'react-admin';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
-import {Empty} from "./empty";
+import {Empty} from "./empty.tsx";
 import {closeDialog, openDialog, remoteLog} from "@mahaswami/vc-frontend";
 import {
     getStandardId,
     isAllowPublishing,
     isAnySchoolFlavorActive,
     isRegularSchoolFlavored,
-    isSchoolStandardLinked
+    isSchoolStandardLinked,
+    isAllowedVoiceOver
 } from "../../businessLogic.ts";
-import { isAllowedVoiceOver } from "../../businessLogic.ts";
 import EditIcon from '@mui/icons-material/Edit';
 
 export const ClassLessonsSorter = ({recordId, disableRedirect, isSchoolClass}) => {

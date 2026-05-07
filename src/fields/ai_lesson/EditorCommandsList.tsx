@@ -1,7 +1,7 @@
 import AssistantIcon from '@mui/icons-material/Assistant';
 import YoutubeIcon from '@mui/icons-material/YouTube';
 import WidgetsIcon from '@mui/icons-material/Widgets';
-import { fileUploadPrompt } from './../../common/FileUploadDialog';
+import { fileUploadPrompt } from '../../views/common/FileUploadDialog';
 import PhotoIcon from '@mui/icons-material/Photo';
 import VideoCameraFrontIcon from '@mui/icons-material/VideoCameraFront';
 import InsertPageBreakIcon from '@mui/icons-material/InsertPageBreak';

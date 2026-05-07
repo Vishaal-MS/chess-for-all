@@ -1,5 +1,4 @@
-
-import {Box, Grid, Stack, Typography} from '@mui/material';
+import {Box, Grid} from '@mui/material';
 import {
     AutocompleteArrayInput,
     Datagrid,
@@ -19,21 +18,27 @@ import {
     useRecordContext,
     useRefresh,
     ShowButton,
-    BooleanInput, EditButton, useGetOne,
+    BooleanInput, EditButton, useGetOne, Edit, Create, Show, List,
 } from 'react-admin';
 
 import { Button } from "@mui/material";
 import Toolbar from '@mui/material/Toolbar';
 import { useEffect, useState } from "react";
 import { SearchInput, TextInput } from 'react-admin';
-import {currentTenantId, isAllowPublishing, isStudent} from "../../businessLogic";
+import {currentTenantId, isStudent} from "../../businessLogic";
 import { AssignmentShow } from "../class/assignments.tsx";
 import { Empty } from '../common/empty.tsx';
 import {FullscreenPortal} from "../../components/FullscreenPortal.tsx";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import {DuplicateDialog} from "../../components/DuplicateDialog.tsx";
-import {openDialog, PER_PAGE, remoteLog, SensibleDefaultPagination, useRealtimeComms} from "@mahaswami/vc-frontend";
-import { SwanCreate, SwanEdit, SwanList, SwanShow } from '../swan_crud/SwanCrud.tsx';
+import {
+    DataTable,
+    openDialog,
+    PER_PAGE,
+    remoteLog,
+    SensibleDefaultPagination,
+    useRealtimeComms
+} from "@mahaswami/vc-frontend";
 
 const filters = [
     <SearchInput source="q" alwaysOn sx={{
@@ -49,16 +54,18 @@ const filters = [
 export const LessonList = () => {
 
     return (
-        <SwanList title={<ListTitle resourceName="Lessons List"/>} filterDefaultValues={{ language: 'EN' }} storeKey={"myLessons"} filters={filters} pagination={<SensibleDefaultPagination />}
-        perPage={PER_PAGE} sort={{field: 'name', order: 'ASC'}} exporter={false} empty={<Empty emptyText="No Lessons found." showCreateIfApplicable={true}/>}>
-            <Datagrid rowClick="edit">
-                <TextField source="name"/>
-                <ReferenceArrayField source="tag_ids" reference="tags" label="Tags" perPage={1000}>
-                    <SingleFieldList linkType={false} />
-                </ReferenceArrayField>
-                <FunctionField label="Language" render={record => getLanguageDescription(record.language)} />
-            </Datagrid>
-        </SwanList>
+        <List title={<ListTitle resourceName="Lessons List"/>} filterDefaultValues={{ language: 'EN' }} storeKey={"myLessons"} filters={filters} pagination={<SensibleDefaultPagination />}
+            perPage={PER_PAGE} sort={{field: 'name', order: 'ASC'}} exporter={false} empty={<Empty emptyText="No Lessons found." showCreateIfApplicable={true}/>}>
+            <DataTable rowClick="edit">
+                <DataTable.Col source="name"/>
+                <DataTable.Col source="tag_ids" field={() =>
+                    <ReferenceArrayField source="tag_ids" reference="tags" label="Tags" perPage={1000}>
+                        <SingleFieldList linkType={false} />
+                    </ReferenceArrayField>
+                }/>
+                <DataTable.Col source="language" field={LanguageChoiceField} />
+            </DataTable>
+        </List>
     );
 }
 
@@ -188,7 +195,7 @@ export const LessonShow = () => {
     }
 
     return (
-        <SwanShow actions={classId ? <ShowActions />: lessonIds ? <CurriculumLessonAction/> : <LessonActions/>} title={<RecordTitle resourceName={title}/>}>
+        <Show actions={classId ? <ShowActions />: lessonIds ? <CurriculumLessonAction/> : <LessonActions/>} title={<RecordTitle resourceName={title}/>}>
             <Box sx={{px: 2, py: 1}}>
                 <Box display="flex" sx={{p: 5, flexDirection: 'column'}}>
                     <Box display="flex" justifyContent="center">
@@ -197,7 +204,7 @@ export const LessonShow = () => {
                 </Box>
                 <ChessAIField source="content" assignmentId={assignmentId} lessonId={lessonId} key={lessonId}/>
             </Box>
-        </SwanShow>
+        </Show>
     );
 }
 
@@ -222,9 +229,9 @@ const ShowActions = () => (
 );
 
 export const LessonEdit = () => (
-    <SwanEdit actions={<ShowActions />} title={<RecordTitle resourceName="Lesson Edit"/>} mutationMode="pessimistic">
+    <Edit actions={<ShowActions />} title={<RecordTitle resourceName="Lesson Edit"/>} mutationMode="pessimistic">
         <LessonForm />
-    </SwanEdit>
+    </Edit>
 );
 
 import KeyboardReturnIcon from "@mui/icons-material/KeyboardReturn";
@@ -235,12 +242,13 @@ import { ChessAIInput } from '../../fields/ai_lesson/ChessAIInput';
 import { useUnique } from '../../helpers/useUnique';
 import { getLanguageDescription, getLanguagesMap } from '../../utils.ts';
 import CustomPrevNextButtons from "../../components/CustomPrevNextButtons.tsx";
+import {LanguageChoiceField} from "../lessons.tsx";
 
 
 export const LessonCreate = () => (
-    <SwanCreate title={<ListTitle resourceName="New Lesson"/>}>
+    <Create title={<ListTitle resourceName="New Lesson"/>}>
         <LessonForm />
-    </SwanCreate>
+    </Create>
 );
 
 export const LessonForm = () => {

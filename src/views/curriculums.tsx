@@ -5,10 +5,8 @@ import {
     editDefaults,
     formDefaults,
     listDefaults,
-    showDefaults,
     RowActions,
     DataTable,
-    SimpleShowLayout,
     SimpleForm,
     TabbedDetailLayout,
     createReferenceField,
@@ -30,7 +28,6 @@ import {
     Edit,
     List,
     Menu,
-    Show,
     type ListProps,
     TextField,
     TextInput,
@@ -38,25 +35,22 @@ import {
     BooleanInput,
     NumberField,
     NumberInput,
-    SelectField,
     SelectInput,
     AutocompleteInput,
     required,
     useRecordContext
 } from "react-admin";
-import { LevelsReferenceField, LevelsReferenceInput } from './levels.js';
-import { DivisionsReferenceField, DivisionsReferenceInput } from './divisions.js';
-import { StandardsReferenceField, StandardsReferenceInput } from './standards.js';
-import { BackgroundMusicsReferenceField, BackgroundMusicsReferenceInput } from './background_musics.js';
+import { LevelsReferenceField } from './levels.js';
+import { BackgroundMusicsReferenceInput } from './background_musics.js';
 import { LessonsReferenceField, LessonsReferenceInput } from './lessons.js';
 import { Box } from '@mui/material';
-import {Fragment} from "react";
+import {CurriculumEdit, CurriculumList, CurriculumShow} from "./curriculum/curriculum.tsx";
 
-export const RESOURCE = "curriculums"
+export const RESOURCE = "curriculum"
 export const DETAIL_RESOURCES: string[] = ["curriculum_lessons"]
 export const ICON = MenuBook
 export const DETAIL_ICONS: any[] = [Category]
-export const PREFETCH: string[] = ["levels", "divisions", "standards", "background_musics"]
+export const PREFETCH: string[] = ["levels", "divisions", "standards", "background_music"]
 export const DETAIL_PREFETCH: string[][] = [[RESOURCE, "lessons", "mapping1_standard_sections", "mapping2_standard_sections", "mapping3_standard_sections", "mapping1_cognitive_skills", "mapping2_cognitive_skills", "mapping3_cognitive_skills"]]
 
 export const CurriculumsReferenceField = createReferenceField(RESOURCE, PREFETCH);
@@ -66,37 +60,11 @@ export const CurriculumLessonsReferenceInput = createReferenceInput(DETAIL_RESOU
 const curriculumsActionDefs: ResourceActionDefs = {};
 
 export const languageChoices = [{ id: 'english', name: 'English' }, { id: 'hindi', name: 'Hindi' }, { id: 'kannada', name: 'Kannada' }, { id: 'spanish', name: 'Spanish' }, { id: 'tamil', name: 'Tamil' }, { id: 'telugu', name: 'Telugu' }];
-export const LanguageChoiceField = (props: any) => <SelectField {...props} choices={languageChoices} />;
 
 const filters = [
     <TextLiveFilter source="search" show />,
-    <ReferenceLiveFilter source="level_id" reference="levels" label="Level" />,
-    <ReferenceLiveFilter source="division_id" reference="divisions" label="Division" />,
-    <ReferenceLiveFilter source="standard_id" reference="standards" label="Standard" />,
-    <ChoicesLiveFilter source="language" label="Language" choiceLabels={languageChoices} show />,
-    <BooleanLiveFilter source="is_background_music_enabled" label="Background Music Enabled" />,
-    <ReferenceLiveFilter source="background_music_id" reference="background_musics" label="Background Music" />
+    <ChoicesLiveFilter source="language" label="Language" choiceLabels={languageChoices} show />
 ]
-
-export const CurriculumsList = (props: ListProps) => {
-    return (
-        <List {...listDefaults(props)}>
-            <DataTable {...tableDefaults(RESOURCE)} hiddenColumns={['division_id', 'standard_id', 'language', 'is_background_music_enabled', 'background_music_id']} >
-                <DataTable.Col source="name" />
-                <DataTable.Col source="duration" />
-                <DataTable.Col source="level_id" field={LevelsReferenceField}/>
-                <DataTable.Col source="image_file_id" />
-                <DataTable.Col source="status" />
-                <DataTable.Col source="division_id" field={DivisionsReferenceField}/>
-                <DataTable.Col source="standard_id" field={StandardsReferenceField}/>
-                <DataTable.Col source="language" field={LanguageChoiceField} />
-                <DataTable.Col source="is_background_music_enabled" field={BooleanField}/>
-                <DataTable.Col source="background_music_id" field={BackgroundMusicsReferenceField}/>
-                <RowActions/>
-            </DataTable>
-        </List>
-    )
-}
 
 export const CurriculumsCardList = (props: ListProps) => {
     return (
@@ -143,35 +111,6 @@ const CurriculumCreate = (props: any) => {
     )
 }
 
-const CurriculumEdit = (props: any) => {
-    return (
-        <Edit {...editDefaults(props)}>
-            <CurriculumForm/>
-        </Edit>
-    )
-}
-
-const CurriculumShow = (props: any) => {
-    return (
-        <Show {...showDefaults(props)}>
-            <SimpleShowLayout display="grid"  gridTemplateColumns={{ xs: '1fr', md: '1fr 1fr' }}  gap="1rem" >
-                <TextField source="name" />
-                <TextField source="description" />
-                <TextField source="duration" />
-                <LevelsReferenceField source="level_id" />
-                <TextField source="image_file_id" />
-                <TextField source="status" />
-                <DivisionsReferenceField source="division_id" />
-                <StandardsReferenceField source="standard_id" />
-                <SelectField source="language" choices={languageChoices} />
-                <BooleanField source="is_background_music_enabled" />
-                <BackgroundMusicsReferenceField source="background_music_id" />
-            </SimpleShowLayout>
-            <DetailResources/>
-        </Show>
-    )
-}
-
 const curriculumsFieldSchema: FieldSchema = {
     name: {},
     description: { ui: 'multiline' },
@@ -183,7 +122,7 @@ const curriculumsFieldSchema: FieldSchema = {
     standard_id: { resource: 'standards' },
     language: { type: 'choice', ui: 'select', choices: languageChoices },
     is_background_music_enabled: {},
-    background_music_id: { resource: 'background_musics' }
+    background_music_id: { resource: 'background_music' }
 };
 
 const detail0Filters = [
@@ -272,27 +211,6 @@ const CurriculumLessonEdit = (props: any) => {
     )
 }
 
-const CurriculumLessonShow = (props: any) => {
-    return (
-        <Show {...showDefaults(props)}>
-            <SimpleShowLayout display="grid"  gridTemplateColumns={{ xs: '1fr', md: '1fr' }}  gap="1rem" >
-                <CurriculumsReferenceField source="curriculum_id" />
-                <LessonsReferenceField source="lesson_id" />
-                <NumberField source="position_number" />
-                <TextInput source="mapping1_standard_section_id" />
-                <TextInput source="mapping2_standard_section_id" />
-                <TextInput source="mapping3_standard_section_id" />
-                <TextInput source="mapping1_cognitive_skill_id" />
-                <TextInput source="mapping2_cognitive_skill_id" />
-                <TextInput source="mapping3_cognitive_skill_id" />
-                <BooleanField source="is_limit_to_show_single_section" />
-                <BooleanField source="is_game_sound_enabled" />
-                <BooleanField source="is_voice_over_enabled" />
-            </SimpleShowLayout>
-        </Show>
-    )
-}
-
 export const CurriculumsResource = (
     <Resource
         name={RESOURCE}
@@ -302,14 +220,13 @@ export const CurriculumsResource = (
         actionDefs={ curriculumsActionDefs}
         filters={filters}
         filtersPlacement="top"
-        list={<CurriculumsList/>}
+        list={<CurriculumList/>}
         create={<CurriculumCreate/>}
         edit={<CurriculumEdit/>}
         show={<CurriculumShow/>}
         hasLiveUpdate
         hasFilterChooser
         cardList={<CurriculumsCardList/>}
-        hasColumnChooser
         sort={{ field: 'name', order: 'ASC' }}
     />
 )
@@ -320,12 +237,12 @@ const curriculumLessonsFieldSchema: FieldSchema = {
     curriculum_id: { required: true, resource: 'curricula' },
     lesson_id: { resource: 'lessons' },
     position_number: {},
-    mapping1_standard_section_id: { resource: 'mapping1_standard_sections' },
-    mapping2_standard_section_id: { resource: 'mapping2_standard_sections' },
-    mapping3_standard_section_id: { resource: 'mapping3_standard_sections' },
-    mapping1_cognitive_skill_id: { resource: 'mapping1_cognitive_skills' },
-    mapping2_cognitive_skill_id: { resource: 'mapping2_cognitive_skills' },
-    mapping3_cognitive_skill_id: { resource: 'mapping3_cognitive_skills' },
+    mapping1_standard_section_id: {},
+    mapping2_standard_section_id: {},
+    mapping3_standard_section_id: {},
+    mapping1_cognitive_skill_id: {},
+    mapping2_cognitive_skill_id: {},
+    mapping3_cognitive_skill_id: {},
     is_limit_to_show_single_section: {},
     is_game_sound_enabled: {},
     is_voice_over_enabled: {}
@@ -348,7 +265,6 @@ export const CurriculumLessonsResource = (
         list={<CurriculumLessonsList/>}
         create={<CurriculumLessonCreate/>}
         edit={<CurriculumLessonEdit/>}
-        show={<CurriculumLessonShow/>}
         hasLiveUpdate
         hasColumnChooser
         hasFilterChooser
@@ -356,7 +272,7 @@ export const CurriculumLessonsResource = (
 )
 
 export const CurriculumsMenu = () => (
-    <Menu.Item to={`/${RESOURCE}`} primaryText="Curriculums" leftIcon={<ICON />} />
+    <Menu.Item to={`/${RESOURCE}`} primaryText="My Curriculums" leftIcon={<ICON />} />
 )
 
 export const CurriculumLessonsMenu = () => (

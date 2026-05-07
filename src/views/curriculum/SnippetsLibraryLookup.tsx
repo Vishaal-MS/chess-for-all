@@ -9,7 +9,7 @@ import {closeDialog, openDialog} from "@mahaswami/vc-frontend";
 import { EmptyDatagridHeader } from "../../fields/EmptyDatagridHeader.tsx";
 import { clearChessBoards } from "../../fields/ai_lesson/ai_lesson_utils.ts";
 import {getTypeChoices} from "../snippets_library/SnippetsLibrary.tsx";
-import {Empty} from "../../common/empty.tsx";
+import {Empty} from "../common/empty.tsx";
 
 const SelectButton = ({onSelect}) => {
   const record = useRecordContext();

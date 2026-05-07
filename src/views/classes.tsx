@@ -8,6 +8,7 @@ import { Create, Edit, List, Menu, Show,
     type ListProps, TextField, TextInput, DateField, DateInput, BooleanField, BooleanInput, AutocompleteInput, required} from "react-admin";
 import { ScheduleTypesReferenceField, ScheduleTypesReferenceInput } from './schedule_types.js';
 import { Box } from '@mui/material';
+import CreateClass from "./class/create/Create.tsx";
 
 export const RESOURCE = "classes"
 export const ICON = Class
@@ -94,17 +95,17 @@ const ClassEdit = (props: any) => {
     )
 }
 
-const ClassCreate = (props: any) => {
-    return (
-        <Create {...createDefaults(props)}>
-            <WizardForm>
-                <WizardForm.Step label='Schedules'>
-                    <SchedulesInputs/>
-                </WizardForm.Step>
-            </WizardForm>
-        </Create>
-    )
-}
+// const ClassCreate = (props: any) => {
+//     return (
+//         <Create {...createDefaults(props)}>
+//             <WizardForm>
+//                 <WizardForm.Step label='Schedules'>
+//                     <SchedulesInputs/>
+//                 </WizardForm.Step>
+//             </WizardForm>
+//         </Create>
+//     )
+// }
 
 const ClassShow = (props: any) => {
     return (
@@ -170,10 +171,9 @@ export const ClassesResource = (
         filters={filters}
         filtersPlacement="top"
         list={<ClassesList/>}
-        create={<ClassCreate/>}
+        create={<CreateClass/>}
         edit={<ClassEdit/>}
         show={<ClassShow/>}
-        hasDialog
         hasLiveUpdate
         hasFilterChooser
         cardList={<ClassesCardList/>}

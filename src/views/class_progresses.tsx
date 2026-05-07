@@ -11,7 +11,7 @@ import { BackgroundMusicsReferenceField, BackgroundMusicsReferenceInput } from '
 
 export const RESOURCE = "class_progresses"
 export const ICON = AssignmentTurnedIn
-export const PREFETCH: string[] = ["classes", "lessons", "mapping1_standard_sections", "mapping2_standard_sections", "mapping3_standard_sections", "mapping1_cognitive_skills", "mapping2_cognitive_skills", "mapping3_cognitive_skills", "background_musics"]
+export const PREFETCH: string[] = ["classes", "lessons", "mapping1_standard_sections", "mapping2_standard_sections", "mapping3_standard_sections", "mapping1_cognitive_skills", "mapping2_cognitive_skills", "mapping3_cognitive_skills", "background_music"]
 
 export const ClassProgressesReferenceField = createReferenceField(RESOURCE, PREFETCH);
 export const ClassProgressesReferenceInput = createReferenceInput(RESOURCE, PREFETCH);
@@ -33,7 +33,7 @@ const filters = [
     <ReferenceLiveFilter source="mapping3_cognitive_skill_id" reference="mapping3_cognitive_skills" label="Mapping3 Cognitive Skill" />,
     <BooleanLiveFilter source="is_limit_to_show_single_section" label="Limit To Show Single Section" />,
     <BooleanLiveFilter source="is_game_sound_enabled" label="Game Sound Enabled" />,
-    <ReferenceLiveFilter source="background_music_id" reference="background_musics" label="Background Music" />,
+    <ReferenceLiveFilter source="background_music_id" reference="background_music" label="Background Music" />,
     <BooleanLiveFilter source="is_voice_over_enabled" label="Voice Over Enabled" />
 ]
 
@@ -157,7 +157,7 @@ const classProgressesFieldSchema: FieldSchema = {
     mapping3_cognitive_skill_id: { resource: 'mapping3_cognitive_skills' },
     is_limit_to_show_single_section: {},
     is_game_sound_enabled: {},
-    background_music_id: { resource: 'background_musics' },
+    background_music_id: { resource: 'background_music' },
     is_voice_over_enabled: {}
 };
 const classProgressesSearchableFields: string[] = [

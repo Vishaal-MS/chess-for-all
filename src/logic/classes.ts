@@ -1,22 +1,26 @@
 import { RESOURCE } from "../views/classes"
+import {
+    deleteCascadeClass,
+    filterByCoachId,
+    filterByStatus,
+    removeTotalClassesCountAtLogin
+} from "../backend/classes.ts";
 
 export const ClassesLogic: any = {
     resource: RESOURCE,
     afterCreate: [],
     afterDelete: [],
     afterDeleteMany: [],
-    afterGetList: [(params: any) => {
-        return params;
-    }],
+    afterGetList: [],
     afterGetMany: [],
     afterGetManyReference: [],
     afterGetOne: [],
-    afterUpdate: [],
+    afterUpdate: [removeTotalClassesCountAtLogin],
     afterUpdateMany: [],
     beforeCreate: [],
-    beforeDelete: [],
+    beforeDelete: [deleteCascadeClass],
     beforeDeleteMany: [],
-    beforeGetList: [],
+    beforeGetList: [filterByStatus, filterByCoachId],
     beforeGetMany: [],
     beforeGetManyReference: [],
     beforeGetOne: [],

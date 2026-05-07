@@ -1,4 +1,4 @@
-import React, {
+import {
   useState,
   useEffect,
   useRef,
@@ -20,7 +20,6 @@ import {
   Popper,
   ClickAwayListener,
 } from '@mui/material';
-import { alpha } from '@mui/material/styles';
 import SearchIcon from '@mui/icons-material/Search';
 import { useNavigate } from "react-router-dom";
 import nlp from "compromise";

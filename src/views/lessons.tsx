@@ -42,6 +42,7 @@ import {
 } from "react-admin";
 import { DivisionsReferenceField } from './divisions.js';
 import {Box} from "@mui/material";
+import {LessonList, LessonShow} from "./curriculum/lessons.tsx";
 // import {ChessAIInput} from "../fields/ai_lesson/ChessAIInput.tsx";
 
 export const RESOURCE = "lessons"
@@ -52,7 +53,7 @@ export const LessonsReferenceField = createReferenceField(RESOURCE, PREFETCH);
 export const LessonsReferenceInput = createReferenceInput(RESOURCE, PREFETCH);
 const lessonsActionDefs: ResourceActionDefs = {};
 
-export const languageChoices = [{ id: 'english', name: 'English' }, { id: 'hindi', name: 'Hindi' }, { id: 'kannada', name: 'Kannada' }, { id: 'spanish', name: 'Spanish' }, { id: 'tamil', name: 'Tamil' }, { id: 'telugu', name: 'Telugu' }];
+export const languageChoices = [{ id: 'EN', name: 'English' }, { id: 'HI', name: 'Hindi' }, { id: 'KN', name: 'Kannada' }, { id: 'ES', name: 'Spanish' }, { id: 'TA', name: 'Tamil' }, { id: 'TE', name: 'Telugu' }];
 export const LanguageChoiceField = (props: any) => <SelectField {...props} choices={languageChoices} />;
 
 const filters = [
@@ -62,20 +63,20 @@ const filters = [
     <BooleanLiveFilter source="is_limit_to_show_single_section" label="Limit To Show Single Section" />
 ]
 
-export const LessonsList = (props: ListProps) => {
-    return (
-        <List {...listDefaults(props)}>
-            <DataTable {...tableDefaults(RESOURCE)}>
-                <DataTable.Col source="name" />
-                <DataTable.Col source="language" field={LanguageChoiceField} />
-                <DataTable.Col source="tag_ids" />
-                <DataTable.Col source="division_id" field={DivisionsReferenceField}/>
-                <DataTable.Col source="is_limit_to_show_single_section" field={BooleanField}/>
-                <RowActions/>
-            </DataTable>
-        </List>
-    )
-}
+// export const LessonsList = (props: ListProps) => {
+//     return (
+//         <List {...listDefaults(props)}>
+//             <DataTable {...tableDefaults(RESOURCE)}>
+//                 <DataTable.Col source="name" />
+//                 <DataTable.Col source="language" field={LanguageChoiceField} />
+//                 <DataTable.Col source="tag_ids" />
+//                 <DataTable.Col source="division_id" field={DivisionsReferenceField}/>
+//                 <DataTable.Col source="is_limit_to_show_single_section" field={BooleanField}/>
+//                 <RowActions/>
+//             </DataTable>
+//         </List>
+//     )
+// }
 
 export const LessonsCardList = (props: ListProps) => {
     return (
@@ -101,7 +102,7 @@ const LessonForm = (props: any) => {
                     <AutocompleteArrayInput label="Tags" />
                 </ReferenceArrayInput>
             </Box>
-            {/*<ChessAIInput source="content" validate={required()} fullWidth />*/}
+            <RichTextInput source="content" validate={required()} fullWidth />
         </SimpleForm>
     )
 }
@@ -122,22 +123,22 @@ const LessonCreate = (props: any) => {
     )
 }
 
-const LessonShow = (props: any) => {
-    return (
-        <Show {...showDefaults(props)}>
-            <SimpleShowLayout>
-                <Box display="grid" gridTemplateColumns={{ xs: '1fr', md: '1fr 1fr' }} gap="1rem">
-                    <TextField source="name" />
-                    <BooleanField source="is_limit_to_show_single_section" />
-                    <SelectField source="language" choices={languageChoices} />
-                    <TextField source="tag_ids" />
-                </Box>
-                <DivisionsReferenceField source="division_id" />
-                {/*<Ch source="content" />*/}
-            </SimpleShowLayout>
-        </Show>
-    )
-}
+// const LessonShow = (props: any) => {
+//     return (
+//         <Show {...showDefaults(props)}>
+//             <SimpleShowLayout>
+//                 <Box display="grid" gridTemplateColumns={{ xs: '1fr', md: '1fr 1fr' }} gap="1rem">
+//                     <TextField source="name" />
+//                     <BooleanField source="is_limit_to_show_single_section" />
+//                     <SelectField source="language" choices={languageChoices} />
+//                     <TextField source="tag_ids" />
+//                 </Box>
+//                 <DivisionsReferenceField source="division_id" />
+//                 <RichTextField source="content" />
+//             </SimpleShowLayout>
+//         </Show>
+//     )
+// }
 
 const lessonsFieldSchema: FieldSchema = {
     name: { required: true, unique: true },
@@ -163,11 +164,10 @@ export const LessonsResource = (
         searchableFields={ lessonsSearchableFields}
         filters={filters}
         filtersPlacement="top"
-        list={<LessonsList/>}
+        list={<LessonList/>}
         create={<LessonCreate/>}
         edit={<LessonEdit/>}
         show={<LessonShow/>}
-        hasDialog
         hasLiveUpdate
         hasFilterChooser
         cardList={<LessonsCardList/>}

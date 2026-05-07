@@ -1,5 +1,5 @@
 import {
-    FunctionField, LinearProgress,
+    FunctionField,
     useNotify,
     useRecordContext, useRefresh,
 } from "react-admin";
