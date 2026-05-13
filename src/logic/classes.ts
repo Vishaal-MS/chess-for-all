@@ -26,7 +26,10 @@ export const ClassesLogic: any = {
     beforeGetOne: [],
     beforeUpdate: [],
     beforeUpdateMany: [],
-    beforeSave: [],
+    beforeSave: [(data) => {
+        data.teaching_mode = undefined;
+        return data;
+    }],
     afterRead: [],
     afterSave: [],
 }

@@ -8,10 +8,11 @@ import { Create, Edit, List, Menu, Show,
 import { ClassesReferenceField, ClassesReferenceInput } from './classes.js';
 import { LessonsReferenceField, LessonsReferenceInput } from './lessons.js';
 import { BackgroundMusicsReferenceField, BackgroundMusicsReferenceInput } from './background_musics.js';
+import {ClassProgressShow} from "./class/classprogress.tsx";
 
-export const RESOURCE = "class_progresses"
+export const RESOURCE = "class_progress"
 export const ICON = AssignmentTurnedIn
-export const PREFETCH: string[] = ["classes", "lessons", "mapping1_standard_sections", "mapping2_standard_sections", "mapping3_standard_sections", "mapping1_cognitive_skills", "mapping2_cognitive_skills", "mapping3_cognitive_skills", "background_music"]
+export const PREFETCH: string[] = ["classes", "lessons"]
 
 export const ClassProgressesReferenceField = createReferenceField(RESOURCE, PREFETCH);
 export const ClassProgressesReferenceInput = createReferenceInput(RESOURCE, PREFETCH);
@@ -25,12 +26,6 @@ const filters = [
     <DateLiveFilter source="completion_date" label="Completion" />,
     <BooleanLiveFilter source="is_assigned" label="Assigned" />,
     <NumberLiveFilter source="position_number" label="Position" />,
-    <ReferenceLiveFilter source="mapping1_standard_section_id" reference="mapping1_standard_sections" label="Mapping1 Standard Section" />,
-    <ReferenceLiveFilter source="mapping2_standard_section_id" reference="mapping2_standard_sections" label="Mapping2 Standard Section" />,
-    <ReferenceLiveFilter source="mapping3_standard_section_id" reference="mapping3_standard_sections" label="Mapping3 Standard Section" />,
-    <ReferenceLiveFilter source="mapping1_cognitive_skill_id" reference="mapping1_cognitive_skills" label="Mapping1 Cognitive Skill" />,
-    <ReferenceLiveFilter source="mapping2_cognitive_skill_id" reference="mapping2_cognitive_skills" label="Mapping2 Cognitive Skill" />,
-    <ReferenceLiveFilter source="mapping3_cognitive_skill_id" reference="mapping3_cognitive_skills" label="Mapping3 Cognitive Skill" />,
     <BooleanLiveFilter source="is_limit_to_show_single_section" label="Limit To Show Single Section" />,
     <BooleanLiveFilter source="is_game_sound_enabled" label="Game Sound Enabled" />,
     <ReferenceLiveFilter source="background_music_id" reference="background_music" label="Background Music" />,
@@ -115,32 +110,6 @@ const ClassProgressCreate = (props: any) => {
     )
 }
 
-const ClassProgressShow = (props: any) => {
-    return (
-        <Show {...showDefaults(props)}>
-            <SimpleShowLayout display="grid"  gridTemplateColumns={{ xs: '1fr', md: '1fr 1fr' }}  gap="1rem" >
-                <ClassesReferenceField source="class_id" />
-                <LessonsReferenceField source="lesson_id" />
-                <TextField source="status" />
-                <DateField source="start_date" />
-                <DateField source="completion_date" />
-                <BooleanField source="is_assigned" />
-                <NumberField source="position_number" />
-                <TextInput source="mapping1_standard_section_id" />
-                <TextInput source="mapping2_standard_section_id" />
-                <TextInput source="mapping3_standard_section_id" />
-                <TextInput source="mapping1_cognitive_skill_id" />
-                <TextInput source="mapping2_cognitive_skill_id" />
-                <TextInput source="mapping3_cognitive_skill_id" />
-                <BooleanField source="is_limit_to_show_single_section" />
-                <BooleanField source="is_game_sound_enabled" />
-                <BackgroundMusicsReferenceField source="background_music_id" />
-                <BooleanField source="is_voice_over_enabled" />
-            </SimpleShowLayout>
-        </Show>
-    )
-}
-
 const classProgressesFieldSchema: FieldSchema = {
     class_id: { resource: 'classes' },
     lesson_id: { resource: 'lessons' },
@@ -149,12 +118,12 @@ const classProgressesFieldSchema: FieldSchema = {
     completion_date: {},
     is_assigned: {},
     position_number: {},
-    mapping1_standard_section_id: { resource: 'mapping1_standard_sections' },
-    mapping2_standard_section_id: { resource: 'mapping2_standard_sections' },
-    mapping3_standard_section_id: { resource: 'mapping3_standard_sections' },
-    mapping1_cognitive_skill_id: { resource: 'mapping1_cognitive_skills' },
-    mapping2_cognitive_skill_id: { resource: 'mapping2_cognitive_skills' },
-    mapping3_cognitive_skill_id: { resource: 'mapping3_cognitive_skills' },
+    mapping1_standard_section_id: {},
+    mapping2_standard_section_id: {},
+    mapping3_standard_section_id: {},
+    mapping1_cognitive_skill_id: {},
+    mapping2_cognitive_skill_id: {},
+    mapping3_cognitive_skill_id: {},
     is_limit_to_show_single_section: {},
     is_game_sound_enabled: {},
     background_music_id: { resource: 'background_music' },
@@ -179,7 +148,6 @@ export const ClassProgressesResource = (
         create={<ClassProgressCreate/>}
         edit={<ClassProgressEdit/>}
         show={<ClassProgressShow/>}
-        hasDialog
         hasLiveUpdate
         hasFilterChooser
         cardList={<ClassProgressesCardList/>}
@@ -188,5 +156,5 @@ export const ClassProgressesResource = (
     />
 )
 export const ClassProgressesMenu = () => (
-    <Menu.Item to={`/${RESOURCE}`} primaryText="Class Progresses" leftIcon={<ICON />} />
+    <Menu.Item to={`/${RESOURCE}`} primaryText="Class progress" leftIcon={<ICON />} />
 )

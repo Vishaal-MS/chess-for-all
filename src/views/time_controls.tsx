@@ -1,7 +1,8 @@
 import { Resource, createDefaults, tableDefaults,
 	editDefaults, formDefaults, listDefaults,
 	showDefaults, RowActions, DataTable, SimpleShowLayout, SimpleForm,
-	type ResourceActionDefs, type FieldSchema, CardGrid, createReferenceField, createReferenceInput, ChoicesLiveFilter, NumberLiveFilter, TextLiveFilter} from '@mahaswami/vc-frontend';
+	type ResourceActionDefs, type FieldSchema, CardGrid, createReferenceField,
+    createReferenceInput, ChoicesLiveFilter, NumberLiveFilter, TextLiveFilter} from '@mahaswami/vc-frontend';
 import { AccessTime } from '@mui/icons-material';
 import { Create, Edit, List, Menu, Show,
     type ListProps, TextField, TextInput, NumberField, NumberInput, SelectField, SelectInput, required} from "react-admin";
@@ -14,7 +15,12 @@ export const TimeControlsReferenceField = createReferenceField(RESOURCE, PREFETC
 export const TimeControlsReferenceInput = createReferenceInput(RESOURCE, PREFETCH);
 const timeControlsActionDefs: ResourceActionDefs = {};
 
-export const nameChoices = [{ id: 'bullet', name: 'Bullet' }, { id: 'blitz', name: 'Blitz' }, { id: 'rapid', name: 'Rapid' }, { id: 'classical', name: 'Classical' }];
+export const nameChoices = [
+    { id: 'Bullet', name: 'Bullet' },
+    { id: 'Blitz', name: 'Blitz' },
+    { id: 'Rapid', name: 'Rapid' },
+    { id: 'Classical', name: 'Classical' }
+];
 export const NameChoiceField = (props: any) => <SelectField {...props} choices={nameChoices} />;
 
 const filters = [
@@ -26,7 +32,7 @@ const filters = [
 
 export const TimeControlsList = (props: ListProps) => {
     return (
-        <List {...listDefaults(props)}>
+        <List {...listDefaults(props)} queryOptions={{ meta: { scopingEscapeHatch: true } }}>
             <DataTable {...tableDefaults(RESOURCE)}>
                 <DataTable.Col source="name" field={NameChoiceField} />
                 <DataTable.Col source="base_time_number" field={NumberField}/>
@@ -39,7 +45,7 @@ export const TimeControlsList = (props: ListProps) => {
 
 export const TimeControlsCardList = (props: ListProps) => {
     return (
-        <List {...listDefaults(props)} component={'div'}>
+        <List {...listDefaults(props)} component={'div'} queryOptions={{ meta: { scopingEscapeHatch: true } }}>
             <CardGrid title={<SelectField source="name" choices={nameChoices} variant='h6' />}>
                 <NumberField source="base_time_number" />
                 <NumberField source="increment_time_number" />
@@ -120,5 +126,5 @@ export const TimeControlsResource = (
     />
 )
 export const TimeControlsMenu = () => (
-    <Menu.Item to={`/${RESOURCE}`} primaryText="Time Controls" leftIcon={<ICON />} />
+    <Menu.Item to={`/${RESOURCE}`} primaryText="Game Time Controls" leftIcon={<ICON />} />
 )

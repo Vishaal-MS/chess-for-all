@@ -192,7 +192,7 @@ export const CurriculumEdit = (props: any) => {
                 )}
                 <Typography variant="h6" mt="1rem">Lessons</Typography>
                 <ReferenceManyField pagination={<SensibleDefaultPagination />} perPage={100} sort={{ field: 'position_number', order: 'ASC' }}
-                 reference={"curriculum_lessons"} target="curriculum_id" queryOptions={{meta: {prefetch: ['lessons', 'standard_sections', 'cognitive_skills']}}}>
+                    reference={"curriculum_lessons"} target="curriculum_id" queryOptions={{ meta: { prefetch: ['lessons'] } }}>
                     <ClassLessonsSorter recordId={recordId} disableRedirect isSchoolClass />
                 </ReferenceManyField>
                 <Button onClick={addLessonsAction}  variant="contained" sx={{justifyContent: 'end', marginTop: 1 }}>Add</Button>

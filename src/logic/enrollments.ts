@@ -1,7 +1,7 @@
 import { RESOURCE } from "../views/enrollments"
 import {
     addBusinessLogicForEnrollments, afterCreateEnrollments,
-    afterDeleteEnrollements, updateUsersInActiveStatusByDeleteEnrollments
+    afterDeleteEnrollements, filterEnrollmentsClassByTeachingMode, updateUsersInActiveStatusByDeleteEnrollments
 } from "../backend/enrollments.ts";
 
 export const EnrollmentsLogic: any = {
@@ -18,7 +18,7 @@ export const EnrollmentsLogic: any = {
     beforeCreate: [],
     beforeDelete: [],
     beforeDeleteMany: [],
-    beforeGetList: [],
+    beforeGetList: [filterEnrollmentsClassByTeachingMode],
     beforeGetMany: [],
     beforeGetManyReference: [],
     beforeGetOne: [],

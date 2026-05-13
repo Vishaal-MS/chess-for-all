@@ -7,7 +7,7 @@ import {
 } from "../helpers/emailTemplates.ts";
 import {remoteLog} from "@mahaswami/vc-frontend";
 import {sendEmail} from "../businessLogic.ts";
-import {createUser} from "./users.ts";
+import {afterGetMultipleUser, createUser} from "./users.ts";
 
 export const getDOBDateRange = () => {
     const minDOBDate = new Date();
@@ -55,19 +55,18 @@ export const beforeCreateStudentUserAndParentUser = async (params: any) => {
     console.log("Student before: ", params)
     const { data, meta } =  params;
     if (data.client_id) {
-        const studentUser = data.user;
+        const { studentUser, parentUser } = meta;
         const userData = await createUser({
-            first_name: studentUser.first_name,
-            last_name: studentUser.last_name,
-            email: studentUser.email,
+            first_name: studentUser?.first_name,
+            last_name: studentUser?.last_name,
+            email: studentUser?.email,
             role: UserRoles.STUDENT,
             is_active: false
         })
         console.log("userData 123: ", userData)
         data.user_id = userData.id;
         //Create User Account for Parent
-        const parentUser = data?.parent_user;
-        if (parentUser && parentUser.first_name) {
+        if (parentUser?.first_name) {
             const parent = await createUser({
                 first_name: parentUser.first_name,
                 last_name: parentUser.last_name,
@@ -81,7 +80,6 @@ export const beforeCreateStudentUserAndParentUser = async (params: any) => {
                 await sendEmailToStudentAndParent(parent, undefined);
             }
             data.parent_user_id = parent ? parent.id : null;
-
             console.log("Data: ", data);
         }
         data.user = undefined;
@@ -141,3 +139,49 @@ export const populateStudentForIndividualClient = async (result) => {
         remoteLog("Error sending on getStudentsForClient: ", error);
     }
 };
+
+export const populateSingleUser = (result) => {
+    const record = result.data;
+    const { data: populatedUsers } = populateMultipleUser({ data: [record] });
+    result.data = populatedUsers[0];
+    return result;
+}
+
+export const populateMultipleUser = (result) => {
+    try {
+        const records = result.data;
+        const userRecords = records.filter(record => record.user).map(record => record.user);
+        if (userRecords.length == 0) return result;
+        const { data: populatedUsers } = afterGetMultipleUser({ data: userRecords });
+        result.data = records.map(record => {
+            const foundUser = populatedUsers.find(user => user.id == record.user_id);
+            if (foundUser) {
+                return { ...record, user: foundUser };
+            }
+            return record;
+        });
+        return result;
+    } catch (error) {
+        remoteLog("Error sending on populateMultipleUser: ", error);
+    }
+}
+
+export const getStudentsByClassId = async (dataProvider, classId) => {
+    try {
+        const { data: enrollments } = await swanDataProvider.getList("enrollments", {
+            filter: { class_id: Number(classId) },
+            pagination: { page: 1, perPage: 10000 },
+            meta: { prefetch: ["students"] }
+        })
+        const studentIds = enrollments.map(enrollment => enrollment.student_id);
+        const { data: students } = await dataProvider.getList("students", {
+            filter: { id: studentIds },
+            meta: { prefetch: ["users"] },
+            pagination :  {page: 1, perPage: 10000}
+        })
+        return students;
+    } catch (error) {
+        remoteLog('Error on getStudentsByClassId: ', error);
+        console.log('Error on getStudentsByClassId: ', error);
+    }
+}

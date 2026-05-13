@@ -390,19 +390,19 @@ resources:
 #        - amount
 #        - status
 
-    trophies:
-      type: resource
-      columns:
-        - trophy_type_id
-        - coach_id
-        - student_id
-        - client_id
-        - status
-        - ordered_date
-        - received_date
-        - issued_date
-        - image_file_id
-        - details
+#    trophies:
+#      type: resource
+#      columns:
+#        - trophy_type_id
+#        - coach_id
+#        - student_id
+#        - client_id
+#        - status
+#        - ordered_date
+#        - received_date
+#        - issued_date
+#        - image_file_id
+#        - details
 #
 #  games:
 #    type: resource

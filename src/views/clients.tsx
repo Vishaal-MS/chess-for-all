@@ -3,17 +3,17 @@ import { Resource,
 	showDefaults, SimpleShowLayout, SimpleForm,
 	type ResourceActionDefs, type FieldSchema, createReferenceField, createReferenceInput,
     ReferenceLiveFilter, NumberLiveFilter, TextLiveFilter} from '@mahaswami/vc-frontend';
-import { People } from '@mui/icons-material';
+import { Business } from '@mui/icons-material';
 import {Edit, Menu, Show, TextField, TextInput, NumberField, NumberInput, required, Button} from "react-admin";
 import { ClientTypesReferenceField, ClientTypesReferenceInput } from './client_types.js';
 import { DivisionsReferenceField, DivisionsReferenceInput } from './divisions.js';
 import { StandardsReferenceField, StandardsReferenceInput } from './standards.js';
 import ClientCreate from "./clients/ClientCreate.tsx";
 import {ClientList} from "./clients/clientList.tsx";
-import ClientEdit from "./clients/ClientEdit.tsx";
+import ClientEditForm from "./clients/ClientEdit.tsx";
 
 export const RESOURCE = "clients"
-export const ICON = People
+export const ICON = Business
 export const PREFETCH: string[] = ["client_types", "divisions", "standards"]
 
 export const ClientsReferenceField = createReferenceField(RESOURCE, PREFETCH);
@@ -49,28 +49,11 @@ const ClientForm = (props: any) => {
     )
 }
 
-const ClientShow = (props: any) => {
-    return (
-        <Show {...showDefaults(props)}>
-            <SimpleShowLayout display="grid"  gridTemplateColumns={{ xs: '1fr', md: '1fr 1fr' }}  gap="1rem" >
-                <TextField source="name" />
-                <TextField source="primary_contact_name" />
-                <NumberField source="primary_contact_number" />
-                <TextField source="email" />
-                <TextField source="address_line" />
-                <TextField source="area" />
-                <TextField source="city" />
-                <TextField source="state" />
-                <TextField source="zipcode" />
-                <TextField source="country" />
-                <TextField source="image_file_id" />
-                <ClientTypesReferenceField source="client_type_id" />
-                <DivisionsReferenceField source="division_id" />
-                <StandardsReferenceField source="standard_id" />
-            </SimpleShowLayout>
-        </Show>
-    )
-}
+const ClientEdit = (props: any) => (
+    <Edit { ...editDefaults(props) } actions={false}>
+        <ClientEditForm />
+    </Edit>
+)
 
 const clientsFieldSchema: FieldSchema = {
     name: { required: true },
@@ -113,7 +96,6 @@ export const ClientsResource = (
         list={<ClientList />}
         create={<ClientCreate />}
         edit={<ClientEdit/>}
-        show={<ClientShow/>}
         hasLiveUpdate
         hasFilterChooser
         hasColumnChooser

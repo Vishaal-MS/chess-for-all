@@ -38,12 +38,168 @@
         }
     },
     "permissions": {
-        "super_admin": {
-            "*": [
+        "super_admin": { "*": ["*"]},
+        "pro_coach": {
+            "document_templates": [
+                "*"
+            ],
+            "digital_signatures": [
+                "*"
+            ],
+            "error_logs": [
+                "list"
+            ],
+            "history": [
+                "list",
+                "show",
+                "restoreHistory"
+            ],
+            "users": [
+                "*"
+            ],
+            "standards": [
+                "*"
+            ],
+            "standard_grades": [
+                "*"
+            ],
+            "standard_categories": [
+                "*"
+            ],
+            "standard_sections": [
+                "*"
+            ],
+            "cognitive_skills": [
+                "*"
+            ],
+            "academy_types": [
+                "*"
+            ],
+            "certificate_templates": [
+                "*"
+            ],
+            "schedule_types": [
+                "*"
+            ],
+            "teaching_modes": [
+                "*"
+            ],
+            "client_types": [
+                "*"
+            ],
+            "divisions": [
+                "*"
+            ],
+            "clients": [
+                "*"
+            ],
+            "lessons": [
+                "*"
+            ],
+            "lesson_block_mappings": [
+                "*"
+            ],
+            "tags": [
+                "*"
+            ],
+            "levels": [
+                "*"
+            ],
+            "trophy_types": [
+                "*"
+            ],
+            "coaches": [
+                "*"
+            ],
+            "curriculum": [
+                "*"
+            ],
+            "curriculum_lessons": [
+                "*"
+            ],
+            "classes": [
+                "*"
+            ],
+            "students": [
+                "*"
+            ],
+            "subscribables": [
+                "*"
+            ],
+            "subscribers": [
+                "*"
+            ],
+            "subscriptions": [
+                "*"
+            ],
+            "subscription_invoices": [
+                "*"
+            ],
+            "trophies": [
+                "*"
+            ],
+            "games": [
+                "*"
+            ],
+            "discussion_topics": [
+                "*"
+            ],
+            "replies": [
+                "*"
+            ],
+            "discussion_read_statuses": [
+                "*"
+            ],
+            "parent_notes": [
+                "*"
+            ],
+            "assignments": [
+                "*"
+            ],
+            "assignment_blocks": [
+                "*"
+            ],
+            "certificates": [
+                "*"
+            ],
+            "class_progress": [
+                "*"
+            ],
+            "class_schedules": [
+                "*"
+            ],
+            "enrollments": [
+                "*"
+            ],
+            "invoices": [
+                "*"
+            ],
+            "reviews": [
+                "*"
+            ],
+            "lesson_blocks": [
+                "*"
+            ],
+            "snippets_library": [
+                "*"
+            ],
+            "background_music": [
+                "*"
+            ],
+            "payments": [
+                "*"
+            ],
+            "timesheets": [
+                "*"
+            ],
+            "ai_block_logs": [
                 "*"
             ]
         },
         "admin": {
+            "tenants": [
+                "*"
+            ],
             "document_templates": [
                 "*"
             ],
@@ -169,7 +325,7 @@
             "certificates": [
                 "*"
             ],
-            "class_progresses": [
+            "class_progress": [
                 "*"
             ],
             "class_schedules": [
@@ -201,7 +357,21 @@
             ],
             "ai_block_logs": [
                 "*"
+            ],
+            "snippets_library": [
+                "*"
             ]
+        },
+        "student": {
+            "enrollments": ["list", "show"],
+            "assignments": ["list", "show"],
+            "lessons": ["list", "show"],
+            "classes": ["show"],
+            "discussion_topics": ["list", "show", "create", "edit"],
+            "replies": ["list", "show", "create", "edit"],
+            "discussion_read_status": ["list", "show", "create", "edit"],
+            "support_topics": ["list"],
+            "games": ["list", "show", "create", "edit"]
         }
     }
 }

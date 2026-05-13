@@ -16,6 +16,9 @@ import {
 import {getSetupLabel, getClientLabel} from "../../helpers/constants.ts";
 import {StandardsReferenceField} from "../standards.tsx";
 import {StandardGradesReferenceInput} from "../standard_grades.tsx";
+import {Fragment} from "react";
+import {StudentEdit} from "./students.tsx";
+import {AddStudents} from "./addStudents.tsx";
 
 export const ClientList = (props: any) => {
     const navigate = useNavigate();
@@ -24,10 +27,10 @@ export const ClientList = (props: any) => {
     const ListActions = () => (
         <Toolbar sx={{float: 'right'}}>
             {isRegularSchoolFlavored() ? <SchoolStudentAddActions/> :
-                <>
+                <Fragment>
                     <ClientIndividualAction/>
                     {!isExecutiveCoachingFlavored() && <ClientBusinessAction/>}
-                </>
+                </Fragment>
             }
         </Toolbar>
     )
@@ -64,10 +67,10 @@ export const ClientList = (props: any) => {
             </Typography>
             <Toolbar sx={{justifyContent: 'center', gap: 2}}>
                 {isRegularSchoolFlavored() ? <SchoolStudentAddActions/> :
-                    <>
+                    <Fragment>
                         <ClientIndividualAction/>
                         {!isExecutiveCoachingFlavored() && <ClientBusinessAction/>}
-                    </>
+                    </Fragment>
                 }
 
             </Toolbar>
@@ -82,7 +85,7 @@ export const ClientList = (props: any) => {
             try {
                 const {data: clients} = await dataProvider.getList('clients');
                 const client = clients[0] || null;
-                // openDialog(<AddStudents client={client} width="70vw"/>)
+                openDialog(<AddStudents client={client} width="70vw"/>)
             } catch (error) {
                 console.error('Error fetching clients:', error);
             }
@@ -97,7 +100,8 @@ export const ClientList = (props: any) => {
     }
 
     const handleEditSchoolStudent = (studentId) => {
-        // openDialog(<StudentEdit studentId={studentId} width="70vw"/>)
+        openDialog(<StudentEdit studentId={studentId} width="70vw"/>);
+        return false;
     }
 
     if (isRegularSchoolFlavored()) {

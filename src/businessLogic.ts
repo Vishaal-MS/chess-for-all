@@ -53,6 +53,8 @@ import {
     getStudentEmailTemplateWithoutCredential
 } from "./helpers/emailTemplates.ts";
 import {TenantConfigNames} from "./helpers/constants.ts";
+import { SnippetsLibrariesLogic } from './logic/snippets_libraries.ts';
+import {getEmailsBasedOnEnv} from "./configuration.tsx";
 
 export const businessLogic = () => {
     return [
@@ -110,10 +112,11 @@ export const businessLogic = () => {
         PaymentsLogic,
         TimesheetsLogic,
         TrophiesLogic,
+        SnippetsLibrariesLogic,
     ];
 };
 
-const getRole = () => {
+export const getRole = () => {
     return getLocalStorage('role');
 }
 
@@ -172,6 +175,15 @@ export const isStudent = () => {
 
 export const currentTenantId = () => {
     return getLocalStorage('tenant_id');
+}
+
+export const addDivisionId = (params, dataProvider) => {
+    if (isLargeAcademy()) {
+        params.data = {...params.data, division_id: getDivisionId()};
+    } else {
+        params.data = {...params.data, division_id: null};
+    }
+    return params;
 }
 
 export const getParentId = () => {
@@ -281,17 +293,7 @@ export const getTeachingModes = async (dataProvider: any) => {
     }
 }
 
-export const filterByDivisionId = async (params, dataProvider) => {
-    let newParams = params;
-    if(!newParams) {
-        newParams = {};
-    }
-    if (!isLargeAcademy()) return newParams;
-    if (newParams.meta?.scopingEscapeDivision) return newParams;
-    const divisionId = await getDivisionId();
-    newParams.filter = {...newParams.filter, division_id: divisionId};
-    return newParams;
-}
+
 
 export const isTenantAllowedCoaching = () => {
     const tenantAllowedCoaching = getLocalStorage('tenant_allowed_coaching');
@@ -338,7 +340,7 @@ export const sendEmail = async (emailBody: any) => {
     const is_mail_blocked = getLocalStorage('is_mail_blocked');
     if (is_mail_blocked) return
     try {
-        const { senderEmail, supportTeamEmail } = null// getEmailsBasedOnEnv();
+        const { senderEmail, supportTeamEmail } = getEmailsBasedOnEnv();
         const TENANT_NAME = getLocalStorage("tenant_name");
         let baseBody = {
             from: senderEmail,

@@ -72,6 +72,7 @@ export const SubscriptionsList = () => {
                 pagination: { page: 1, perPage: 10000 }
             });
             const subscribableIds = subscriptions.map(subscription => subscription.subscribable_id);
+            console.log("subscribableIds: ", subscriptions, subscribableIds, currentTenantId())
             const {data: subscribables} = await dataProvider.getList('subscribables', {
                 filter: { id: subscribableIds },
                 meta: {scopingEscapeHatch: true, prefetch: ['curriculum', 'tenants']},
@@ -113,6 +114,7 @@ export const SubscriptionsList = () => {
             <AddNewSubscription/>
         </Box>
     );
+    console.log("mySubscribedCurriculumIds: ", mySubscribedCurriculumIds)
 
     return (
         <List title={<ListTitle resourceName='Subscribed Curriculums List'/>} resource='curriculum'

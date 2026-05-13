@@ -1,7 +1,6 @@
-import {Box, Grid} from '@mui/material';
+import {Box} from '@mui/material';
 import {
     AutocompleteArrayInput,
-    Datagrid,
     FunctionField,
     Loading,
     Button as RAButton,
@@ -20,7 +19,15 @@ import {
     ShowButton,
     BooleanInput, EditButton, useGetOne, Edit, Create, Show, List,
 } from 'react-admin';
-
+import KeyboardReturnIcon from "@mui/icons-material/KeyboardReturn";
+import { useLocation, useNavigate } from "react-router-dom";
+import { ListTitle, RecordTitle } from "../../components/Title.tsx";
+import { ChessAIField } from '../../fields/ai_lesson/ChessAIField';
+import { ChessAIInput } from '../../fields/ai_lesson/ChessAIInput';
+import { useUnique } from '../../helpers/useUnique';
+import { getLanguagesMap } from '../../utils.ts';
+import CustomPrevNextButtons from "../../components/CustomPrevNextButtons.tsx";
+import {LanguageChoiceField} from "../lessons.tsx";
 import { Button } from "@mui/material";
 import Toolbar from '@mui/material/Toolbar';
 import { useEffect, useState } from "react";
@@ -32,31 +39,23 @@ import {FullscreenPortal} from "../../components/FullscreenPortal.tsx";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import {DuplicateDialog} from "../../components/DuplicateDialog.tsx";
 import {
-    DataTable,
+    createDefaults,
+    DataTable, editDefaults, formDefaults, listDefaults,
     openDialog,
     PER_PAGE,
     remoteLog,
-    SensibleDefaultPagination,
+    SensibleDefaultPagination, SimpleForm, tableDefaults,
     useRealtimeComms
 } from "@mahaswami/vc-frontend";
 
-const filters = [
-    <SearchInput source="q" alwaysOn sx={{
-        '& .MuiFilledInput-input': {
-            height: '2em',
-        }}}/>,
-    <ReferenceArrayInput source="tag_ids" reference="tags" alwaysOn queryOptions={{meta: {scopingEscapeHatch:true}}} perPage={1000} sort={{ field: 'name', order: 'ASC' }}>
-        <AutocompleteArrayInput label="Tags" />
-    </ReferenceArrayInput>,
-    <SelectInput source="language" alwaysOn choices={getLanguagesMap()} />
-];
-
-export const LessonList = () => {
+export const LessonList = (props: any) => {
 
     return (
-        <List title={<ListTitle resourceName="Lessons List"/>} filterDefaultValues={{ language: 'EN' }} storeKey={"myLessons"} filters={filters} pagination={<SensibleDefaultPagination />}
-            perPage={PER_PAGE} sort={{field: 'name', order: 'ASC'}} exporter={false} empty={<Empty emptyText="No Lessons found." showCreateIfApplicable={true}/>}>
-            <DataTable rowClick="edit">
+        <List {...listDefaults(props)} title={<ListTitle resourceName="Lessons List"/>} storeKey={"myLessons"}
+            filterDefaultValues={{ language: 'EN' }} pagination={<SensibleDefaultPagination />}
+            perPage={PER_PAGE} sort={{field: 'name', order: 'ASC'}} exporter={false}
+            empty={<Empty emptyText="No Lessons found." showCreateIfApplicable={true}/>}>
+            <DataTable { ...tableDefaults(props)} rowClick="edit">
                 <DataTable.Col source="name"/>
                 <DataTable.Col source="tag_ids" field={() =>
                     <ReferenceArrayField source="tag_ids" reference="tags" label="Tags" perPage={1000}>
@@ -219,66 +218,45 @@ const ReturnButtonMyLesson = () => {
     )
 }
 
-import { SimpleForm } from 'react-admin';
-
 const ShowActions = () => (
     <TopToolbar>
-         <ReturnButtonMyLesson/>
+        <ReturnButtonMyLesson/>
         <ShowButton label={"Preview"}/>
     </TopToolbar>
 );
 
-export const LessonEdit = () => (
-    <Edit actions={<ShowActions />} title={<RecordTitle resourceName="Lesson Edit"/>} mutationMode="pessimistic">
+export const LessonEdit = (props: any) => (
+    <Edit { ...editDefaults(props)} actions={<ShowActions />}>
         <LessonForm />
     </Edit>
 );
 
-import KeyboardReturnIcon from "@mui/icons-material/KeyboardReturn";
-import { useLocation, useNavigate } from "react-router-dom";
-import { ListTitle, RecordTitle } from "../../components/Title.tsx";
-import { ChessAIField } from '../../fields/ai_lesson/ChessAIField';
-import { ChessAIInput } from '../../fields/ai_lesson/ChessAIInput';
-import { useUnique } from '../../helpers/useUnique';
-import { getLanguageDescription, getLanguagesMap } from '../../utils.ts';
-import CustomPrevNextButtons from "../../components/CustomPrevNextButtons.tsx";
-import {LanguageChoiceField} from "../lessons.tsx";
-
-
-export const LessonCreate = () => (
-    <Create title={<ListTitle resourceName="New Lesson"/>}>
+export const LessonCreate = (props: any) => (
+    <Create { ...createDefaults(props)} title={<ListTitle resourceName="New Lesson"/>}>
         <LessonForm />
     </Create>
 );
 
-export const LessonForm = () => {
+export const LessonForm = (props) => {
     const unique = useUnique();
     return(
-        <SimpleForm>
-            <Grid container spacing={1}>
-                <Grid item xs={12} md={6}>
-                    <TextInput source="name" validate={[required(), unique()]}/>
-                </Grid>
-                <Grid mt={2} item xs={12} md={6}>
-                    <BooleanInput defaultValue={false} label="Limit To Show Single Section?" source="is_limit_to_show_single_section"/>
-                </Grid>
-                <Grid item xs={12} md={6}>
-                    <SelectInput
-                        source="language"
-                        label="Language"
-                        choices={getLanguagesMap()}
-                        defaultValue={'EN'}
-                        helperText={false}
-                        validate={required()}
-                        fullWidth
-                    />
-                </Grid>
-                <Grid item xs={12} md={6}>
-                    <ReferenceArrayInput source="tag_ids" reference="tags" queryOptions={{meta: {scopingEscapeHatch:true}}} perPage={1000} sort={{ field: 'name', order: 'ASC' }} >
-                        <AutocompleteArrayInput label="Tags" />
-                    </ReferenceArrayInput>
-                </Grid>
-            </Grid>
+        <SimpleForm {...formDefaults(props)}>
+            <Box width='100%' display='grid' gridTemplateColumns={{ md: '1fr 1fr' }} gap='1rem'>
+                <TextInput source="name" validate={[required(), unique()]}/>
+                <BooleanInput defaultValue={false} label="Limit To Show Single Section?" source="is_limit_to_show_single_section"/>
+                <SelectInput
+                    source="language"
+                    label="Language"
+                    choices={getLanguagesMap()}
+                    defaultValue={'EN'}
+                    helperText={false}
+                    validate={required()}
+                    fullWidth
+                />
+                <ReferenceArrayInput source="tag_ids" reference="tags" queryOptions={{meta: {scopingEscapeHatch:true}}} perPage={1000} sort={{ field: 'name', order: 'ASC' }} >
+                    <AutocompleteArrayInput label="Tags" />
+                </ReferenceArrayInput>
+            </Box>
             <ChessAIInput source="content" validate={required()} fullWidth/>
         </SimpleForm>
     );

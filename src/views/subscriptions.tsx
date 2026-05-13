@@ -2,7 +2,7 @@ import { Resource, createDefaults,
 	editDefaults, formDefaults, listDefaults,
 	showDefaults, SimpleShowLayout, SimpleForm,
 	type ResourceActionDefs, type FieldSchema, CardGrid, recordRep, createReferenceField, createReferenceInput, ReferenceLiveFilter, DateLiveFilter, TextLiveFilter} from '@mahaswami/vc-frontend';
-import { ShoppingCart } from '@mui/icons-material';
+import { Subscriptions } from '@mui/icons-material';
 import { Create, Edit, List, Menu, Show,
     type ListProps, DateField, DateInput} from "react-admin";
 import { SubscribablesReferenceField, SubscribablesReferenceInput } from './subscribables.js';
@@ -10,7 +10,7 @@ import { DivisionsReferenceField, DivisionsReferenceInput } from './divisions.js
 import {SubscriptionsList} from "./subscriptions/subscriptions.tsx";
 
 export const RESOURCE = "subscriptions"
-export const ICON = ShoppingCart
+export const ICON = Subscriptions
 export const PREFETCH: string[] = ["subscribables"]
 
 export const SubscriptionsReferenceField = createReferenceField(RESOURCE, PREFETCH);

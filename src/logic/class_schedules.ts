@@ -1,19 +1,18 @@
 import { RESOURCE } from "../views/class_schedules"
+import {afterDeleteSchedule, afterUpdateClassSchedule, beforeCreateClassSchedule} from "../backend/classSchedule.ts";
 
 export const ClassSchedulesLogic: any = {
     resource: RESOURCE,
     afterCreate: [],
-    afterDelete: [],
+    afterDelete: [afterDeleteSchedule],
     afterDeleteMany: [],
-    afterGetList: [(params: any) => {
-        return params;
-    }],
+    afterGetList: [],
     afterGetMany: [],
     afterGetManyReference: [],
     afterGetOne: [],
-    afterUpdate: [],
+    afterUpdate: [afterUpdateClassSchedule],
     afterUpdateMany: [],
-    beforeCreate: [],
+    beforeCreate: [beforeCreateClassSchedule],
     beforeDelete: [],
     beforeDeleteMany: [],
     beforeGetList: [],

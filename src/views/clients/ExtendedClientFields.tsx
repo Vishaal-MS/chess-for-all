@@ -33,6 +33,7 @@ export const ExtendedClientFields = ({ clientType, isEditView }) => {
     };
 
     const record = useRecordContext();
+    console.log("Student Record: ", record)
     const unique = useUnique();
     const initialCountry = record ? record?.country : getLocalStorage('country');
     const [selectedCountry, setSelectedCountry] = useState(initialCountry);
@@ -84,7 +85,7 @@ export const ExtendedClientFields = ({ clientType, isEditView }) => {
                     </FormDataConsumer>
                     {isExecutiveCoachingFlavored() ?
                         isEditView && <Grid item md={3}>
-                            <StudentStatusSelect user={record?.student.user} type={clientType}/>
+                            <StudentStatusSelect user={record?.student?.user} type={clientType}/>
                         </Grid>
                         :
                         <Grid item md={6} sx={{display: "flex", justifyContent: "space-between"}}>
@@ -93,7 +94,7 @@ export const ExtendedClientFields = ({ clientType, isEditView }) => {
                                               source="student.is_integrated_parental_engagement"/>
                             </Grid>
                             <Grid item md={5}>
-                                {isEditView && <StudentStatusSelect user={record?.student.user} type={clientType}/>}
+                                {isEditView && <StudentStatusSelect user={record?.student?.user} type={clientType}/>}
                             </Grid>
                         </Grid>}
                     {!isExecutiveCoachingFlavored() &&

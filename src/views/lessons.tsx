@@ -1,53 +1,27 @@
 import {
     Resource,
-    createDefaults,
-    tableDefaults,
-    editDefaults,
-    formDefaults,
     listDefaults,
-    showDefaults,
-    RowActions,
-    DataTable,
-    SimpleShowLayout,
-    SimpleForm,
     type ResourceActionDefs,
     type FieldSchema,
-    RichTextField,
     CardGrid,
     createReferenceField,
     createReferenceInput,
-    BooleanLiveFilter,
-    ReferenceLiveFilter,
     ChoicesLiveFilter,
     TextLiveFilter,
-    RichTextInput
 } from '@mahaswami/vc-frontend';
-import { Book } from '@mui/icons-material';
+import { LibraryBooks } from '@mui/icons-material';
 import {
-    Create,
-    Edit,
     List,
     Menu,
-    Show,
     type ListProps,
     TextField,
-    TextInput,
-    BooleanField,
-    BooleanInput,
-    SelectField,
-    SelectInput,
-    required,
-    useUnique,
-    ReferenceArrayInput, AutocompleteArrayInput
+    SelectField, ReferenceArrayInput, AutocompleteArrayInput
 } from "react-admin";
-import { DivisionsReferenceField } from './divisions.js';
-import {Box} from "@mui/material";
-import {LessonList, LessonShow} from "./curriculum/lessons.tsx";
-// import {ChessAIInput} from "../fields/ai_lesson/ChessAIInput.tsx";
+import {LessonCreate, LessonEdit, LessonList, LessonShow} from "./curriculum/lessons.tsx";
 
 export const RESOURCE = "lessons"
-export const ICON = Book
-export const PREFETCH: string[] = ["divisions"]
+export const ICON = LibraryBooks
+export const PREFETCH: string[] = []
 
 export const LessonsReferenceField = createReferenceField(RESOURCE, PREFETCH);
 export const LessonsReferenceInput = createReferenceInput(RESOURCE, PREFETCH);
@@ -59,8 +33,6 @@ export const LanguageChoiceField = (props: any) => <SelectField {...props} choic
 const filters = [
     <TextLiveFilter source="search" show />,
     <ChoicesLiveFilter source="language" label="Language" choiceLabels={languageChoices} show />,
-    <ReferenceLiveFilter source="division_id" reference="divisions" label="Division" />,
-    <BooleanLiveFilter source="is_limit_to_show_single_section" label="Limit To Show Single Section" />
 ]
 
 // export const LessonsList = (props: ListProps) => {
@@ -88,57 +60,6 @@ export const LessonsCardList = (props: ListProps) => {
         </List>
     )
 }
-
-const LessonForm = (props: any) => {
-    const unique = useUnique();
-    return (
-        <SimpleForm {...formDefaults(props)}>
-            <Box width='100%' display="grid" gridTemplateColumns={{ xs: '1fr', md: '1fr 1fr' }} gap="1rem">
-                <TextInput source="name" validate={[required(), unique()]} />
-                <BooleanInput source="is_limit_to_show_single_section" />
-                <SelectInput source="language" choices={languageChoices} validate={required()} />
-                <ReferenceArrayInput source="tag_ids" reference="tags" queryOptions={{meta: {scopingEscapeHatch:true}}}
-                                     perPage={1000} sort={{ field: 'name', order: 'ASC' }}>
-                    <AutocompleteArrayInput label="Tags" />
-                </ReferenceArrayInput>
-            </Box>
-            <RichTextInput source="content" validate={required()} fullWidth />
-        </SimpleForm>
-    )
-}
-
-const LessonEdit = (props: any) => {
-    return (
-        <Edit {...editDefaults(props)}>
-            <LessonForm />
-        </Edit>
-    )
-}
-
-const LessonCreate = (props: any) => {
-    return (
-    	<Create {...createDefaults(props)}>
-            <LessonForm />
-        </Create>
-    )
-}
-
-// const LessonShow = (props: any) => {
-//     return (
-//         <Show {...showDefaults(props)}>
-//             <SimpleShowLayout>
-//                 <Box display="grid" gridTemplateColumns={{ xs: '1fr', md: '1fr 1fr' }} gap="1rem">
-//                     <TextField source="name" />
-//                     <BooleanField source="is_limit_to_show_single_section" />
-//                     <SelectField source="language" choices={languageChoices} />
-//                     <TextField source="tag_ids" />
-//                 </Box>
-//                 <DivisionsReferenceField source="division_id" />
-//                 <RichTextField source="content" />
-//             </SimpleShowLayout>
-//         </Show>
-//     )
-// }
 
 const lessonsFieldSchema: FieldSchema = {
     name: { required: true, unique: true },
@@ -175,5 +96,5 @@ export const LessonsResource = (
     />
 )
 export const LessonsMenu = () => (
-    <Menu.Item to={`/${RESOURCE}`} primaryText="Lessons" leftIcon={<ICON />} />
+    <Menu.Item to={`/${RESOURCE}`} primaryText="My Lessons" leftIcon={<ICON />} />
 )

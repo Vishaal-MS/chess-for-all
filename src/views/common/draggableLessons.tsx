@@ -1,23 +1,21 @@
-import React, {useEffect, useMemo} from "react";
-import {Box, Grid, Typography} from "@mui/material";
+import {useEffect} from "react";
+import {Box, Typography} from "@mui/material";
 import {
-    Datagrid,
-    ReferenceField,
-    TextField,
-    FunctionField,
-    DeleteButton,
-    Loading,
-    Button,
-    Edit, SimpleForm, ReferenceInput, AutocompleteInput,
-    FormDataConsumer, useRefresh, Toolbar, SaveButton,
-    BooleanInput
+    ReferenceField, TextField, DeleteButton, Loading, Button, Edit,
+    AutocompleteInput, FormDataConsumer, useRefresh, Toolbar, SaveButton, BooleanInput
 } from "react-admin";
 import { useListContext } from 'react-admin';
 import { useState } from 'react';
 import {useNotify } from 'react-admin';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import {Empty} from "./empty.tsx";
-import {closeDialog, openDialog, remoteLog} from "@mahaswami/vc-frontend";
+import {
+    closeDialog,
+    DataTable,
+    openDialog,
+    remoteLog,
+    SimpleForm
+} from "@mahaswami/vc-frontend";
 import {
     getStandardId,
     isAllowPublishing,
@@ -27,8 +25,10 @@ import {
     isAllowedVoiceOver
 } from "../../businessLogic.ts";
 import EditIcon from '@mui/icons-material/Edit';
+import {StandardSectionsReferenceInput} from "../standard_sections.tsx";
+import {CognitiveSkillsReferenceInput} from "../cognitive_skills.tsx";
 
-export const ClassLessonsSorter = ({recordId, disableRedirect, isSchoolClass}) => {
+export const ClassLessonsSorter = ({recordId, disableRedirect, isSchoolClass, props}) => {
     const dataProvider = window.swanAppFunctions.dataProvider;
     const {data: listData, isPending,  resource } = useListContext();
     const notify = useNotify();
@@ -135,31 +135,31 @@ export const ClassLessonsSorter = ({recordId, disableRedirect, isSchoolClass}) =
                                     {(isSchoolStandardLinked() || isRegularSchoolFlavored()) &&
                                     <>
                                     <Typography variant={'h5'}>Sections & Cognitive Skills</Typography>
-                                    <ReferenceInput source={'mapping1_standard_section_id'} reference={'standard_sections'} filter={{standard_id: standardId, ...section1Filter}} perPage={10000}
-                                                    queryOptions={{meta: {scopingEscapeHatch: true}}}>
+                                    <StandardSectionsReferenceInput source={'mapping1_standard_section_id'} filter={{standard_id: standardId, ...section1Filter}}
+                                                                    perPage={10000} queryOptions={{ meta: {scopingEscapeHatch: true}}}>
                                         <AutocompleteInput label={"Section 1"} source={"code_inc_any"} filterToQuery={codeFilterQuery} limitTags={3}/>
-                                    </ReferenceInput>
-                                    <ReferenceInput source={'mapping2_standard_section_id'} reference={'standard_sections'} filter={{standard_id: standardId, ...section2Filter }} perPage={10000}
-                                                    queryOptions={{meta: {scopingEscapeHatch: true}}}>
+                                    </StandardSectionsReferenceInput>
+                                    <StandardSectionsReferenceInput source={'mapping2_standard_section_id'} filter={{standard_id: standardId, ...section2Filter }}
+                                                                    perPage={10000} queryOptions={{ meta: {scopingEscapeHatch: true} }}>
                                         <AutocompleteInput label={"Section 2"} source={"code_inc_any"} limitTags={3} filterToQuery={codeFilterQuery}/>
-                                    </ReferenceInput>
-                                    <ReferenceInput source={'mapping3_standard_section_id'} reference={'standard_sections'} filter={{standard_id: standardId, ...section3Filter}} perPage={10000}
-                                                    queryOptions={{meta: {scopingEscapeHatch: true}}}>
+                                    </StandardSectionsReferenceInput>
+                                    <StandardSectionsReferenceInput source={'mapping3_standard_section_id'} filter={{standard_id: standardId, ...section3Filter}}
+                                                                    perPage={10000} queryOptions={{ meta: {scopingEscapeHatch: true} }}>
                                         <AutocompleteInput label={"Section 3"} source={"code_inc_any"} limitTags={3} filterToQuery={codeFilterQuery}/>
-                                    </ReferenceInput>
+                                    </StandardSectionsReferenceInput>
 
-                                    <ReferenceInput source={'mapping1_cognitive_skill_id'} reference={'cognitive_skills'} filter={{...cognitiveSkill1Filter}} perPage={1000}
-                                                    queryOptions={{meta: {scopingEscapeHatch: true}}}>
+                                    <CognitiveSkillsReferenceInput source={'mapping1_cognitive_skill_id'} filter={{...cognitiveSkill1Filter}}
+                                                                   perPage={1000} queryOptions={{meta: {scopingEscapeHatch: true}}}>
                                         <AutocompleteInput label={"Cognitive Skill 1"} source={"name"} limitTags={3}/>
-                                    </ReferenceInput>
-                                    <ReferenceInput source={'mapping2_cognitive_skill_id'} reference={'cognitive_skills'} filter={{...cognitiveSkill2Filter}} perPage={1000}
-                                                    queryOptions={{meta: {scopingEscapeHatch: true}}}>
+                                    </CognitiveSkillsReferenceInput>
+                                    <CognitiveSkillsReferenceInput source={'mapping2_cognitive_skill_id'} filter={{...cognitiveSkill2Filter}}
+                                                    perPage={1000} queryOptions={{meta: {scopingEscapeHatch: true}}}>
                                         <AutocompleteInput label={"Cognitive Skill 2"} source={"name"} limitTags={3}/>
-                                    </ReferenceInput>
-                                    <ReferenceInput source={'mapping3_cognitive_skill_id'} reference={'cognitive_skills'} filter={{...cognitiveSkill3Filter}} perPage={1000}
-                                                    queryOptions={{meta: {scopingEscapeHatch: true}}}>
+                                    </CognitiveSkillsReferenceInput>
+                                    <CognitiveSkillsReferenceInput source={'mapping3_cognitive_skill_id'} filter={{...cognitiveSkill3Filter}}
+                                                                   perPage={1000} queryOptions={{meta: {scopingEscapeHatch: true}}}>
                                         <AutocompleteInput label={"Cognitive Skill 3"} source={"name"} limitTags={3}/>
-                                    </ReferenceInput>
+                                    </CognitiveSkillsReferenceInput>
                                     </>}
                                 </>
                             )
@@ -169,77 +169,76 @@ export const ClassLessonsSorter = ({recordId, disableRedirect, isSchoolClass}) =
                 </Edit>
             )
         }
-
         openDialog(<EditSectionAndCognitiveSkill />)
     }
 
-    if(isLoadingLessons) return <Loading/>; // Handle loading state
+    if (isLoadingLessons) return <Loading/>; // Handle loading state
+
     return (
         <Box sx={{width: '100%'}}>
-        <DragDropContext onDragEnd={handleDragEnd}>
-            <Droppable droppableId={droppableId} direction="vertical">
-                {(provided) => (
-                    <div ref={provided.innerRef} {...provided.droppableProps}>
-            <Datagrid sx={{
-                  "& .RaDatagrid-tableWrapper": {
-                      maxHeight: 'calc(100vh - 22rem)',
-                      overflow: 'auto'
-                  }
-               }} data={orderedRows} bulkActionButtons={false} empty={<Empty emptyText="No Lessons yet"/>} rowClick={false}>
-                <FunctionField label="Lesson" render={record => {
-                    return (
-                    <Draggable key={record.id} draggableId={record.id.toString()} index={record.__index__}>
-                        {(provided) => (
-                            <div
-                                ref={provided.innerRef}
-                                {...provided.draggableProps}
-                                {...provided.dragHandleProps}
-                            >
-                                <Typography variant={"h7"}>{record.lesson.name}</Typography>
-                            </div>
-                            )}
-                    </Draggable>)}}/>
-                <ReferenceField source={"lesson.tenant_id"} reference={"tenants"} link={false} label="Publisher">
-                    <TextField source="name"/>
-                </ReferenceField>
-                {(isSchoolClass && isAnySchoolFlavorActive()) &&
-                    <FunctionField label={"Sections"}
-                        render={record => {
-                            const code1 = record?.mapping1_standard_section?.code || '';
-                            const code2 = record?.mapping2_standard_section?.code || '';
-                            const code3 = record?.mapping3_standard_section?.code || '';
+            <DragDropContext onDragEnd={handleDragEnd}>
+                <Droppable droppableId={droppableId} direction="vertical">
+                    {(provided) => (
+                        <div ref={provided.innerRef} {...provided.droppableProps}>
+                            <DataTable data={orderedRows} bulkActionButtons={false} empty={<Empty emptyText="No Lessons yet"/>} rowClick={false}>
+                                <DataTable.Col label="Lesson" render={record => {
+                                    return (
+                                        <Draggable key={record.id} draggableId={record.id.toString()} index={record.__index__}>
+                                            {(provided) => (
+                                                <div
+                                                    ref={provided.innerRef}
+                                                    {...provided.draggableProps}
+                                                    {...provided.dragHandleProps}
+                                                >
+                                                    <Typography variant={"h7"}>{record?.lesson?.name}</Typography>
+                                                </div>
+                                                )}
+                                        </Draggable>
+                                    )}}/>
+                                <DataTable.Col label="Publisher" source='lesson.tenant_id' field={() =>
+                                    <ReferenceField source={"lesson.tenant_id"} reference={"tenants"} link={false}>
+                                        <TextField source="name"/>
+                                    </ReferenceField>
+                                }/>
+                                {(isSchoolClass && isAnySchoolFlavorActive()) &&
+                                    <DataTable.Col label={"Sections"}
+                                        render={record => {
+                                            const code1 = record?.mapping1_standard_section?.code || '';
+                                            const code2 = record?.mapping2_standard_section?.code || '';
+                                            const code3 = record?.mapping3_standard_section?.code || '';
+                                            return [code1, code2, code3].filter(Boolean).join(', ');
+                                        }}
+                                    />
+                                }
+                                {(isSchoolClass && isAnySchoolFlavorActive()) &&
+                                    <DataTable.Col label={"Cognitive Skills"}
+                                                   render={record => {
+                                                       const name1 = record?.mapping1_cognitive_skill?.name || '';
+                                                       const name2 = record?.mapping2_cognitive_skill?.name || '';
+                                                       const name3 = record?.mapping3_cognitive_skill?.name || '';
 
-                            return [code1, code2, code3].filter(Boolean).join(', ');
-                        }}
-                    />
-                }
-                {(isSchoolClass && isAnySchoolFlavorActive()) &&
-                    <FunctionField label={"Cognitive Skills"}
-                                   render={record => {
-                                       const name1 = record?.mapping1_cognitive_skill?.name || '';
-                                       const name2 = record?.mapping2_cognitive_skill?.name || '';
-                                       const name3 = record?.mapping3_cognitive_skill?.name || '';
-
-                                       return [name1, name2, name3].filter(Boolean).join(', ');
-                                   }}
-                    />
-                }
-                {(resource === 'curriculum_lessons') &&
-                    <FunctionField  render={(record) => {
-                        return (
-                            <Button sx={{height: "1.5rem", '& .MuiButton-icon': {margin: 0}}} onClick={() => handleEdit(record)} variant="text">
-                                <EditIcon/>
-                            </Button>
-                        )
-                    }}/>
-                }
-                <DeleteButton label={false} redirect={!disableRedirect && (resource === 'class_progress' ? `/classes/${recordId}/2` : `curriculum/${recordId}`)}/>
-            </Datagrid>
-                        {provided.placeholder}
-                    </div>
-                )}
-            </Droppable>
-        </DragDropContext>
+                                                       return [name1, name2, name3].filter(Boolean).join(', ');
+                                                   }}
+                                    />
+                                }
+                                <DataTable.Col label={false} render={(record) => {
+                                    return (
+                                        <Box>
+                                            {(resource === 'curriculum_lessons') &&
+                                                <Button sx={{height: "1.5rem", '& .MuiButton-icon': {margin: 0}}} onClick={() => handleEdit(record)} variant="text">
+                                                    <EditIcon/>
+                                                </Button>}
+                                            <DeleteButton label={false}
+                                                redirect={!disableRedirect && (resource === 'class_progress' ? `/classes/${recordId}/2` : `curriculum/${recordId}`)}/>
+                                        </Box>
+                                    )
+                                }}/>
+                            </DataTable>
+                            {provided.placeholder}
+                        </div>
+                    )}
+                </Droppable>
+            </DragDropContext>
         </Box>
        )
 }

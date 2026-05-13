@@ -1,12 +1,14 @@
 import { Resource, createDefaults, tableDefaults,
 	editDefaults, formDefaults, listDefaults,
-	showDefaults, RowActions, DataTable, SimpleShowLayout, SimpleForm,
+	RowActions, DataTable, SimpleForm,
 	type ResourceActionDefs, type FieldSchema, CardGrid, recordRep, createReferenceField, createReferenceInput, BooleanLiveFilter, ReferenceLiveFilter, DateLiveFilter, TextLiveFilter} from '@mahaswami/vc-frontend';
 import { Group } from '@mui/icons-material';
-import { Create, Edit, List, Menu, Show,
-    type ListProps, TextField, TextInput, DateField, DateInput, BooleanField, BooleanInput} from "react-admin";
+import { Create, Edit, List, Menu,
+    type ListProps, TextInput, DateField, DateInput, BooleanField, BooleanInput} from "react-admin";
 import { ClassesReferenceField, ClassesReferenceInput } from './classes.js';
 import { StudentsReferenceField, StudentsReferenceInput } from './students.js';
+import {EnrollmentShow} from "./class/studentDashBoard.tsx";
+import {EnrollmentsList} from "./class/enrollments.tsx";
 
 export const RESOURCE = "enrollments"
 export const ICON = Group
@@ -24,23 +26,6 @@ const filters = [
     <DateLiveFilter source="completion_date" label="Completion" />,
     <BooleanLiveFilter source="is_certificate_due" label="Certificate Due" />
 ]
-
-export const EnrollmentsList = (props: ListProps) => {
-    return (
-        <List {...listDefaults(props)}>
-            <DataTable {...tableDefaults(RESOURCE)} hiddenColumns={['status', 'is_certificate_due']} >
-                <DataTable.Col source="class_id" field={ClassesReferenceField}/>
-                <DataTable.Col source="student_id" field={StudentsReferenceField}/>
-                <DataTable.Col source="enrollment_date" field={DateField}/>
-                <DataTable.Col source="completion_date" field={DateField}/>
-                <DataTable.Col source="grade" />
-                <DataTable.Col source="status" />
-                <DataTable.Col source="is_certificate_due" field={BooleanField}/>
-                <RowActions/>
-            </DataTable>
-        </List>
-    )
-}
 
 export const EnrollmentsCardList = (props: ListProps) => {
     return (
@@ -83,22 +68,6 @@ const EnrollmentCreate = (props: any) => {
     )
 }
 
-const EnrollmentShow = (props: any) => {
-    return (
-        <Show {...showDefaults(props)}>
-            <SimpleShowLayout display="grid"  gridTemplateColumns={{ xs: '1fr', md: '1fr 1fr' }}  gap="1rem" >
-                <ClassesReferenceField source="class_id" />
-                <StudentsReferenceField source="student_id" />
-                <DateField source="enrollment_date" />
-                <DateField source="completion_date" />
-                <TextField source="grade" />
-                <TextField source="status" />
-                <BooleanField source="is_certificate_due" />
-            </SimpleShowLayout>
-        </Show>
-    )
-}
-
 const enrollmentsFieldSchema: FieldSchema = {
     class_id: { resource: 'classes' },
     student_id: { resource: 'students' },
@@ -128,7 +97,6 @@ export const EnrollmentsResource = (
         create={<EnrollmentCreate/>}
         edit={<EnrollmentEdit/>}
         show={<EnrollmentShow/>}
-        hasDialog
         hasLiveUpdate
         hasFilterChooser
         cardList={<EnrollmentsCardList/>}

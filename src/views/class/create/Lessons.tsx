@@ -29,7 +29,7 @@ const Lessons = ({ classRecord, showLessonList, setShowLessonList }) => {
                                 target={"class_id"}
                                 record={{ id: classRecord.id }}
                                 sort={{field: 'position_number', order: 'ASC'}}
-                                filter={{class_id: classRecord.id}} queryOptions={{meta: {prefetch: ['lessons', 'standard_sections', 'cognitive_skills']}}}>
+                                filter={{class_id: classRecord.id}} queryOptions={{meta: {prefetch: ['lessons']}}}>
                 <ClassLessonsSorter recordId={classRecord.id} disableRedirect isSchoolClass={isSchoolClass}/>
             </ReferenceManyField>
             <Button onClick={showAddLessonDialog} variant="contained" sx={{marginY: '0.5rem' }} label="Add"/>

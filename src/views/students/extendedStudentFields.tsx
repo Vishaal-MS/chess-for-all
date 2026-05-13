@@ -4,7 +4,6 @@ import {
     BooleanInput,
     DateInput,
     FormDataConsumer,
-    ReferenceInput,
     required,
     SelectInput,
     TextInput,
@@ -19,6 +18,7 @@ import {getLocalStorage} from "@mahaswami/vc-frontend";
 import {getDOBDateRange} from "../../backend/students.ts";
 import {isRegularSchoolFlavored} from "../../businessLogic.ts";
 import {StudentStatusSelect} from "./../students.tsx";
+import {StandardGradesReferenceInput} from "../standard_grades.tsx";
 
 
 export const ExtendedStudentFields = ({mode, standardId}) => {
@@ -128,9 +128,9 @@ export const ExtendedStudentFields = ({mode, standardId}) => {
                 </Grid>
                 <Grid item xs={12} md={6}>
                     {standardId ?
-                        <ReferenceInput source={"standard_grade_id"} reference={"standard_grades"} filter={{standard_id: standardId}} link={false}>
+                        <StandardGradesReferenceInput source={"standard_grade_id"} filter={{standard_id: standardId}} link={false}>
                             <AutocompleteInput optionText={"name"} label="Grade" validate={[required()]}/>
-                        </ReferenceInput> :
+                        </StandardGradesReferenceInput> :
                         <TextInput source="grade" label="Grade"/>
                     }
                 </Grid>

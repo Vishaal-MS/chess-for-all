@@ -3,25 +3,19 @@ import {
     AutocompleteInput, BooleanField,
     Button,
     CreateButton,
-    Datagrid,
     DateField,
-    DateInput, DeleteButton,
+    DateInput, DeleteButton, Edit,
     EditButton, FormDataConsumer,
     FunctionField,
-    ImageField,
-    RecordContextProvider,
-    ReferenceField,
-    ReferenceInput,
+    ImageField, Link, List,
     ReferenceManyCount,
-    ReferenceManyField, required, Show, SimpleList,
+    ReferenceManyField, required, SelectField, Show, SimpleList,
     TabbedForm,
     TextField,
     TextInput, Toolbar, TopToolbar,
     useGetRecordId, useListContext,
-    useNotify, useRecordContext, useRedirect,
-    useRefresh,
-    useUnselectAll, WithListContext,
-    WithRecord
+    useNotify, useRecordContext,
+    useRefresh, WithListContext
 } from "react-admin";
 import {
     isAcademy,
@@ -35,36 +29,45 @@ import {
     Avatar,
     Box,
     Card, CardContent, CardHeader,
-    Grid, Typography,
+    Grid, Stack, Tooltip, Typography,
 } from "@mui/material";
 import {isProCoach} from "../../businessLogic";
 import {SearchInput} from "ra-ui-materialui";
-import {Navigate, useNavigate} from "react-router-dom";
-import { getLocalStorage, openDialog, PER_PAGE, SensibleDefaultPagination} from "@mahaswami/vc-frontend";
-
+import {useNavigate} from "react-router-dom";
+import {
+    DataTable, editDefaults,
+    getLocalStorage,
+    listDefaults,
+    openDialog,
+    PER_PAGE,
+    SensibleDefaultPagination, showDefaults, tableDefaults
+} from "@mahaswami/vc-frontend";
 import {ScheduleCreate, ScheduleEdit} from "./schedules";
 import {AddLessons} from "./addLessons";
 import {ClassLessonsSorter} from "../common/draggableLessons";
 import {EnrollStudentsButton} from "./addStudents";
 import {Empty} from "../common/empty";
 import {ListTitle, RecordTitle} from "../../components/Title.tsx";
-import {ClassesStatus} from "../../helpers/constants.ts";
+import {ClassesStatus, classStatusChoises} from "../../helpers/constants.ts";
 import KeyboardReturnIcon from '@mui/icons-material/KeyboardReturn';
 import FilterMultiChoiceInput from "../common/FilterMultiChoiceInput.tsx";
 import {ExtendedSchoolClassFields} from "./ExtendedSchoolClassFields.tsx";
 import AddIcon from "@mui/icons-material/Add";
 import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
 import PlayCircleFilledRoundedIcon from "@mui/icons-material/PlayCircleFilledRounded";
-import {classNameValidation, validateEndDate, validateStartDate} from "../../backend/classes.ts";
+import {classNameValidation, validateEndDate} from "../../backend/classes.ts";
 import { AvatarField } from "../../fields/AvatarField.tsx";
 import { getSimpleDate } from "../../utils.ts";
-import { SwanEdit, SwanList } from "../swan_crud/SwanCrud.tsx";
-
-export const myClassesStatusChoices = [
-    { id: ClassesStatus.ACTIVE, name: 'Active' },
-    { id: ClassesStatus.COMPLETED, name: 'Completed' },
-    { id: ClassesStatus.SCHEDULED, name: 'Scheduled' }
-];
+import {ClassLessons} from "./classLessons.tsx";
+import {TeachingModesReferenceField, TeachingModesReferenceInput} from "../teaching_modes.tsx";
+import {CoachesReferenceField, CoachesReferenceInput} from "../coaches.tsx";
+import {StandardGradesReferenceField} from "../standard_grades.tsx";
+import AccordionSection from "../../components/AccordionSection.tsx";
+import SchedulePreview from "./SchedulePreview.tsx";
+import {StudentsReferenceField} from "../students.tsx";
+import {UsersReferenceField} from "../users.tsx";
+import {ClientsReferenceField} from "../clients.tsx";
+import {ScheduleTypesReferenceField} from "../schedule_types.tsx";
 
 const CreateToolBar = () => {
     const navigate = useNavigate();
@@ -140,7 +143,7 @@ const EmptyComponent = () => {
     return <Empty emptyText={""}/>
 }
 
-export const MyClassesList = () => {
+export const MyClassesList = (props: any) => {
     const dataProvider = window.swanAppFunctions.dataProvider;
     const navigate = useNavigate();
     const [state, setState] = useState<any>({
@@ -182,7 +185,7 @@ export const MyClassesList = () => {
     useEffect(() => {
         const fetchCoachList = async () => {
             const {data: currentTenantCoachList} = await dataProvider.getList('coaches', {
-                meta: {prefetch: ['users']}
+                meta: { prefetch: ['users'] }
             })
             const sortedCoachList = currentTenantCoachList.sort((a: any, b: any) => a.user.last_name.toLowerCase().localeCompare(b.user.last_name.toLowerCase()));
             const coachUserList = new Map();
@@ -201,6 +204,12 @@ export const MyClassesList = () => {
     }, []);
 
     const {coachList} = state;
+    const myClassesStatusChoices = [
+        { id: ClassesStatus.ACTIVE, name: 'Active' },
+        { id: ClassesStatus.COMPLETED, name: 'Completed' },
+        { id: ClassesStatus.SCHEDULED, name: 'Scheduled' }
+    ];
+
     const classFilters = [
         <SearchInput source="q" alwaysOn />,
         <FilterMultiChoiceInput source="status" label="Status" choices={myClassesStatusChoices} alwaysOn/>,
@@ -222,20 +231,20 @@ export const MyClassesList = () => {
     ];
 
     return(
-        <SwanList actions={isOrgAdmin() || isDivisionAdmin() || isProCoach() ? <CreateToolBar /> : false} filters={classFilters}
-              title={<ListTitle resourceName={`${isRegularSchoolFlavored() ? 'Teacher' : 'Coach'} Workspace`}/>} sort={{field: 'start_date', order: 'DESC'}}
+        <List {...listDefaults(props)} actions={isOrgAdmin() || isDivisionAdmin() || isProCoach() ? <CreateToolBar /> : false}
+              title={<ListTitle resourceName={`${isRegularSchoolFlavored() ? 'Teacher' : 'Coach'} Workspace`}/>}
+              sort={{field: 'start_date', order: 'DESC'}}
               pagination={<SensibleDefaultPagination />} perPage={PER_PAGE} exporter={false}
               empty={isSchoolStandardLinked() ? <EmptyClassComponent /> : <EmptyComponent/>}
         >
             <ClassDataWithFilter />
-        </SwanList>
+        </List>
     );
 }
 
 const ClassDataWithFilter = () => {
     const {data, filterValues, setFilters} = useListContext();
     const defaultSetRef = useRef(true);
-    const isSchoolStandardLink = isSchoolStandardLinked();
     const isExecutiveCoachingFlavor = isExecutiveCoachingFlavored();
 
     useEffect(() => {
@@ -247,22 +256,25 @@ const ClassDataWithFilter = () => {
         }
     }, [data, filterValues, setFilters]);
     return (
-        <Datagrid bulkActionButtons={false}>
-            <TextField source={"name"} label="Name"/>
-            {!(isRegularSchoolFlavored() || isExecutiveCoachingFlavor) && <ReferenceField source={"teaching_mode_id"} label="Coaching Mode"
-                reference={"teaching_modes"} link={false} queryOptions={{meta: {scopingEscapeHatch:true}}}/>}
-            <DateField source="start_date" label="Start Date" />
-            <DateField source="end_date" label="End Date" />
-            <TextField source={"status"} label="Status" sx={{textTransform: 'capitalize'}}/>
-            {isAcademy() && !isOrgCoach() &&
-                <ReferenceField label={isRegularSchoolFlavored() ? "Teacher" : "Coach"} source={"coach_id"}
-                                reference={"coaches"} link={false} queryOptions={{meta: {prefetch: ['users']}}}>
-                    <TextField source={"user.fullName"}/>
-                </ReferenceField>
+        <DataTable bulkActionButtons={false}>
+            <DataTable.Col source={"name"} />
+            {!(isRegularSchoolFlavored() || isExecutiveCoachingFlavor) &&
+                <DataTable.Col source="teaching_mode_id" field={(props) =>
+                    <TeachingModesReferenceField { ...props } label="Coaching Mode" link={false}
+                                                 queryOptions={{ meta: {scopingEscapeHatch:true }}} />} />
             }
-            {isSchoolStandardLinked() && <BooleanField source={'is_school_class'} label={"Is School Class"}/>}
-            {isSchoolStandardLinked() && <ReferenceField reference="standard_grades" source="standard_grade_id" />}
-        </Datagrid>
+            <DataTable.Col source="start_date" field={DateField} />
+            <DataTable.Col source="end_date" field={DateField} />
+            <DataTable.Col source="status" field={(props) => <SelectField {...props} choices={classStatusChoises} />} />
+            {isAcademy() && !isOrgCoach() &&
+                <DataTable.Col label={isRegularSchoolFlavored() ? "Teacher" : "Coach"} source="coach_id" link={false}
+                               field={(props: any) => <CoachesReferenceField {...props}>
+                                   <TextField source={"user.fullName"}/>
+                               </CoachesReferenceField>} />
+            }
+            {isSchoolStandardLinked() && <DataTable.Col source='is_school_class' field={BooleanField}/>}
+            {isSchoolStandardLinked() && <StandardGradesReferenceField source="standard_grade_id" />}
+        </DataTable>
     )
 }
 
@@ -287,7 +299,7 @@ const cardContentSx = () => ({
 });
 
 
-export const MyClassShow = () => {
+export const MyClassShow = (props: any) => {
     const dataProvider = window.swanAppFunctions.dataProvider;
     const recordId = Number(useGetRecordId());
     const notify = useNotify();
@@ -335,7 +347,8 @@ export const MyClassShow = () => {
     const isRemoteTeachMode: boolean = classRecord?.teaching_mode_id === 2;
 
     return (
-        <Show title={<RecordTitle resourceName={isProCoach() || isOrgCoach() || isStudent() ? 'Classes Show': 'Classes Show'}/>} component={'div'} actions={false} sx={{
+        <Show {...showDefaults(props)} title={<RecordTitle resourceName={isProCoach() || isOrgCoach() || isStudent() ? 'Classes Show': 'Classes Show'}/>}
+              component={'div'} actions={false} sx={{
             '& .MuiToolbar-root': {
                 justifyContent: 'right',
             },
@@ -382,28 +395,24 @@ export const MyClassShow = () => {
                                 >
                                     <SimpleList
                                         primaryText={() => (
-                                            <ReferenceField source="student_id" reference="students" link={false}>
-                                                <ReferenceField source="user_id" reference="users" link={false}>
-                                                    <TextField source="fullName" />
-                                                </ReferenceField>
-                                            </ReferenceField>
+                                            <StudentsReferenceField source="student_id" link={false}>
+                                                <FunctionField render={student => student.user.fullName} />
+                                            </StudentsReferenceField>
                                         )}
                                         leftAvatar={() => (
-                                            <ReferenceField source="student_id" reference="students" link={false}>
-                                                <ReferenceField source="user_id" reference="users" link={false}>
-                                                    <FunctionField render={(user) => (
-                                                        user?.image_file_id ? (
-                                                            <Avatar>
-                                                                <ImageField source="image_file_id" src="src" />
-                                                            </Avatar>
-                                                        ) : (
-                                                            <Avatar>
-                                                                {user?.fullName?.substring(0, 2).toUpperCase()}
-                                                            </Avatar>
-                                                        )
-                                                    )}/>
-                                                </ReferenceField>
-                                            </ReferenceField>
+                                            <StudentsReferenceField source="student_id" link={false}>
+                                                <FunctionField render={(student) => (
+                                                    student?.user?.image_file_id ? (
+                                                        <Avatar>
+                                                            <ImageField source="image_file_id" src="src" />
+                                                        </Avatar>
+                                                    ) : (
+                                                        <Avatar>
+                                                            {student?.user?.fullName?.substring(0, 2).toUpperCase()}
+                                                        </Avatar>
+                                                    )
+                                                )}/>
+                                            </StudentsReferenceField>
                                         )}
                                         sx={{
                                             '& .MuiListItem-gutters': {
@@ -417,10 +426,30 @@ export const MyClassShow = () => {
                     </Card>
                 </Grid>
                 {isRemoteTeachMode &&
-                    <Grid item xs={12} md={5}>
-                        <Typography>
-                            Discussion board
-                        </Typography>
+                    <Grid item xs={12} md={4}>
+                        <Card  sx={{height: '100%'}}>
+                            <CardHeader title={<Typography variant="h6"> Discussion Board</Typography>} sx={cardHeaderSx} />
+                            <CardContent sx={cardContentSx}>
+                                <ReferenceManyField reference="queries" target="class_id">
+                                    <WithListContext render={({ isPending, total }) => (
+                                        !isPending && total > 0 && (
+                                            <Button
+                                                sx={{ borderRadius: 0, pt: 2 }}
+                                                component={Link}
+                                                to={{
+                                                    pathname: '/queries',
+                                                    search: `filter=${JSON.stringify({ class_id: recordId })}`,
+                                                }}
+                                                size="small"
+                                                color="primary"
+                                            >
+                                                See more details
+                                            </Button>
+                                        )
+                                    )} />
+                                </ReferenceManyField>
+                            </CardContent>
+                        </Card>
                     </Grid>
                 }
             </Grid>
@@ -432,14 +461,9 @@ export const EditClass = (props) => {
     const recordId= Number(useGetRecordId());
     const dataProvider = window.swanAppFunctions.dataProvider;
     const [coaches, setCoaches] = useState([]);
-    const refresh= useRefresh();
     const navigate = useNavigate();
-    const record = useRecordContext();
     const isExecutiveCoachingFlavor = isExecutiveCoachingFlavored();
     const tabFormStyle = { height: 'calc(100vh - 16rem)', width: '100%', overflow: 'auto'};
-    const addScheduleAction = () => {
-        openDialog(<ScheduleCreate classId={recordId} width={'60vw'}/>);
-    }
 
     useEffect(() => {
         const fetchCoaches = async () => {
@@ -475,31 +499,23 @@ export const EditClass = (props) => {
         return errors;
     }
     return(
-        <SwanEdit actions={<EditActions />} title={<RecordTitle resourceName={`${isRegularSchoolFlavored() ? 'Teacher': 'Coach'} Workspace`}/>}
-             {...props} mutationMode="pessimistic">
+        <Edit {...editDefaults(props)} {...props} mutationMode="pessimistic" actions={<EditActions />}
+              title={<RecordTitle resourceName={`${isRegularSchoolFlavored() ? 'Teacher': 'Coach'} Workspace`}/>}>
             <TabbedForm validate={validateClassOnEdit}>
-                <TabbedForm.Tab label={"Class Details"} >
+                <TabbedForm.Tab label={"Class Details"}>
                     <Box sx={tabFormStyle}>
                         <TextInput source="name" validate={[required(), classNameValidation]}/>
-
-                        {isAcademy() && <ReferenceInput source={"coach_id"} queryOptions={{meta: {prefetch: ['users']}}}
-                                                        reference={"coaches"} link={false}>
-                            <AutocompleteInput optionText={"user.fullName"}
-                                               label={isRegularSchoolFlavored() ? "Teacher" : "Coach"}/>
-                        </ReferenceInput>}
+                        {isAcademy() && <CoachesReferenceInput label={isRegularSchoolFlavored() ? "Teacher" : "Coach"} source='coach_id' />}
                         <FormDataConsumer>
                             {({formData}) => {
                                 const isSchoolClass = formData?.is_school_class;
                                 return (
                                     <>
                                         {!isSchoolClass ?
-                                            <ReferenceInput source={"teaching_mode_id"} reference={"teaching_modes"}
-                                                            link={false}
-                                                            sort={{field: 'name', order: 'ASC'}}
-                                                            queryOptions={{meta: {scopingEscapeHatch: true}}}
-                                                            perPage={1000}>
-                                                <AutocompleteInput optionText={"name"} label="Coaching Mode"/>
-                                            </ReferenceInput> :
+                                            <TeachingModesReferenceInput label="Coaching Mode"
+                                                source={"teaching_mode_id"} link={false}
+                                                sort={{field: 'name', order: 'ASC'}} perPage={1000}
+                                                queryOptions={{ meta: {scopingEscapeHatch: true}}} /> :
                                             <ExtendedSchoolClassFields/>
                                         }
                                     </>
@@ -519,7 +535,7 @@ export const EditClass = (props) => {
                 </TabbedForm.Tab>
                     <ClassScheduleTab/>
             </TabbedForm>
-        </SwanEdit>
+        </Edit>
     );
 }
 
@@ -534,7 +550,7 @@ export const AddLessonButton = () => {
     return (<Button label="Add" onClick={showAddLessonDialog}  variant="contained" sx={{marginTop: 1 }} />)
 }
 
-const ClassEnrolledStudentTab = () => {
+const ClassEnrolledStudentTab = (props) => {
     const record = useRecordContext();
     const isSchoolClass = record?.is_school_class;
     const refresh = useRefresh();
@@ -545,29 +561,34 @@ const ClassEnrolledStudentTab = () => {
         <Box sx={tabFormStyle}>
             <ReferenceManyField pagination={<SensibleDefaultPagination/>} perPage={PER_PAGE} reference="enrollments"
                                 target={"class_id"} queryOptions={{meta: {prefetch: ['students']}}}>
-                <Datagrid empty={<Empty emptyText={`No ${isExecutiveCoachingFlavor ? 'executives' : 'students'} yet`}/>} bulkActionButtons={false}
+                <DataTable {...tableDefaults(props)} empty={<Empty emptyText={`No ${isExecutiveCoachingFlavor ? 'executives' : 'students'} yet`}/>} bulkActionButtons={false}
                           rowClick={false} sx={{maxHeight: '44vh', width: '100%', overflow: 'auto'}}>
-                    <ReferenceField source="student.user_id" label={isExecutiveCoachingFlavor ? 'Executive' : 'Student'} reference="users" link={false} sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                        <AvatarField/>
-                        <TextField source="fullName"/>
-                    </ReferenceField>
-                    {!(isSchoolClass || isExecutiveCoachingFlavor) && <ReferenceField source="student.client_id" reference="clients" label="Type"
-                                                       queryOptions={{meta: {prefetch: ['client_types']}}} link={false}>
-                        <TextField source="client_type.name"/>
-                    </ReferenceField>}
+                    <DataTable.Col label={isExecutiveCoachingFlavor ? 'Executive' : 'Student'}  source='student.user_id'
+                                   field={(props) =>
+                                        <UsersReferenceField { ...props } link={false} sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                                            <AvatarField/>
+                                            <TextField source="fullName"/>
+                                        </UsersReferenceField>
+                                   } />
                     {!(isSchoolClass || isExecutiveCoachingFlavor) &&
-                        <ReferenceField source="student.client_id" label="Client" reference="clients" link={false}/>}
-                    <TextField source="student.emergency_contact" label="Emergency Contact"/>
+                        <DataTable.Col label="Type" source="student.client_id" field={(props) =>
+                            <ClientsReferenceField { ...props } link={false}>
+                                <TextField source="client_type.name"/>
+                            </ClientsReferenceField>
+                        } />
+                    }
+                    {!(isSchoolClass || isExecutiveCoachingFlavor) &&
+                        <DataTable.Col source="student.client_id" label="Client" field={ClientsReferenceField} />}
+                    <DataTable.Col source="student.emergency_contact" label="Emergency Contact"/>
                     {!isExecutiveCoachingFlavor && (
                         !isSchoolClass ?
-                            <TextField source="student.grade" label="Grade"/> :
-                            <ReferenceField source="student.standard_grade_id" reference={"standard_grades"} label="Grade" link={false}>
-                                <TextField source={'name'}/>
-                            </ReferenceField>
+                            <DataTable.Col source="student.grade" label="Grade"/> :
+                            <DataTable.Col source="student.standard_grade_id" field={StandardGradesReferenceField} label="Grade" />
                     )}
-
-                    <DeleteButton label={false} redirect={`/classes/${record?.id}/1`}/>
-                </Datagrid>
+                    <DataTable.Col label={false}>
+                        <DeleteButton label={false} redirect={`/classes/${record?.id}/1`}/>
+                    </DataTable.Col>
+                </DataTable>
             </ReferenceManyField>
             <EnrollStudentsButton classRecord={record} refreshFn={refresh}/>
         </Box>
@@ -583,7 +604,7 @@ const ClassLessonTab = (props) => {
     return(
         <Box sx={tabFormStyle}>
             <ReferenceManyField pagination={<SensibleDefaultPagination />} reference={"class_progress"} target={"class_id"}
-                                sort={{field: 'position_number', order: 'ASC'}} queryOptions={{meta: {prefetch: ['lessons', 'standard_sections', 'cognitive_skills']}}}>
+                                sort={{field: 'position_number', order: 'ASC'}} queryOptions={{meta: {prefetch: ['lessons']}}}>
                 <ClassLessonsSorter recordId={record?.id} isSchoolClass={isSchoolClass}/>
             </ReferenceManyField>
             <AddLessonButton />
@@ -607,17 +628,19 @@ const ClassScheduleTab = (props) => {
                         <Box sx={tabFormStyle}>
                         <ReferenceManyField pagination={<SensibleDefaultPagination/>} perPage={PER_PAGE} reference={"class_schedules"}
                                             target="class_id" queryOptions={{meta: {scopingEscapeHatch: true}}}>
-                            <Datagrid bulkActionButtons={false} empty={<Empty emptyText={'No schedules added yet'}/>}
+                            <DataTable {...tableDefaults(props)} bulkActionButtons={false} empty={<Empty emptyText={'No schedules added yet'}/>}
                                       rowClick={(id) => openDialog(<ScheduleEdit id={id} width="60vw"/>) } sx={{maxHeight: 'calc(100vh - 22rem)', overflow: 'auto'}}>
-                                <ReferenceField source="schedule_type_id" reference={"schedule_types"} label="Schedule Type"/>
-                                <DateField source="start_date" label="Start Date"/>
-                                <DateField source="end_date" label="End Date"/>
-                                <TextField source="time_of_start" label={"Start Time"}/>
-                                <TextField source="time_of_end" label={"End Time"}/>
-                                <TextField source="days" sx={{textTransform: 'capitalize'}}/>
-                                <TextField source="details"/>
-                                <DeleteButton label={false} redirect={`/classes/${record?.id}/3`}/>
-                            </Datagrid>
+                                <DataTable.Col source="schedule_type_id" field={ScheduleTypesReferenceField}/>
+                                <DataTable.Col source="start_date" label="Start Date" field={DateField} />
+                                <DataTable.Col source="end_date" label="End Date" field={DateField} />
+                                <DataTable.Col source="time_of_start" label={"Start Time"}/>
+                                <DataTable.Col source="time_of_end" label={"End Time"}/>
+                                <DataTable.Col source="days" sx={{textTransform: 'capitalize'}}/>
+                                <DataTable.Col source="details"/>
+                                <DataTable.Col label={false}>
+                                    <DeleteButton label={false} redirect={`/classes/${record?.id}/3`}/>
+                                </DataTable.Col>
+                            </DataTable>
                         </ReferenceManyField>
                         <Button label="Add" onClick={addScheduleAction}  variant="contained" sx={{marginY: "0.5rem"}}/>
                         </Box>

@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@hello-pangea/dnd": "^18.0.1",
-    "@mahaswami/vc-frontend": "^2.2.0",
+    "@mahaswami/vc-frontend": "^2.2.17",
     "@mui/x-charts": "^7.24.1",
     "@simplewebauthn/browser": "^13.3.0",
     "@tiptap/suggestion": "^2.11.5",
@@ -43,6 +43,7 @@
     "react-markdown": "^10.1.0",
     "react-player": "^2.16.0",
     "react-router-dom": "^7.3.0",
+    "recharts": "^3.8.1",
     "remark-gfm": "^4.0.1",
     "stream-browserify": "^3.0.0",
     "tiptap-extension-resize-image": "1.2.1",

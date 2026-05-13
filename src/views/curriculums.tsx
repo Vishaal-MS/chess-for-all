@@ -51,7 +51,7 @@ export const DETAIL_RESOURCES: string[] = ["curriculum_lessons"]
 export const ICON = MenuBook
 export const DETAIL_ICONS: any[] = [Category]
 export const PREFETCH: string[] = ["levels", "divisions", "standards", "background_music"]
-export const DETAIL_PREFETCH: string[][] = [[RESOURCE, "lessons", "mapping1_standard_sections", "mapping2_standard_sections", "mapping3_standard_sections", "mapping1_cognitive_skills", "mapping2_cognitive_skills", "mapping3_cognitive_skills"]]
+export const DETAIL_PREFETCH: string[][] = [[RESOURCE, "lessons"]]
 
 export const CurriculumsReferenceField = createReferenceField(RESOURCE, PREFETCH);
 export const CurriculumsReferenceInput = createReferenceInput(RESOURCE, PREFETCH);
@@ -130,12 +130,6 @@ const detail0Filters = [
     <ReferenceLiveFilter source="curriculum_id" reference="curricula" label="Curriculum" />,
     <ReferenceLiveFilter source="lesson_id" reference="lessons" label="Lesson" />,
     <NumberLiveFilter source="position_number" label="Position" />,
-    <ReferenceLiveFilter source="mapping1_standard_section_id" reference="mapping1_standard_sections" label="Mapping1 Standard Section" />,
-    <ReferenceLiveFilter source="mapping2_standard_section_id" reference="mapping2_standard_sections" label="Mapping2 Standard Section" />,
-    <ReferenceLiveFilter source="mapping3_standard_section_id" reference="mapping3_standard_sections" label="Mapping3 Standard Section" />,
-    <ReferenceLiveFilter source="mapping1_cognitive_skill_id" reference="mapping1_cognitive_skills" label="Mapping1 Cognitive Skill" />,
-    <ReferenceLiveFilter source="mapping2_cognitive_skill_id" reference="mapping2_cognitive_skills" label="Mapping2 Cognitive Skill" />,
-    <ReferenceLiveFilter source="mapping3_cognitive_skill_id" reference="mapping3_cognitive_skills" label="Mapping3 Cognitive Skill" />,
     <BooleanLiveFilter source="is_limit_to_show_single_section" label="Limit To Show Single Section" />,
     <BooleanLiveFilter source="is_game_sound_enabled" label="Game Sound Enabled" />,
     <BooleanLiveFilter source="is_voice_over_enabled" label="Voice Over Enabled" />

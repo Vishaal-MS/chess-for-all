@@ -74,6 +74,13 @@ export const ClassesStatus = {
     DRAFT: 'draft',
 }
 
+export const classStatusChoises = [
+    { id: ClassesStatus.ACTIVE, name: 'Active' },
+    { id: ClassesStatus.COMPLETED, name: 'Completed' },
+    { id: ClassesStatus.SCHEDULED, name: 'Scheduled' },
+    { id: ClassesStatus.DRAFT, name: 'Draft' }
+]
+
 export const InvoicesStatus = {
     PAID: 'paid',
     UNPAID: 'unpaid',
@@ -373,6 +380,12 @@ export const GameEntryMethods = {
     SCAN_SCORE_CARD: "scan_score_card",
     PLAY_GAME: "play_game",
     BOT_GAME: "bot_game"
+};
+
+export const DialogTitleByEntryMode = {
+    [GameEntryMethods.FILE_UPLOAD]: "Upload Game",
+    [GameEntryMethods.SCAN_SCORE_CARD]: "Scan Game Scoresheet",
+    [GameEntryMethods.INPUT_SCORE_CARD]: "Input Game Scoresheet"
 };
 
 export const colorChoices = [

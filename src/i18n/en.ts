@@ -4,6 +4,9 @@ import {englishMessages} from '@mahaswami/vc-frontend'
 const customEnglishMessages: TranslationMessages = {
     ...englishMessages,
     resources: {
+        snippets_library: {
+            name: 'Snippets Libraries',
+        },
         trophies: {
             name: 'Trophies',
         },
@@ -37,8 +40,8 @@ const customEnglishMessages: TranslationMessages = {
         class_schedules: {
             name: 'Class Schedules',
         },
-        class_progresses: {
-            name: 'Class Progresses',
+        class_progress: {
+            name: 'Class progress',
         },
         certificates: {
             name: 'Certificates',

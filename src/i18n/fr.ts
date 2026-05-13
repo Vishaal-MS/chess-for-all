@@ -4,6 +4,9 @@ import frenchMessages from 'ra-language-english'; // NOTE: just to show multilan
 const customFrenchMessages: TranslationMessages = {
     ...frenchMessages,
     resources: {
+        snippets_library: {
+            name: 'Snippets Libraries',
+        },
         trophies: {
             name: 'Trophies',
         },
@@ -37,8 +40,8 @@ const customFrenchMessages: TranslationMessages = {
         class_schedules: {
             name: 'Class Schedules',
         },
-        class_progresses: {
-            name: 'Class Progresses',
+        class_progress: {
+            name: 'Class progress',
         },
         certificates: {
             name: 'Certificates',

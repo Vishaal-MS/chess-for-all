@@ -10,7 +10,6 @@ import FullscreenIcon from '@mui/icons-material/Fullscreen';
 import {ChessAIField} from "../../fields/ai_lesson/ChessAIField";
 import React, {useEffect,useState,useCallback,useRef} from "react";
 import { FullscreenPortal } from "../../components/FullscreenPortal";
-import {useRealtimeComms} from '@mahaswami/vc-frontend';
 import {useLocation, useNavigate, Link, useSearchParams, useParams} from "react-router-dom";
 import {AssignmentList} from "./assignmentList.tsx";
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
@@ -21,7 +20,7 @@ import {AssignmentStatus} from "../../helpers/constants.ts";
 import KeyboardReturnIcon from '@mui/icons-material/KeyboardReturn';
 import {isOrgAdmin, isOrgCoach, isProCoach, isRegularSchoolFlavored} from "../../businessLogic.ts";
 import {formatDateWithShortYear} from "../../utils.ts";
-import { SwanShow } from '../swan_crud/SwanCrud.tsx';
+import {showDefaults} from "@mahaswami/vc-frontend";
 
 
 const PostShowActions = ({ onPresent, onAssignmentsLive, classProgressId, classId}: { onPresent: any, onAssignmentsLive: any, classProgressId: number }) => {
@@ -45,8 +44,8 @@ const PostShowActions = ({ onPresent, onAssignmentsLive, classProgressId, classI
     )
 };
 
-export const ClassProgressShow = () => {
-    const classProgressId = Number(useGetRecordId());
+export const ClassProgressShow = (props: any) => {
+    const classProgressId = Number(props?.id);
     const [isSidebarOpen, setSidebarVisibility] = useSidebarState();
     const { data: classProgress } = useGetOne("class_progress", { id: classProgressId, meta: {prefetch: ["classes", "standard_sections", "cognitive_skills"]} });
     const isSchoolClass = classProgress?.class?.is_school_class;
@@ -75,7 +74,7 @@ export const ClassProgressShow = () => {
     }
     if (assignmentsLive) {
         return (
-            <SwanShow title={classProgressShowTitle} actions={
+            <Show { ...showDefaults(props) } title={classProgressShowTitle} actions={
                 <TopToolbar>
                     <Button color="primary" label="Assignments List" onClick={handleAssignmentList}/>
                     <Button onClick={() => navigate(`/classes/${classId}/show`)} style={{fontSize: 13}} startIcon={<KeyboardReturnIcon />}  label={"Return To Coach Workspace"}/>
@@ -84,7 +83,7 @@ export const ClassProgressShow = () => {
                 <ListBase resource="assignments" filter={liveAssignmentsFilter} queryOptions={{meta: {prefetch: ['students']}}}>
                     <AssignmentsLiveGrid classId={classId}/>
                 </ListBase>
-            </SwanShow>
+            </Show>
         )
     }
 
@@ -94,7 +93,7 @@ export const ClassProgressShow = () => {
     }
 
     return (
-        <Show title={classProgressShowTitle} actions={
+        <Show {...showDefaults(props)} title={classProgressShowTitle} actions={
             <PostShowActions
                 onPresent={() => setFullscreen(true)}
                 onAssignmentsLive={handleOnAssignmentLive}

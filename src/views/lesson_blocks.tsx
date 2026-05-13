@@ -4,34 +4,46 @@ import {
     tableDefaults,
     editDefaults,
     listDefaults,
-    showDefaults,
     DataTable,
-    SimpleShowLayout,
     SimpleForm,
     type ResourceActionDefs,
     type FieldSchema,
     CardGrid,
     createReferenceField,
     createReferenceInput,
-    BooleanLiveFilter,
-    ReferenceLiveFilter,
-    TextLiveFilter,
+    TextLiveFilter, ChoicesLiveFilter,
 } from '@mahaswami/vc-frontend';
-import { School } from '@mui/icons-material';
+import { ViewComfy } from '@mui/icons-material';
 import {
-    Create, Edit, List, Menu, Show,
-    type ListProps, TextInput, BooleanField, BooleanInput, ReferenceArrayInput, AutocompleteArrayInput,
-    SelectField, TopToolbar, Button, SelectInput, WithRecord, FormDataConsumer, NumberInput, TextField
+    Create,
+    Edit,
+    List,
+    Menu,
+    type ListProps,
+    TextInput,
+    BooleanField,
+    BooleanInput,
+    ReferenceArrayInput,
+    AutocompleteArrayInput,
+    SelectField,
+    TopToolbar,
+    Button,
+    SelectInput,
+    WithRecord,
+    FormDataConsumer,
+    NumberInput,
+    TextField,
+    ReferenceArrayField, SingleFieldList
 } from "react-admin";
 import {useLocation, useNavigate} from "react-router-dom";
 import AddIcon from '@mui/icons-material/Add';
 import {Typography, Box} from "@mui/material";
 import {LessonBlockForm} from "./curriculum/LessonBlockForm.tsx";
-
+import {LessonBlockShow} from "./curriculum/lesson_blocks.tsx";
 
 export const RESOURCE = "lesson_blocks"
-export const ICON = School
-export const PREFETCH: string[] = ["divisions", "ccai_pubs"]
+export const ICON = ViewComfy
+export const PREFETCH: string[] = []
 
 export const LessonBlocksReferenceField = createReferenceField(RESOURCE, PREFETCH);
 export const LessonBlocksReferenceInput = createReferenceInput(RESOURCE, PREFETCH);
@@ -42,13 +54,7 @@ export const BlockTypeChoiceField = (props: any) => <SelectField {...props} choi
 
 const filters = [
     <TextLiveFilter source="search" show />,
-    <BooleanLiveFilter source="is_game_engine_active" label="Game Engine Active" />,
-    <BooleanLiveFilter source="is_choice_1_correct" label="Choice 1 Correct" />,
-    <BooleanLiveFilter source="is_choice_2_correct" label="Choice 2 Correct" />,
-    <BooleanLiveFilter source="is_choice_3_correct" label="Choice 3 Correct" />,
-    <ReferenceLiveFilter source="division_id" reference="divisions" label="Division" />,
-    <ReferenceLiveFilter source="ccai_pub_id" reference="ccai_pubs" label="Ccai Pub" />,
-    <BooleanLiveFilter source="is_hide_board" label="Hide Board" />
+    <ChoicesLiveFilter source="block_type" choiceLabels={blockTypeChoices} show />
 ]
 
 const LessonBlockListActions = () => {
@@ -80,10 +86,15 @@ const CustomEmptyList = () => {
 
 export const LessonBlocksList = (props: ListProps) => {
     return (
-        <List {...listDefaults(props)} actions={<LessonBlockListActions/>} empty={<CustomEmptyList/>} redirect={"edit"}>
-            <DataTable {...tableDefaults(RESOURCE)} hiddenColumns={['board_subtitle', 'additional_visuals', 'animated_tutorial', 'help', 'solution', 'goals', 'game_engine_guidance', 'choice_title', 'choice_hint', 'choice_1_text', 'choice_1_feedback', 'is_choice_1_correct', 'choice_2_text', 'choice_2_feedback', 'is_choice_2_correct', 'choice_3_text', 'choice_3_feedback', 'is_choice_3_correct', 'pgn', 'block_description', 'division_id', 'tag_ids', 'ccai_pub_id', 'question', 'number_of_lines', 'number_of_words', 'expected_answer', 'is_hide_board', 'sound_sprites_json', 'sound_message_keys', 'voice_key']} >
+        <List {...listDefaults(props)} actions={<LessonBlockListActions />} empty={<CustomEmptyList/>} redirect={"edit"}>
+            <DataTable {...tableDefaults(RESOURCE)}>
                 <DataTable.Col source="name" />
-                <DataTable.Col source="block_type" />
+                <DataTable.Col source="block_type" field={BlockTypeChoiceField} />
+                <DataTable.Col source="tag_ids" field={() =>
+                    <ReferenceArrayField source="tag_ids" reference="tags" label="Tags" perPage={1000}>
+                        <SingleFieldList linkType={false} />
+                    </ReferenceArrayField>
+                }/>
             </DataTable>
         </List>
     )
@@ -231,18 +242,6 @@ const LessonBlockCreate = (props: any) => {
     )
 }
 
-const LessonBlockShow = (props: any) => {
-    return (
-        <Show {...showDefaults(props)}>
-            <SimpleShowLayout display="grid"  gridTemplateColumns={{ xs: '1fr', md: '1fr 1fr' }}  gap="1rem" >
-                <TextField source="name" />
-                <TextField source="block_type" />
-                <TextField source="animated_tutorial" />
-            </SimpleShowLayout>
-        </Show>
-    )
-}
-
 const lessonBlocksFieldSchema: FieldSchema = {
     name: {},
     block_type: { type: 'choice', choices: blockTypeChoices },
@@ -337,5 +336,5 @@ export const LessonBlocksResource = (
     />
 )
 export const LessonBlocksMenu = () => (
-    <Menu.Item to={`/${RESOURCE}`} primaryText="Lesson Blocks" leftIcon={<ICON />} />
+    <Menu.Item to={`/${RESOURCE}`} primaryText="My Lesson Blocks" leftIcon={<ICON />} />
 )

@@ -12,7 +12,7 @@ import {
     useRecordContext,
     useUpdate,
     WithRecord,
-    Confirm
+    Confirm, Show
 } from 'react-admin';
 import {
     Box,
@@ -29,14 +29,14 @@ import { LessonBlockForm } from "./LessonBlockForm.tsx";
 import { Create} from 'react-admin';
 import {SimpleShowLayout } from 'react-admin';
 import { LessonBlockField } from '../../fields/ai_lesson/lesson_block_field';
-import {PER_PAGE, remoteLog, SensibleDefaultPagination } from "@mahaswami/vc-frontend";
+import {PER_PAGE, remoteLog, SensibleDefaultPagination, showDefaults} from "@mahaswami/vc-frontend";
 import { SearchInput, Button, TopToolbar, Edit, SimpleForm, TextInput} from 'react-admin';
 import {useLocation, useNavigate} from "react-router-dom";
 import React, { useEffect, useMemo, useState, useCallback } from "react";
 import { extractMessageAndConstructKeyMap } from '../../utils.ts';
 import {voiceChoices, VoiceStatus} from "../../helpers/constants.ts";
 import { isAllowedVoiceOver, sendEmail } from '../../businessLogic.ts';
-// import { getEmailsBasedOnEnv } from '../../configuration.tsx';
+import { getEmailsBasedOnEnv } from '../../configuration.tsx';
 import { GraphicEq } from '@mui/icons-material';
 import {generateVoiceOverMessages} from "../../backend/voiceOver.ts";
 
@@ -104,12 +104,12 @@ export const getBlockTypeChoices = () => {
     return choices;
 };
 
-export const LessonBlockShow = () => {
+export const LessonBlockShow = (props: any) => {
     const isXLargeScreen = useMediaQuery(theme => theme.breakpoints.up('xl'));
     const maxBoardSize = isXLargeScreen ? '80%/max=550' : '80%/max=340'
 
     return (
-    <SwanShow>
+    <Show {...showDefaults(props)}>
         <SimpleShowLayout sx={{height: '82vh', overflow: 'auto'}}>
             {/* <TextField source="id" /> */}
             <Grid container sx={{display: 'flex', alignItems: 'center'}}>
@@ -128,7 +128,7 @@ export const LessonBlockShow = () => {
             {/* <TextField source="animated_tutorial" />             */}
             <LessonBlockField label="Tutorial" source="animated_tutorial" maxSize={maxBoardSize}/>                        
         </SimpleShowLayout>
-    </SwanShow>
+    </Show>
     )
 };
 

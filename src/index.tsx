@@ -45,7 +45,7 @@ const appFunctions = {
 window.swanAppFunctions = appFunctions;
 // service callbacks end
 
-import { initService, remoteLog } from "@mahaswami/vc-frontend";
+import { initService } from "@mahaswami/vc-frontend";
 import appConfigOptions from '../vegacore.json';
 import appPermissions from '../vegacore.permissions.json';
 
@@ -58,11 +58,21 @@ await initService(import.meta.env,  devDataServiceProvider, devDataServiceSpread
 import { App } from "@mahaswami/vc-frontend";
 
 import {ReactFromModule} from "@mahaswami/vc-frontend";
+import {registerServiceWorker} from "./utils.ts";
 console.log("DEBUG: React same?")
 console.log(React === ReactFromModule) //false
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-);
+const renderApp = () => {
+    ReactDOM.createRoot(document.getElementById("root")!).render(
+        <React.StrictMode>
+            <App />
+        </React.StrictMode>,
+    )
+}
+
+registerServiceWorker()
+    .then(_ => renderApp())
+    .catch(err => {
+        console.error('Service worker registration failed:', err);
+        renderApp()
+    });

@@ -1,30 +1,70 @@
-import { Resource, createDefaults, tableDefaults,
+import { Resource, tableDefaults,
 	editDefaults, tabbedFormDefaults, layoutDefaults, listDefaults, showDefaults,
-	RowActions, DataTable, WizardForm, createReferenceField, createReferenceInput,
-	type ResourceActionDefs, type FieldSchema, recordRep, SimpleShowLayout, CardGrid, BooleanLiveFilter, ReferenceLiveFilter, DateLiveFilter, TextLiveFilter} from '@mahaswami/vc-frontend';
-import { Class } from '@mui/icons-material';
-import { Create, Edit, List, Menu, Show,
+	RowActions, DataTable, createReferenceField, createReferenceInput,
+	type ResourceActionDefs, type FieldSchema, recordRep, SimpleShowLayout, CardGrid, MultiselectChoicesFilter, BooleanLiveFilter, ReferenceLiveFilter, DateLiveFilter, TextLiveFilter} from '@mahaswami/vc-frontend';
+import { CastForEducation } from '@mui/icons-material';
+import { Edit, List, Menu, Show,
     TabbedForm, TabbedShowLayout,
     type ListProps, TextField, TextInput, DateField, DateInput, BooleanField, BooleanInput, AutocompleteInput, required} from "react-admin";
 import { ScheduleTypesReferenceField, ScheduleTypesReferenceInput } from './schedule_types.js';
 import { Box } from '@mui/material';
 import CreateClass from "./class/create/Create.tsx";
+import {EditClass, MyClassesList, MyClassShow} from "./class/classes.tsx";
+import {SearchInput} from "ra-ui-materialui";
+import FilterMultiChoiceInput from "./common/FilterMultiChoiceInput.tsx";
+import {
+    isAcademy,
+    isDivisionAdmin,
+    isOrgAdmin,
+    isRegularSchoolFlavored,
+    isSchoolStandardLinked
+} from "../businessLogic.ts";
+import {filterClassesStatusChoices} from "../helpers/constants.ts";
 
 export const RESOURCE = "classes"
-export const ICON = Class
+export const ICON = CastForEducation
 export const PREFETCH: string[] = ["schedule_types"]
 
 export const ClassesReferenceField = createReferenceField(RESOURCE, PREFETCH);
 export const ClassesReferenceInput = createReferenceInput(RESOURCE, PREFETCH);
 const classesActionDefs: ResourceActionDefs = {};
 
+// const filters = [
+//     <TextLiveFilter source="search" show />,
+//     <ReferenceLiveFilter source="schedule_type_id" reference="schedule_types" label="Schedule Type" />,
+//     <DateLiveFilter source="start_date" label="Start" />,
+//     <DateLiveFilter source="end_date" label="End" />,
+//     <BooleanLiveFilter source="is_google_calendar_enabled" label="Google Calendar Enabled" />
+// ]
+
+const StatusFilter = (props: any) => {
+    const filterClassesStatusChoices = [
+        { id: 'active', name: 'Active' },
+        { id: 'completed', name: 'Completed' },
+        { id: 'scheduled', name: 'Scheduled' }
+    ];
+    return <MultiselectChoicesFilter { ...props } choices={filterClassesStatusChoices} />
+}
+
 const filters = [
     <TextLiveFilter source="search" show />,
-    <ReferenceLiveFilter source="schedule_type_id" reference="schedule_types" label="Schedule Type" />,
-    <DateLiveFilter source="start_date" label="Start" />,
-    <DateLiveFilter source="end_date" label="End" />,
-    <BooleanLiveFilter source="is_google_calendar_enabled" label="Google Calendar Enabled" />
-]
+    <StatusFilter source="status" label="Status" show />,
+    //
+    // ...(isAcademy() && (isOrgAdmin() || isDivisionAdmin())  ? [
+    //         <FilterMultiChoiceInput source="coach_id" label={isRegularSchoolFlavored() ? "Teacher" : "Coach"} choices={coachList} alwaysOn/>
+    //     ] : []
+    // ),
+    // ...(isSchoolStandardLinked() ? [
+    //     <AutocompleteInput label="Grade" alwaysOn
+    //                        resource="standard_grades" source="standard_grade_id"
+    //                        choices={state.gradeChoise}
+    //                        sx={{
+    //                            '& .MuiInputBase-root': { height: '2.5rem' },
+    //                            '& .MuiInputBase-input': { fontSize: '0.85rem' },
+    //                            width: '16vw'
+    //                        }}/>
+    // ] : [])
+];
 
 export const ClassesList = (props: ListProps) => {
     return (
@@ -164,16 +204,16 @@ export const ClassesResource = (
         name={RESOURCE}
         icon={ICON}
         prefetch={PREFETCH}
-        recordRepresentation={(record: any) => recordRep('schedule_types', record.schedule_type)}
+        recordRepresentation={(record: any) => record?.name}
         fieldSchema={ classesFieldSchema}
         actionDefs={ classesActionDefs}
         searchableFields={ classesSearchableFields}
         filters={filters}
         filtersPlacement="top"
-        list={<ClassesList/>}
+        list={<MyClassesList/>}
         create={<CreateClass/>}
-        edit={<ClassEdit/>}
-        show={<ClassShow/>}
+        edit={<EditClass/>}
+        show={<MyClassShow/>}
         hasLiveUpdate
         hasFilterChooser
         cardList={<ClassesCardList/>}
@@ -182,5 +222,5 @@ export const ClassesResource = (
     />
 )
 export const ClassesMenu = () => (
-    <Menu.Item to={`/${RESOURCE}`} primaryText="Classes" leftIcon={<ICON />} />
+    <Menu.Item to={`/${RESOURCE}`} primaryText="Workspace" leftIcon={<ICON />} />
 )

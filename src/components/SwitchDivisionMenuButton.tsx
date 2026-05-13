@@ -3,7 +3,7 @@ import { Box, Button, Menu, MenuItem, styled } from '@mui/material';
 import FolderIcon from '@mui/icons-material/Folder';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { getLocalStorage, setLocalStorage, useRealtimeComms } from '@mahaswami/vc-frontend';
-import { getDivisionId, getDivisionName, isLargeAcademy, isDivisionAdmin, isDivisionCoach } from "../businessLogic.ts";
+import { getDivisionId, isLargeAcademy, isDivisionAdmin, isDivisionCoach } from "../businessLogic.ts";
 import { useNavigate } from 'react-router-dom';
 import { useRefresh } from "react-admin";
 import { isOrgAdmin } from '../businessLogic.ts';
@@ -90,7 +90,7 @@ export const SwitchDivisionMenuButton = (props: SwitchProjectMenuButtonProps) =>
                         startIcon={icon}
                         endIcon={isOrgAdmin() ? <ExpandMoreIcon fontSize="small"/> : null}
                     >
-                        {getDivisionName() || "Select Division"}
+                        {/*{getDivisionName() || "Select Division"}*/}
                     </Button>
                     {isOrgAdmin() &&
                     <Menu

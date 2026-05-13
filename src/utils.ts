@@ -1,8 +1,10 @@
 import {getLocalStorage, remoteLog} from "@mahaswami/vc-frontend";
 import {StatusLabel, StatusValue} from "./helpers/constants.ts";
-// import { getEmailsBasedOnEnv } from "./configuration.tsx";
+import { getEmailsBasedOnEnv } from "./configuration.tsx";
 import { format } from "date-fns";
-// import { extractDetailsFromPGNStr } from "./views/games/gameUtils.ts";
+import { FunctionComponent, memo } from 'react';
+import {sendEmail} from "./businessLogic.ts";
+import { extractDetailsFromPGNStr } from "./views/games/gameUtils.ts";
 
 export const formatStatus = (status) => {
     switch (status) {
@@ -114,8 +116,6 @@ export const renderAddressLine2 = (record) =>{
     }
     return address_line2 ;
 };
-
-import React, { FunctionComponent, memo } from 'react';
 
 /**
  * A version of React.memo that preserves the original component type allowing it to accept generics.
@@ -601,18 +601,18 @@ export const initServiceWorkerMessageListener = () => {
                 "ChessBoard File Not Found",
                 new Error(urls)
             )
-            // const { supportTeamEmail } = getEmailsBasedOnEnv()
-            // sendEmail({
-            //     to: supportTeamEmail,
-            //     subject: "CCAI: ChessBoard File Not Found",
-            //     message: `Here is the missing file urls ${urls}`
-            // })
+            const { supportTeamEmail } = getEmailsBasedOnEnv()
+            sendEmail({
+                to: supportTeamEmail,
+                subject: "CCAI: ChessBoard File Not Found",
+                message: `Here is the missing file urls ${urls}`
+            })
         }
     });
 };
 
 export const generateFileName = (pgn: string, gameId: any) => {
-    const pgnDetails = null //extractDetailsFromPGNStr(pgn);
+    const pgnDetails = extractDetailsFromPGNStr(pgn);
     if (!pgnDetails) return "undefined-game";
     const { player1, player2, eventDate } = pgnDetails;
     const date = eventDate.replaceAll(".", "-");

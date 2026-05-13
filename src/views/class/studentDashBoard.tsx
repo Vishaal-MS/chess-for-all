@@ -1,14 +1,14 @@
-import {getLocalStorage, remoteLog, setLocalStorage} from "@mahaswami/vc-frontend";
+import {remoteLog, setLocalStorage, showDefaults} from "@mahaswami/vc-frontend";
 import {
     ListBase,
     ReferenceField,
     Show, Title,
     useGetRecordId,
     Loading,
-    useRedirect, useSidebarState
+    useSidebarState, useRecordContext
 } from "react-admin";
-import React, {useEffect, useState} from "react";
-import {Box, Button, Card, CardContent, CardHeader, Grid, Tooltip, Typography} from "@mui/material";
+import {useEffect, useState} from "react";
+import {Button, Card, CardContent, CardHeader, Grid, Tooltip, Typography} from "@mui/material";
 import AccordionSection from "../../components/AccordionSection.tsx";
 import SchedulePreview from "./SchedulePreview.tsx";
 import {isCoach, isStudent} from "../../businessLogic.ts";
@@ -21,8 +21,9 @@ import {TeachingMode} from "../../helpers/constants.ts";
 import {useNavigate} from "react-router-dom";
 import { GameIcon } from "../games/GameIcon.tsx";
 
-export const EnrollmentShow = () => {
-    const recordId = Number(useGetRecordId());
+export const EnrollmentShowDetails = () => {
+    const record = useRecordContext();
+    const recordId = Number(record?.id);
     const [enrollment,setEnrollment] = useState(null);
     const [studentName,setStudentName] = useState(null);
     const [classRecord, setClassRecord] = useState(null);
@@ -127,14 +128,6 @@ export const EnrollmentShow = () => {
     }
 
     return (
-        <Show component={'div'} title={studentName + '\'s Class Workspace'} sx={{
-            '& .RaShow-card': {
-                height: 'calc(100vh - 70px)',
-            },
-            '& .RaDatagrid-root': {
-                width: "100%"
-            }
-        }}>
             <Grid container spacing={1} sx={{height: '100%'}}>
                 <Grid item xs={isRemoteMode ? 5 : 12}>
                     <Card sx={{height: '100%'}}>
@@ -173,5 +166,12 @@ export const EnrollmentShow = () => {
                     }}/>
                 </Grid>}
             </Grid>
-        </Show>
     )};
+
+export const EnrollmentShow = (props) => {
+    return (
+        <Show {...showDefaults(props)} component={'div'} actions={false}>
+            <EnrollmentShowDetails />
+        </Show>
+    )
+}

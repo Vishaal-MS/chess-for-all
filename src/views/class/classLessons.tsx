@@ -4,22 +4,21 @@ import {EmptyDatagridHeader} from "../../fields/EmptyDatagridHeader";
 import AssignmentRoundedIcon from "@mui/icons-material/AssignmentRounded";
 import CircularProgress from '@mui/material/CircularProgress';
 import {useEffect, useState,useRef} from "react";
-import {Grid, IconButton, Tooltip, Typography,Box,Card, FormControlLabel, Switch} from "@mui/material";
+import {Grid, IconButton, Tooltip, Typography,Box, FormControlLabel, Switch} from "@mui/material";
 import {DragDropContext, Droppable, Draggable} from "@hello-pangea/dnd";
-import {useNotify, FunctionField, ReferenceManyCount,InfiniteList,WithListContext,
- useListContext,InfinitePagination,useRefresh,List,TopToolbar, Datagrid,
+import {useNotify, FunctionField,
+ useListContext,List,TopToolbar, Datagrid,
  ReferenceField, TextField, Loading, Button, useUnselectAll,useRedirect,
  ListContextProvider,
  ResourceContextProvider} from "react-admin";
  import AccordionSection from "../../components/AccordionSection";
  import {formatDateWithShortYear, formatStatus} from "../../utils.ts";
-import {swanAPI, openDialog, closeDialog, remoteLog} from "@mahaswami/vc-frontend";
+import {openDialog, closeDialog, remoteLog} from "@mahaswami/vc-frontend";
 import {assignAssignments, sendStudentsAssignmentEmail} from "../../backend/assignments.ts";
-import {getStudentIdsByEnrollments} from "../../backend/classLessons.ts";
 import {ClassesStatus, ClassProgressStatus, TeachingMode} from "../../helpers/constants.ts";
-import { set } from "date-fns";
 import {isExecutiveCoachingFlavored} from "../../businessLogic.ts";
 import { Info } from "@mui/icons-material";
+import {getStudentIdsByEnrollments} from "../../backend/classLessons.ts";
 
 export const ClassLessons = ({classId}) => {
     const dataProvider = window.swanAppFunctions.dataProvider;

@@ -1,24 +1,20 @@
 import {
-    Button, DeleteButton,
-    Edit, EmailField,
+    Button,
+    EmailField,
     ReferenceManyField,
     required,
     TabbedForm, TextField,
     TextInput,
-    useGetRecordId,
     useRecordContext
 } from "react-admin";
 import {
     DataTable,
-    editDefaults, formDefaults, openDialog,
+    formDefaults, openDialog,
     PER_PAGE,
-    remoteLog,
     SensibleDefaultPagination,
     SimpleForm
 } from "@mahaswami/vc-frontend";
-import {useEffect, useState} from "react";
-import {useParams} from "react-router-dom";
-import {Box} from "@mui/material";
+import {Box } from "@mui/material";
 import {ClientTypes, getSetupLabel} from "../../helpers/constants.ts";
 import {ExtendedClientFields} from "./ExtendedClientFields.tsx";
 import {Empty} from "../common/empty.tsx";
@@ -28,21 +24,14 @@ import {isSchoolStandardLinked} from "../../businessLogic.ts";
 import {StandardGradesReferenceInput} from "../standard_grades.tsx";
 import {StudentClasses} from "./studentClasses.tsx";
 import {AddStudents} from "./addStudents.tsx";
+import { StudentEdit } from "./students.tsx";
 
-const ClientEdit = (props: any) => {
-
-    const [loading, setLoading] = useState(true);
-    const [clientType, setClientType] = useState(null);
-    const {id} = useParams();
-
-    const recordId = Number(useGetRecordId());
+const ClientEditForm = (props: any) => {
     const record = useRecordContext();
-    console.log("userDetails: ", record)
-    // record contains the coach data passed from react-admin
-    const dataProvider = window.swanAppFunctions.dataProvider;
+    const clientType = record?.client_type?.name;
 
     const showStudentEditDialog = (studentId) => {
-        // openDialog(<StudentEdit width="80vw" studentId={studentId} clientId={recordId}/>);
+        openDialog(<StudentEdit width="80vw" studentId={studentId} clientId={record?.id}/>);
     }
 
     const showStudentAddDialog = (record) => {
@@ -55,24 +44,6 @@ const ClientEdit = (props: any) => {
             <Button onClick={() => showStudentAddDialog(record)} variant="contained" sx={{justifyContent: 'end', marginTop: 1 }}>Add</Button>
         )
     }
-
-    // Fetch user data based on user_id from coach record
-    useEffect(() => {
-        const fetchClientType = async () => {
-            try {
-                const { data: client } = await dataProvider.getOne('clients', {
-                    id: recordId,
-                    meta: { prefetch: ['client_types']}
-                });
-                setClientType(client?.client_type.name);
-                setLoading(false);
-            } catch (err) {
-                console.error("Error sending on clientEdit fetchClientType method: ", err);
-                remoteLog("Error sending on clientEdit fetchClientType method: ", err);
-            }
-        }
-        fetchClientType();
-    }, []);
 
     const ClientDetails =() => {
         return (
@@ -90,9 +61,13 @@ const ClientEdit = (props: any) => {
     }
     let title = clientType === ClientTypes.INDIVIDUAL ? getSetupLabel().EDIT_PAGE_LABEL : (ClientTypes.BUSINESS + " Clients Edit");
 
+    const handleRowClick = (id, resource, record) => {
+        showStudentEditDialog(record?.id);
+        return false;
+    }
 
     return (
-        <Edit {...editDefaults(props)}>
+        <Box>
             {clientType === ClientTypes.INDIVIDUAL ?
                 <SimpleForm { ...formDefaults(props) }>
                     <ClientDetails/>
@@ -105,7 +80,7 @@ const ClientEdit = (props: any) => {
                     <TabbedForm.Tab label={"students"}>
                         <ReferenceManyField pagination={<SensibleDefaultPagination />} perPage={PER_PAGE} reference="students"
                                             target="client_id" label="Students" queryOptions={{meta: {prefetch: ['users']}}}>
-                            <DataTable rowClick={ (value) => { showStudentEditDialog(value) }} bulkActionButtons={false}
+                            <DataTable sx={{ width: '100%' }} rowClick={handleRowClick} bulkActionButtons={false}
                                        empty={<Empty emptyText={'No Students added yet'}/>}>
                                 <DataTable.Col label='Profile'>
                                     <UsersReferenceField source="user_id" link={false} label={"Profile"}>
@@ -113,12 +88,12 @@ const ClientEdit = (props: any) => {
                                     </UsersReferenceField>
                                 </DataTable.Col>
                                 <DataTable.Col label='First Name'>
-                                    <UsersReferenceField source="user_id" reference="users" link={false} label={"First Name"}>
+                                    <UsersReferenceField source="user_id" link={false} label={"First Name"}>
                                         <TextField source="first_name" />
                                     </UsersReferenceField>
                                 </DataTable.Col>
                                 <DataTable.Col label='Last Name'>
-                                    <UsersReferenceField source="user_id" reference="users" link={false} label={"Last Name"}>
+                                    <UsersReferenceField source="user_id" link={false} label={"Last Name"}>
                                         <TextField source="last_name" />
                                     </UsersReferenceField>
                                 </DataTable.Col>
@@ -127,17 +102,17 @@ const ClientEdit = (props: any) => {
                                         <EmailField source="email"/>
                                     </UsersReferenceField>
                                 </DataTable.Col>
-                                {isSchoolStandardLinked() ?
+                                <DataTable.Col field={() => isSchoolStandardLinked() ?
                                     <StandardGradesReferenceInput source={"standard_grade_id"} reference={"standard_grades"} label={"Grade"} /> :
                                     <TextField source={'grade'} label={"grade"}/>
-                                }
+                                }/>
                             </DataTable>
                         </ReferenceManyField>
                         <AddStudentButton />
                     </TabbedForm.Tab>
                 </TabbedForm>
             }
-        </Edit>
+        </Box>
     )
 }
-export default ClientEdit;
+export default ClientEditForm;

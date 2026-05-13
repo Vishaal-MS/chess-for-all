@@ -1,4 +1,4 @@
-import { Datagrid, DateField, List, ReferenceField, TextField, useRecordContext } from "react-admin";
+import { DateField, List, TextField, useRecordContext } from "react-admin";
 import { Typography } from "@mui/material";
 import {
    isDivisionAdmin,
@@ -6,9 +6,13 @@ import {
    isOrgAdmin,
    isRegularSchoolFlavored,
 } from "../../businessLogic";
-import { useEffect, useState } from "react";
+import {Fragment, useEffect, useState} from "react";
 import { getClassIdByStudentId } from "../../backend/clients";
 import {Empty} from "../common/empty.tsx";
+import {DataTable} from "@mahaswami/vc-frontend";
+import {TeachingModesReferenceField} from "../teaching_modes.tsx";
+import {CoachesReferenceField} from "../coaches.tsx";
+import {UsersReferenceField} from "../users.tsx";
 
 export const StudentClasses = ({studentId}: {studentId? : number}) => {
 
@@ -26,25 +30,30 @@ export const StudentClasses = ({studentId}: {studentId? : number}) => {
    }, [])
 
    return(
-      <>
+      <Fragment>
          <Typography sx={{ml: 1}}>Classes</Typography>
          <List key='student-classes' empty={<Empty showIcon={false} emptyText={"No Classes for the student"}/>} actions={false} exporter={false}
             resource="classes" perPage={1000} filter={{id : classIds}} storeKey={false} sx={{ width: '100%' }}>
-            <Datagrid rowClick={false}>
-               <TextField source="name" label="Name" />
+            <DataTable rowClick={false} bulkActionButtons={false}>
+               <DataTable.Col source="name" label="Name" />
                {!isStandardLinkedOrExecutive &&
-                   <ReferenceField source="teaching_mode_id" reference="teaching_modes" link={false}
-                  queryOptions={{ meta: { scopingEscapeHatch: true }}} label="Coaching Mode" />}
-                  <DateField source="start_date" label="Start Date" />
-                  <DateField source="end_date" label="End Date" />
-                  <TextField source="status"  sx={{ textTransform: 'capitalize' }}/>
-                  {(isOrgAdmin() || isDivisionAdmin()) && <ReferenceField source="coach_id" reference="coaches" label={isRegularSchoolFlavored() ? "Teacher" : "Coach"}>
-                  <ReferenceField source="user_id" reference="users" label={isRegularSchoolFlavored() ? "Teacher" : "Coach"} link={false}>
-                     <TextField source="fullName" />
-                  </ReferenceField>
-               </ReferenceField>}
-            </Datagrid>
+                   <DataTable.Col source='teaching_mode_id'>
+                      <TeachingModesReferenceField source="teaching_mode_id" link={false}
+                     queryOptions={{ meta: { scopingEscapeHatch: true }}} label="Coaching Mode" />
+                   </DataTable.Col>
+               }
+               <DataTable.Col source="start_date" label="Start Date" field={DateField} />
+               <DataTable.Col source="end_date" label="End Date" field={DateField} />
+               <DataTable.Col source="status"  sx={{ textTransform: 'capitalize' }}/>
+               {(isOrgAdmin() || isDivisionAdmin()) &&
+                   <DataTable.Col source='coach_id' field={() =>
+                      <CoachesReferenceField source="coach_id" label={isRegularSchoolFlavored() ? "Teacher" : "Coach"}>
+                         <UsersReferenceField source="user_id" label={isRegularSchoolFlavored() ? "Teacher" : "Coach"} link={false} />
+                     </CoachesReferenceField>
+                   }/>
+               }
+            </DataTable>
          </List>
-      </>
+      </Fragment>
    );
 }

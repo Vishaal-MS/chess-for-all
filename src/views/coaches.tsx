@@ -127,7 +127,7 @@ export const CoachesResource = (
         name={RESOURCE}
         icon={ICON}
         prefetch={PREFETCH}
-        recordRepresentation={(record: any) => recordRep('users', record.user)}
+        recordRepresentation={(record: any) => `${record.user.first_name} ${record.user.last_name}`}
         fieldSchema={ coachesFieldSchema}
         actionDefs={ coachesActionDefs}
         searchableFields={ coachesSearchableFields}

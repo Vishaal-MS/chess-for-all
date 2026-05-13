@@ -1,13 +1,12 @@
 import { RESOURCE } from "../views/lessons"
+import {updateLessonBlockMappings} from "../backend/lessons.ts";
 
 export const LessonsLogic: any = {
     resource: RESOURCE,
     afterCreate: [],
     afterDelete: [],
     afterDeleteMany: [],
-    afterGetList: [(params: any) => {
-        return params;
-    }],
+    afterGetList: [],
     afterGetMany: [],
     afterGetManyReference: [],
     afterGetOne: [],
@@ -24,5 +23,5 @@ export const LessonsLogic: any = {
     beforeUpdateMany: [],
     beforeSave: [],
     afterRead: [],
-    afterSave: [],
+    afterSave: [updateLessonBlockMappings],
 }

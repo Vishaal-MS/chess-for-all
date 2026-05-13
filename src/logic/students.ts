@@ -1,17 +1,15 @@
 import { RESOURCE } from "../views/students"
-import {beforeCreateStudentUserAndParentUser} from "../backend/students.ts";
+import {beforeCreateStudentUserAndParentUser, populateMultipleUser, populateSingleUser} from "../backend/students.ts";
 
 export const StudentsLogic: any = {
     resource: RESOURCE,
     afterCreate: [],
     afterDelete: [],
     afterDeleteMany: [],
-    afterGetList: [(params: any) => {
-        return params;
-    }],
-    afterGetMany: [],
+    afterGetList: [populateMultipleUser],
+    afterGetMany: [populateMultipleUser],
     afterGetManyReference: [],
-    afterGetOne: [],
+    afterGetOne: [populateSingleUser],
     afterUpdate: [],
     afterUpdateMany: [],
     beforeCreate: [beforeCreateStudentUserAndParentUser],
@@ -23,7 +21,11 @@ export const StudentsLogic: any = {
     beforeGetOne: [],
     beforeUpdate: [],
     beforeUpdateMany: [],
-    beforeSave: [],
+    beforeSave: [(data) => {
+        data.client_type = undefined;
+        console.log("Before save: ", data);
+        return data;
+    }],
     afterRead: [],
     afterSave: [],
 }

@@ -31,7 +31,7 @@ import {ExtendedStudentFields} from "./students/extendedStudentFields.tsx";
 
 export const RESOURCE = "students"
 export const ICON = School
-export const PREFETCH: string[] = ["users", "clients", "parent_users", "divisions", "standard_grades"]
+export const PREFETCH: string[] = ["users", "clients", "divisions", "standard_grades"]
 
 export const StudentsReferenceField = createReferenceField(RESOURCE, PREFETCH);
 export const StudentsReferenceInput = createReferenceInput(RESOURCE, PREFETCH);
