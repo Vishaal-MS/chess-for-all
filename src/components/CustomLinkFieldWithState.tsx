@@ -9,8 +9,8 @@ export const CustomLinkFieldWithState = ({state = {}}) => {
     const record = useRecordContext();
     const navigate = useNavigate();
     const isPublisherLogin = state?.isFromSubscribedCurriculum === undefined;
-
     if (!record) return null;
+    console.log("Lessson record: ", record);
 
     const lessonIds =  state.ids || [];
     if (!lessonIds.includes(record.lesson_id)) {
@@ -18,13 +18,11 @@ export const CustomLinkFieldWithState = ({state = {}}) => {
     }
     if (isPublisherLogin || state?.isFromSubscribedCurriculum) {
         return (
-            <>
-                <Typography sx={{textDecoration: 'underline', cursor: 'pointer', fontSize: '.9rem'}}
-                            color="primary"
-                            onClick={() => navigate(`/lessons/${record.lesson_id}/show`, {state: state})}>
-                    {record?.lesson.name}
-                </Typography>
-            </>
+            <Typography sx={{textDecoration: 'underline', cursor: 'pointer', fontSize: '.9rem'}}
+                        color="primary"
+                        onClick={() => navigate(`/lessons/${record.lesson_id}/show`, {state: state})}>
+                {record?.lesson?.name}
+            </Typography>
         );
     } else if (isTenantAllowedCoaching()) {
         return (

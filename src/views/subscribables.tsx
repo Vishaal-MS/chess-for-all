@@ -11,7 +11,7 @@ import {SubscribableList, SubscribableShow} from "./subscriptions/subscribables.
 
 export const RESOURCE = "subscribables"
 export const ICON = Group
-export const PREFETCH: string[] = []
+export const PREFETCH: string[] = ["curriculum", "tenants"]
 
 export const SubscribablesReferenceField = createReferenceField(RESOURCE, PREFETCH);
 export const SubscribablesReferenceInput = createReferenceInput(RESOURCE, PREFETCH);
@@ -71,22 +71,6 @@ const SubscribableCreate = (props: any) => {
         </Create>
     )
 }
-
-// const SubscribableShow = (props: any) => {
-//     return (
-//         <Show {...showDefaults(props)}>
-//             <SimpleShowLayout display="grid"  gridTemplateColumns={{ xs: '1fr', md: '1fr 1fr' }}  gap="1rem" >
-//                 <CurriculumsReferenceField source="curriculum_id" />
-//                 <DateField source="published_date" />
-//                 <BooleanField source="is_active" />
-//                 <MoneyField source="one_time_amount" currency="USD" />
-//                 <TextField source="rating" />
-//                 <MoneyField source="monthly_amount" currency="USD" />
-//                 <BooleanField source="is_unlisted" />
-//             </SimpleShowLayout>
-//         </Show>
-//     )
-// }
 
 const subscribablesFieldSchema: FieldSchema = {
     curriculum_id: { resource: 'curricula' },

@@ -1,11 +1,6 @@
 import {remoteLog, setLocalStorage, showDefaults} from "@mahaswami/vc-frontend";
 import {
-    ListBase,
-    ReferenceField,
-    Show, Title,
-    useGetRecordId,
-    Loading,
-    useSidebarState, useRecordContext
+    ListBase, ReferenceField, Show, Title, Loading, useSidebarState, useGetRecordId
 } from "react-admin";
 import {useEffect, useState} from "react";
 import {Button, Card, CardContent, CardHeader, Grid, Tooltip, Typography} from "@mui/material";
@@ -22,8 +17,7 @@ import {useNavigate} from "react-router-dom";
 import { GameIcon } from "../games/GameIcon.tsx";
 
 export const EnrollmentShowDetails = () => {
-    const record = useRecordContext();
-    const recordId = Number(record?.id);
+    const recordId = Number(useGetRecordId());
     const [enrollment,setEnrollment] = useState(null);
     const [studentName,setStudentName] = useState(null);
     const [classRecord, setClassRecord] = useState(null);
@@ -42,11 +36,15 @@ export const EnrollmentShowDetails = () => {
                 const {data: enrollmentData} = await dataProvider.getOne('enrollments', {id: recordId});
                 const {data:student} = await dataProvider.getOne('students', {id: enrollmentData.student_id});
                 setParentId(student?.parent_user_id)
-                const {data:user} = await dataProvider.getOne('users', {id: student.user_id});
-                const {data:classData} = await dataProvider.getOne('classes', {id: enrollmentData.class_id, meta: {prefetch: ['teaching_modes']}});
-                const {data:assignmentsData} = await dataProvider.getList('assignments', {
+                const {data: user} = await dataProvider.getOne('users', {id: student.user_id});
+                const {data: classData} = await dataProvider.getOne('classes', {
+                    id: enrollmentData.class_id,
+                    meta: {prefetch: ['teaching_modes']}
+                });
+                const {data: assignmentsData} = await dataProvider.getList('assignments', {
                     pagination: {page: 1, perPage: 100},
-                    filter: {class_id: enrollmentData.class_id, student_id: enrollmentData.student_id}});
+                    filter: {class_id: enrollmentData.class_id, student_id: enrollmentData.student_id}
+                });
                 const {data: parentData} = await dataProvider.getList('parent_notes');
                 const filteredNotes = parentData.filter(note => note.student_id === enrollmentData.student_id);
                 setParentRecord(filteredNotes.length);
@@ -65,6 +63,7 @@ export const EnrollmentShowDetails = () => {
         fetchEnrollments();
     }, []);
 
+    if (!recordId) return;
 
    let assignmentsFilter = {
        class_id: enrollment?.class_id,

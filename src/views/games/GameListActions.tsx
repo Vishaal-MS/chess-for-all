@@ -583,7 +583,7 @@ const PlayGameDialog = ({ classId, props }: { classId: number, props: any }) => 
     ), validateGameOverFEN]
 
     return (
-        <Create {...createDefaults(props)} title={false} resource="games" transform={addPlayerNames} mutationOptions={{ onSuccess: sendInvitation }}>
+        <Create title={false} resource="games" transform={addPlayerNames} mutationOptions={{ onSuccess: sendInvitation }}>
             <SimpleForm defaultValues={{ created_date: new Date(), status: GAME_STATUS.INVITED }} toolbar={<BottomToolbar isLoading={state.loading}/>}>
                 <Typography variant="h6">{isStudent() ? "Play a Game" : "Setup a Game"}</Typography>
                 {isCoach() && !classId &&

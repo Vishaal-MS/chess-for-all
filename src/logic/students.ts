@@ -23,7 +23,6 @@ export const StudentsLogic: any = {
     beforeUpdateMany: [],
     beforeSave: [(data) => {
         data.client_type = undefined;
-        console.log("Before save: ", data);
         return data;
     }],
     afterRead: [],

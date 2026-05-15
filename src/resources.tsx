@@ -55,6 +55,8 @@ import {Route} from "react-router-dom";
 import {ManualAssignmentCheckins} from "./views/manual_assignment_check/ManualAssignmentCheckins.tsx";
 import { Rule } from '@mui/icons-material';
 import {Fragment} from "react";
+import {DirectAssignmentShow} from "./views/class/directAssignmentShow.tsx";
+import {StudentAssignmentLive} from "./views/class/studentAssignmentLive.tsx";
 // {{VC:INSERT:RESOURCE_IMPORTS}}
 
 export const configureResources = (permissions: any) => {
@@ -63,6 +65,10 @@ export const configureResources = (permissions: any) => {
             <Route path={"/manual_assignment_checkins"}
                element={<Authenticated><ManualAssignmentCheckins /></Authenticated>}
             />
+        </CustomRoutes>,
+        <CustomRoutes key={35} noLayout>
+            <Route path="/assignments/:tId/:uniqueDirectAssignmentId" element={<DirectAssignmentShow/>} />
+            <Route path="/lessons/:id/live" element={<StudentAssignmentLive/>} />
         </CustomRoutes>,
         HistoryResource,
         UsersResource,
@@ -163,6 +169,20 @@ export const configureMenus = (permissions: any) => {
             </AutoLayoutMenu>
         </>
 
+    const proCoachMenusAll =
+        <>
+            <ClassesMenu />
+            <CurriculumsMenu />
+            <SubscriptionsMenu />
+            <LessonsMenu />
+            <LessonBlocksMenu />
+            <ClientsMenu />
+            <Menu.Item to="/manual_assignment_checkins" primaryText="Assignment Checkins" leftIcon={<Rule/>} />
+            <GamesMenu />
+        </>
+
+
+
     const studentMenus = <EnrollmentsMenu />
 
     if ('super_admin' === permissions) {
@@ -173,6 +193,9 @@ export const configureMenus = (permissions: any) => {
     }
     if ('student' === permissions) {
         return studentMenus;
+    }
+    if ('pro_coach' === permissions) {
+        return proCoachMenusAll;
     }
     return adminMenusAll;
 

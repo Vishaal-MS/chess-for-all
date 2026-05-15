@@ -14,7 +14,7 @@ import {Box, Grid} from '@mui/material';
 import {validatePhoneNumber} from "../../helpers/phoneNumberValidation.ts";
 import {isExecutiveCoachingFlavored, isSchoolStandardLinked} from "../../businessLogic.ts";
 import {getLocalStorage} from "@mahaswami/vc-frontend";
-import {ClientTypes, genderChoices} from "../../constants.ts";
+import {ClientTypes, genderChoices} from "./../../helpers/constants.ts";
 import {countryChoices} from "../../helpers/AllCountries.ts";
 import {getDOBDateRange} from "../../backend/students.ts";
 import {parentEmailValidation, studentEmailValidation} from "../../backend/clients.ts";
@@ -33,7 +33,6 @@ export const ExtendedClientFields = ({ clientType, isEditView }) => {
     };
 
     const record = useRecordContext();
-    console.log("Student Record: ", record)
     const unique = useUnique();
     const initialCountry = record ? record?.country : getLocalStorage('country');
     const [selectedCountry, setSelectedCountry] = useState(initialCountry);

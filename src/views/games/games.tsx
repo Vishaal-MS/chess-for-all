@@ -214,7 +214,7 @@ export const GamePlay = () => {
                 prefetch: ["students", "time_controls", "users"]
             }}}
         >
-            <GamePlayView classId={classId}/>
+            {/*<GamePlayView classId={classId}/>*/}
         </Show>
     )
 }

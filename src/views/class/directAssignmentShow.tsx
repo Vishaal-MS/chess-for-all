@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import {Loading, ShowBase} from "react-admin";
 import {useParams} from "react-router-dom";
 import {remoteLog, setLocalStorage} from "@mahaswami/vc-frontend";

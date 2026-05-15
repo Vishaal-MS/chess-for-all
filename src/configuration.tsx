@@ -30,101 +30,101 @@ export const canAccess = async (params: any) => {
 }
 
 export const postLogin = async (dataProvider: any, user: any) => {
-    // if (getLocalStorage("role") === "super_admin") {
-    //     return;
-    // }
-    // console.log("Role: ", getLocalStorage("role"));
-    // const isStudent = getLocalStorage("role") === "student";
-    // const postLoginPromises = [
-    //     dataProvider.getList('classes'),
-    //     dataProvider.getList('coaches', {filter:{user_id: user.id}}),
-    //     dataProvider.getList('settings')
-    // ]
-    // if (isStudent) {
-    //     postLoginPromises.push(vcDataProvider.getList('students', {
-    //         filter: {user_id: user.id},
-    //         sort: {field: 'id', order: 'ASC'},
-    //         pagination: { page: 1, perPage: 1000 },
-    //     }));
-    // }
-    // const [classesResult, coachesResult, settingsResult, studentResult] = await Promise.all(postLoginPromises);
-    // const {data: classes} = classesResult;
-    // const {data: coaches} = coachesResult;
-    // const {data: settings} = settingsResult;
-    // console.log("Data: ", classes, coaches, settings, studentResult)
-    // if (settings.length > 0) {
-    //     const tenantType = settings.find(s => s.config_name === TenantConfigNames.TENANT_TYPE).config_value;
-    //     const allowPublishing = settings.find(s => s.config_name === TenantConfigNames.ALLOW_PUBLISHING).config_value;
-    //     const allowCoaching = settings.find(s => s.config_name === TenantConfigNames.ALLOW_COACHING).config_value;
-    //     const largeAcademy = settings.find(s => s.config_name === TenantConfigNames.LARGE_ACADEMY)?.config_value;
-    //     const allowVoiceOver = settings.find(s => s.config_name === TenantConfigNames.ALLOW_VOICE_OVER)?.config_value;
-    //     const tenantCountry = settings.find(s => s.config_name === TenantConfigNames.COUNTRY)?.config_value;
-    //     const calendarId = settings.find(s => s.config_name === TenantConfigNames.GOOGLE_CALENDER_ID)?.config_value;
-    //     const schoolStandardLinked = settings.find(s => s.config_name === TenantConfigNames.SCHOOL_STANDARD_LINKED)?.config_value;
-    //     const regularSchoolFlavored = settings.find(s => s.config_name === TenantConfigNames.REGULAR_SCHOOL_FLAVORED)?.config_value;
-    //     const executiveCoachingFlavored = settings.find(s => s.config_name === TenantConfigNames.EXECUTIVE_COACHING_FLAVORED)?.config_value;
-    //     const schoolStandardId = settings.find(s => s.config_name === TenantConfigNames.SCHOOL_STANDARD_ID)?.config_value;
-    //     setLocalStorage('tenant_allowed_publishing', allowPublishing);
-    //     setLocalStorage('tenant_allowed_coaching', allowCoaching);
-    //     setLocalStorage('tenant_academy_type', TenantTypeLookup[tenantType]);
-    //     setLocalStorage('tenant_large_academy', largeAcademy);
-    //     setLocalStorage('country', tenantCountry);
-    //     setLocalStorage('tenant_google_calendar_id', calendarId);
-    //     setLocalStorage('tenant_school_standard_linked', schoolStandardLinked);
-    //     setLocalStorage('tenant_regular_school_flavored', regularSchoolFlavored);
-    //     setLocalStorage('tenant_executive_coaching_flavored', executiveCoachingFlavored);
-    //     setLocalStorage('tenant_school_standard_id', schoolStandardId);
-    //     setLocalStorage('tenant_allowed_voice_over', allowVoiceOver);
-    //     setLocalStorage('is_app_sound_enabled', true);
-    //     if (regularSchoolFlavored?.toUpperCase() === 'TRUE') {
-    //         const {data: clients} = await dataProvider.getList('clients');
-    //         if (clients.length === 0) {
-    //             const tenantName = getLocalStorage('tenant_name');
-    //             const standardId = parseInt(schoolStandardId);
-    //             await dataProvider.create('clients', {
-    //                 data: {
-    //                     name: tenantName,
-    //                     primary_contact_name: tenantName,
-    //                     standard_id: standardId,
-    //                     client_type_id: 1
-    //                 }
-    //             });
-    //         }
-    //     }
-    // }
-    // setLocalStorage('coach_id', coaches[0]?.id);
-    // if (isDivisionAdmin() || isDivisionCoach()) {
-    //     const divisionId = coaches[0]?.division_id;
-    //     setLocalStorage('selected_division_id', divisionId);
-    // }
-    // if (isStudent) {
-    //     const {data: students} = studentResult;
-    //     const currentStudent = students.find(student => student.user_id === getUserId());
-    //     setLocalStorage('student_id', currentStudent.id);
-    //     const enrollments = await getRemoteAndHybridClassEnrollments(vcDataProvider, students[0].id);
-    //     const activeClassEnrollments = enrollments.filter((enrollment) => enrollment.class.status === ClassesStatus.ACTIVE);
-    //     if (enrollments.length === 1) {
-    //         const enrollmentId = enrollments[0].id;
-    //         setLocalStorage("enrollment_id", enrollmentId);
-    //     } else if (activeClassEnrollments.length > 0) {
-    //         const enrollmentId = activeClassEnrollments[0].id;
-    //         setLocalStorage("enrollment_id", enrollmentId);
-    //     }
-    // }
-    // if (isOrgAdmin() || isProCoach() || isDivisionAdmin()) {
-    //     setLocalStorage('total_classes_at_login', classes.length);
-    // }
-    // if (user.image_file_id) {
-    //     const getDownloadURL = () =>
-    //         window.data_service_map[window.data_service_name] +
-    //         "/file_download/" +
-    //         window.spreadsheetId + "/";
-    //     user.avatar =
-    //         getDownloadURL() + "inline/" + user.image_file_id +
-    //         "?app=" + window.app_name + "&env=" + window.app_env;
-    //     user.fullName = user.first_name + " " + user.last_name
-    //     setLocalStorage('user', JSON.stringify(user));
-    // }
+    if (getLocalStorage("role") === "super_admin") {
+        return;
+    }
+    console.log("Role: ", getLocalStorage("role"));
+    const isStudent = getLocalStorage("role") === "student";
+    const postLoginPromises = [
+        dataProvider.getList('classes'),
+        dataProvider.getList('coaches', {filter:{user_id: user.id}}),
+        dataProvider.getList('settings')
+    ]
+    if (isStudent) {
+        postLoginPromises.push(vcDataProvider.getList('students', {
+            filter: {user_id: user.id},
+            sort: {field: 'id', order: 'ASC'},
+            pagination: { page: 1, perPage: 1000 },
+        }));
+    }
+    const [classesResult, coachesResult, settingsResult, studentResult] = await Promise.all(postLoginPromises);
+    const {data: classes} = classesResult;
+    const {data: coaches} = coachesResult;
+    const {data: settings} = settingsResult;
+    console.log("Data: ", classes, coaches, settings, studentResult)
+    if (settings.length > 0) {
+        const tenantType = settings.find(s => s.config_name === TenantConfigNames.TENANT_TYPE).config_value;
+        const allowPublishing = settings.find(s => s.config_name === TenantConfigNames.ALLOW_PUBLISHING).config_value;
+        const allowCoaching = settings.find(s => s.config_name === TenantConfigNames.ALLOW_COACHING).config_value;
+        const largeAcademy = settings.find(s => s.config_name === TenantConfigNames.LARGE_ACADEMY)?.config_value;
+        const allowVoiceOver = settings.find(s => s.config_name === TenantConfigNames.ALLOW_VOICE_OVER)?.config_value;
+        const tenantCountry = settings.find(s => s.config_name === TenantConfigNames.COUNTRY)?.config_value;
+        const calendarId = settings.find(s => s.config_name === TenantConfigNames.GOOGLE_CALENDER_ID)?.config_value;
+        const schoolStandardLinked = settings.find(s => s.config_name === TenantConfigNames.SCHOOL_STANDARD_LINKED)?.config_value;
+        const regularSchoolFlavored = settings.find(s => s.config_name === TenantConfigNames.REGULAR_SCHOOL_FLAVORED)?.config_value;
+        const executiveCoachingFlavored = settings.find(s => s.config_name === TenantConfigNames.EXECUTIVE_COACHING_FLAVORED)?.config_value;
+        const schoolStandardId = settings.find(s => s.config_name === TenantConfigNames.SCHOOL_STANDARD_ID)?.config_value;
+        setLocalStorage('tenant_allowed_publishing', allowPublishing);
+        setLocalStorage('tenant_allowed_coaching', allowCoaching);
+        setLocalStorage('tenant_academy_type', TenantTypeLookup[tenantType]);
+        setLocalStorage('tenant_large_academy', largeAcademy);
+        setLocalStorage('country', tenantCountry);
+        setLocalStorage('tenant_google_calendar_id', calendarId);
+        setLocalStorage('tenant_school_standard_linked', schoolStandardLinked);
+        setLocalStorage('tenant_regular_school_flavored', regularSchoolFlavored);
+        setLocalStorage('tenant_executive_coaching_flavored', executiveCoachingFlavored);
+        setLocalStorage('tenant_school_standard_id', schoolStandardId);
+        setLocalStorage('tenant_allowed_voice_over', allowVoiceOver);
+        setLocalStorage('is_app_sound_enabled', true);
+        if (regularSchoolFlavored?.toUpperCase() === 'TRUE') {
+            const {data: clients} = await dataProvider.getList('clients');
+            if (clients.length === 0) {
+                const tenantName = getLocalStorage('tenant_name');
+                const standardId = parseInt(schoolStandardId);
+                await dataProvider.create('clients', {
+                    data: {
+                        name: tenantName,
+                        primary_contact_name: tenantName,
+                        standard_id: standardId,
+                        client_type_id: 1
+                    }
+                });
+            }
+        }
+    }
+    setLocalStorage('coach_id', coaches[0]?.id);
+    if (isDivisionAdmin() || isDivisionCoach()) {
+        const divisionId = coaches[0]?.division_id;
+        setLocalStorage('selected_division_id', divisionId);
+    }
+    if (isStudent) {
+        const {data: students} = studentResult;
+        const currentStudent = students.find(student => student.user_id === getUserId());
+        setLocalStorage('student_id', currentStudent.id);
+        const enrollments = await getRemoteAndHybridClassEnrollments(vcDataProvider, students[0].id);
+        const activeClassEnrollments = enrollments.filter((enrollment) => enrollment.class.status === ClassesStatus.ACTIVE);
+        if (enrollments.length === 1) {
+            const enrollmentId = enrollments[0].id;
+            setLocalStorage("enrollment_id", enrollmentId);
+        } else if (activeClassEnrollments.length > 0) {
+            const enrollmentId = activeClassEnrollments[0].id;
+            setLocalStorage("enrollment_id", enrollmentId);
+        }
+    }
+    if (isOrgAdmin() || isProCoach() || isDivisionAdmin()) {
+        setLocalStorage('total_classes_at_login', classes.length);
+    }
+    if (user.image_file_id) {
+        const getDownloadURL = () =>
+            window.data_service_map[window.data_service_name] +
+            "/file_download/" +
+            window.spreadsheetId + "/";
+        user.avatar =
+            getDownloadURL() + "inline/" + user.image_file_id +
+            "?app=" + window.app_name + "&env=" + window.app_env;
+        user.fullName = user.first_name + " " + user.last_name
+        setLocalStorage('user', JSON.stringify(user));
+    }
 }
 
 export const postLogout = () => {

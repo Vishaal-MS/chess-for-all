@@ -1,14 +1,13 @@
 import {Box, Button, Card, Grid, Rating, Typography} from "@mui/material";
 import {
-    Datagrid,
     DateField,
     FunctionField, Loading,
     ReferenceField,
     ReferenceManyField, ReferenceOneField,
     TabbedShowLayout,
-    TextField, WrapperField,
+    WrapperField,
 } from "react-admin";
-import {dataProvider, openDialog, PER_PAGE, SensibleDefaultPagination} from "@mahaswami/vc-frontend";
+import {dataProvider, DataTable, openDialog, PER_PAGE, SensibleDefaultPagination} from "@mahaswami/vc-frontend";
 import {CustomLinkFieldWithState} from "../../components/CustomLinkFieldWithState.tsx";
 import {
     CurriculumImageField,
@@ -16,15 +15,14 @@ import {
 } from "./curriculum.tsx";
 import {useRecordContext} from "ra-core";
 import {formatCurrency, formatDateWithShortYear} from "../../utils.ts";
-// import {ReviewDetail} from "../reviews/Reviews.tsx";
-// import {PublisherProfileDialog} from "../profiles/publisherProfileDialog.tsx";
-import React, {useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import {TenantConfigNames} from "../../helpers/constants.ts";
 import {StarRating} from "../../components/NumberedStar.tsx";
 import { useLocation } from "react-router-dom";
 import {currentTenantId, getUserId} from "../../businessLogic.ts";
 import {Empty} from "../common/empty.tsx";
 import {ReviewDetail} from "../reviews/Reviews.tsx";
+import {UsersReferenceField} from "../users.tsx";
 
 const cardStyles = (theme) => ({
     background: `linear-gradient(45deg, 
@@ -115,28 +113,32 @@ const SubscribablesTabs = ({recordData}) => {
                 <ReferenceManyField pagination={<SensibleDefaultPagination/>} perPage={100}
                                     reference={"curriculum_lessons"} target={"curriculum_id"} link={false}
                                     sort={{field: 'position_number', order: 'ASC'}}
-                                    queryOptions={{meta: {prefetch: ['lessons']}}}>
-                    <Datagrid bulkActionButtons={false} rowClick={false}>
-                        <WrapperField label={'Lessons'}>
-                            <CustomLinkFieldWithState state={{curriculumId: record?.id, ids: ids}}/>
-                        </WrapperField>
-                    </Datagrid>
+                                    queryOptions={{ meta: { prefetch: ['lessons'] }}}>
+                    <DataTable bulkActionButtons={false} rowClick={false}>
+                        <DataTable.Col>
+                            <WrapperField label={'Lessons'}>
+                                <CustomLinkFieldWithState state={{curriculumId: record?.id, ids: ids}}/>
+                            </WrapperField>
+                        </DataTable.Col>
+                    </DataTable>
                 </ReferenceManyField>
             </Grid>
         ) : (
             <Grid item xs={12}>
                 <TabbedShowLayout>
                     <TabbedShowLayout.Tab label={"Lessons"}>
-                        <ReferenceField source="curriculum_id" reference="curriculum" link={false} label={""}>
+                        <ReferenceField source="curriculum_id" reference="curriculum" link={false} label={false}>
                             <ReferenceManyField reference="curriculum_lessons" target="curriculum_id"
                                                 label="Lessons" pagination={<SensibleDefaultPagination/>}
                                                 perPage={100} sort={{field: 'position_number', order: 'ASC'}}
                                                 queryOptions={{meta: {prefetch: ['lessons']}}}>
-                                <Datagrid bulkActionButtons={false} rowClick={false}>
-                                    <WrapperField label={'Lessons'}>
-                                        <CustomLinkFieldWithState state={{subscribableId: record?.id, isFromSubscribedCurriculum, ids: ids}}/>
-                                    </WrapperField>
-                                </Datagrid>
+                                <DataTable bulkActionButtons={false} rowClick={false}>
+                                    <DataTable.Col>
+                                        <WrapperField label={'Lessons'}>
+                                            <CustomLinkFieldWithState state={{subscribableId: record?.id, isFromSubscribedCurriculum, ids: ids}}/>
+                                        </WrapperField>
+                                    </DataTable.Col>
+                                </DataTable>
                             </ReferenceManyField>
                         </ReferenceField>
                     </TabbedShowLayout.Tab>
@@ -148,16 +150,13 @@ const SubscribablesTabs = ({recordData}) => {
                         ) : (
                             <ReferenceManyField reference={"reviews"} target="subscribable_id" filter={{type: 'review'}}
                                                 pagination={<SensibleDefaultPagination/>} perPage={PER_PAGE}>
-                                <Datagrid bulkActionButtons={false} expand={<ReviewDetail/>}
+                                <DataTable bulkActionButtons={false} expand={<ReviewDetail/>}
                                           empty={<Empty emptyText={"No Reviews Yet"} showIcon={false}/>}>
-                                    <TextField source="title" label={"Review"}/>
-                                    <FunctionField label="Rating"
-                                                   render={record => <Rating value={record.rating} readOnly/>}/>
-                                    <ReferenceField reference={"users"} source={"user_id"}>
-                                        <TextField source="fullName"/>
-                                    </ReferenceField>
-                                    <DateField source="review_date" label={"Date"}/>
-                                </Datagrid>
+                                    <DataTable.Col source="title" label={"Review"}/>
+                                    <DataTable.Col label="Rating" render={record => <Rating value={record.rating} readOnly/>}/>
+                                    <DataTable.Col source={"user_id"} field={UsersReferenceField} />
+                                    <DataTable.Col source="review_date" label={"Date"} field={DateField}/>
+                                </DataTable>
                             </ReferenceManyField>
                         )}
                     </TabbedShowLayout.Tab>
@@ -169,12 +168,12 @@ const SubscribablesTabs = ({recordData}) => {
                         ) : (
                             <ReferenceManyField reference={"reviews"} target="subscribable_id"
                                                 filter={{type: 'message', user_id: getUserId()}}>
-                                <Datagrid bulkActionButtons={false} expand={<ReviewDetail/>}
+                                <DataTable bulkActionButtons={false} expand={<ReviewDetail/>}
                                           empty={<Empty emptyText={"No Messages Yet"} showIcon={false}/>}
                                           sx={{fontSize: '0.5rem'}}>
-                                    <TextField source="title" label="Message"/>
-                                    <DateField source="review_date" label={"Date"}/>
-                                </Datagrid>
+                                    <DataTable.Col source="title" label="Message"/>
+                                    <DataTable.Col source="review_date" label={"Date"} field={DateField}/>
+                                </DataTable>
                             </ReferenceManyField>
                         )}
                     </TabbedShowLayout.Tab>

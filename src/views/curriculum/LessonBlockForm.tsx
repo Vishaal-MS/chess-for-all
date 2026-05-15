@@ -277,6 +277,13 @@ export const LessonBlockForm = ({onSaveBlock, recordData, formMode}) => {
                 id = lessonBlock.id;
             } else {
                 delete recordToSave.id;
+                recordToSave.type = undefined;
+                recordToSave.title = undefined;
+                recordToSave.content = undefined;
+                recordToSave.position_number = undefined;
+                recordToSave.is_advanced = undefined;
+                recordToSave.is_active = undefined;
+                console.log("Lesson block data: ", recordToSave);
                 const {data: lessonBlock} = await dataProvider.create('lesson_blocks', {data: recordToSave});
                 if (aiBlockLog)
                     await dataProvider.update('ai_block_logs', {id: aiBlockLog?.id, data: {name: name, lesson_block_id: lessonBlock?.id}});

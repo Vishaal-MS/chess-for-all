@@ -29,7 +29,6 @@ export const TenantsLogic: any = {
 async function addTenantSetting(response, dataProvider, resource) {
     try {
         const tenant = response.data;
-
         const settings = [
             {tenant_id: tenant.id, config_name: TenantConfigNames.ALLOW_COACHING, config_value: 'TRUE'},
             {tenant_id: tenant.id, config_name: TenantConfigNames.ALLOW_PUBLISHING, config_value: 'FALSE'},
@@ -42,13 +41,14 @@ async function addTenantSetting(response, dataProvider, resource) {
             {tenant_id: tenant.id, config_name: TenantConfigNames.SCHOOL_STANDARD_ID, config_value: ''},
             {tenant_id: tenant.id, config_name: TenantConfigNames.ALLOW_VOICE_OVER, config_value: 'FALSE'}
         ];
-
         await Promise.all(
             settings.map(data =>
-                dataProvider.create("settings", {data: data})
+                dataProvider.create("settings", {
+                    data,
+                    meta: { scopingEscapeHatch: true }
+                })
             )
         );
-
     } catch (error) {
         console.error("Error while adding tenant setting: ", error);
         remoteLog("Error sending on addTenantSetting: ", error);

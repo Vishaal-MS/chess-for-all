@@ -2,7 +2,7 @@ import {Create, TextInput, useNotify, useRedirect} from "react-admin";
 import {createDefaults, formDefaults, hideLoading, remoteLog, showLoading, SimpleForm} from "@mahaswami/vc-frontend";
 import {useSearchParams} from "react-router-dom";
 import {useEffect, useState} from "react";
-import {ClientTypes} from "../../constants.ts";
+import {ClientTypes} from "./../../helpers/constants.ts";
 import {Box} from "@mui/material";
 import {ExtendedClientFields} from "./ExtendedClientFields.tsx";
 

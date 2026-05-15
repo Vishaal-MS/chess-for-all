@@ -45,7 +45,7 @@ import { PaymentsLogic } from './logic/payments.ts';
 import { TimesheetsLogic } from './logic/timesheets.ts';
 import { AiBlockLogsLogic } from './logic/ai_block_logs.ts';
 import { getLocalStorage, remoteLog, swanAPI } from '@mahaswami/vc-frontend';
-import {TenantTypes, UserRoles} from "./constants.ts";
+import {TenantTypes, UserRoles} from "./helpers/constants.ts";
 import {DataProvider} from "react-admin";
 import {
     getParentEmailTemplate,
@@ -55,6 +55,7 @@ import {
 import {TenantConfigNames} from "./helpers/constants.ts";
 import { SnippetsLibrariesLogic } from './logic/snippets_libraries.ts';
 import {getEmailsBasedOnEnv} from "./configuration.tsx";
+import {TenantsLogic} from "./logic/tenants.ts";
 
 export const businessLogic = () => {
     return [
@@ -113,6 +114,7 @@ export const businessLogic = () => {
         TimesheetsLogic,
         TrophiesLogic,
         SnippetsLibrariesLogic,
+        TenantsLogic
     ];
 };
 

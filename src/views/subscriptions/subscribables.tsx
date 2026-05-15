@@ -1,10 +1,18 @@
-import { Datagrid, Loading, useCreate, useGetOne, FunctionField, useRefresh, List } from 'react-admin';
+import { Loading, useCreate, useGetOne, FunctionField, useRefresh, List } from 'react-admin';
 import {useEffect,  useState} from "react";
 import {useLocation, useNavigate, useParams} from "react-router-dom";
 import {Button, useGetRecordId, useRecordContext} from "react-admin";
 import {Box, Typography, Menu, MenuItem, Fade, Backdrop, CircularProgress} from "@mui/material";
 import {Create,SimpleForm,TextInput,useRedirect,useNotify} from "react-admin"
-import {closeDialog, getLocalStorage, openDialog, remoteLog, showDefaults} from "@mahaswami/vc-frontend";
+import {
+    closeDialog,
+    DataTable,
+    getLocalStorage,
+    openDialog,
+    remoteLog,
+    showDefaults,
+    tableDefaults
+} from "@mahaswami/vc-frontend";
 import RateReviewRoundedIcon from '@mui/icons-material/RateReviewRounded';
 import {currentTenantId, getUserId, isSuperAdmin} from "../../businessLogic";
 import nlp from 'compromise';
@@ -23,6 +31,7 @@ import {CurriculumListView} from "../curriculum/curriculumListView.tsx";
 import {CurriculumShowView} from "../curriculum/curriculumShowView.tsx";
 import {formatCurrency } from "../../utils.ts";
 import FuzzySearchBox from "../common/FuzzySearchBox.tsx";
+import {RESOURCE} from "../subscribables.tsx";
 
 export const SubscribableList = () => {
     const dataProvider = window.swanAppFunctions.dataProvider;
@@ -142,11 +151,9 @@ export const SubscribableList = () => {
                   pagination={<SensibleDefaultPagination />} perPage={PER_PAGE} exporter={false}
                   title={<ListTitle resourceName="Marketplace List" />} disableSyncWithLocation
             >
-                <Datagrid bulkActionButtons={false} sx={{
-                    "& .RaDatagrid-headerCell": { display: "none" }
-                }}>
+                <DataTable bulkActionButtons={false}>
                     <CurriculumListView currentView="subscribables" settings={settingsData}/>
-                </Datagrid>
+                </DataTable>
             </List>
         </>
     )
@@ -268,13 +275,13 @@ export const ShowActions = () => {
         const handleSubscribeClick = async (type: any) => {
             try {
                 setIsLoading(true);
-                const user = JSON.parse(getLocalStorage("user"));
+                const tenantId = getLocalStorage('tenant_id');
                 await dataProvider.create("subscribers", {
                     data: {
                         start_date: currentDate,
                         end_date:'12/31/2029',
                         subscribable_id: subscribleRecord?.id,
-                        subscriber_tenant_id: user.tenant_id,
+                        subscriber_tenant_id: tenantId,
                         tenant_id: subscribleRecord?.publisher_tenant_id,
                         subscription_type: type,
                         // division_id: subscribleRecord?.curriculum?.division_id
@@ -286,7 +293,7 @@ export const ShowActions = () => {
                         start_date: currentDate,
                         end_date:'12/31/2029',
                         subscribable_id: subscribleRecord?.id,
-                        subscriber_tenant_id: user.tenant_id
+                        subscriber_tenant_id: tenantId
                     }
                 }, {
                     onSuccess: () => {
@@ -404,7 +411,7 @@ export const ShowActions = () => {
 }
 
 export const SubscribableShow = (props: any) => (
-    <Show {...showDefaults(props)} actions={<ShowActions />} queryOptions={{meta: {prefetch: ['curriculum', 'tenants']}}}>
+    <Show {...showDefaults(props)} actions={<ShowActions />}>
         <CurriculumShowView currentView={"subscribables"} />
     </Show>
 );

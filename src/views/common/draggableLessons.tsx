@@ -76,7 +76,7 @@ export const ClassLessonsSorter = ({recordId, disableRedirect, isSchoolClass, pr
             const updatePromises = reorderedRows.map((row) => {
                 return dataProvider.update(resource, {
                     id: row.id,
-                    data: {...row}
+                    data: {...row, __index__: undefined}
                 });
             });
             Promise.all(updatePromises)
