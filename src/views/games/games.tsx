@@ -1,24 +1,15 @@
-import {
-    DateField,
-    EditGuesser,
-    Loading,
-    ReferenceField,
-    ReferenceFieldProps, SelectInput,
-    SimpleShowLayout,
-    TextField,
-    useRecordContext, useListContext,
-    ReferenceInput,
-    AutocompleteInput, List, Show
+import {DateField, EditGuesser, Loading, ReferenceField, ReferenceFieldProps, SelectInput, SimpleShowLayout,
+    TextField, useRecordContext, useListContext, ReferenceInput, AutocompleteInput, List, Show
 } from "react-admin"
 import GameListActions from "./GameListActions"
 import { Empty } from "../common/empty";
 import {
     DataTable,
-    getLocalStorage, listDefaults,
+    getLocalStorage,
     PER_PAGE,
     remoteLog,
     removeLocalStorage,
-    SensibleDefaultPagination, showDefaults
+    SensibleDefaultPagination
 } from "@mahaswami/vc-frontend";
 import { NotaBoardField } from "./NotaBoardField";
 import { useEffect, useState } from "react";
@@ -37,11 +28,11 @@ import {
 } from "../../businessLogic.ts";
 import FilterMultiChoiceInput from "../common/FilterMultiChoiceInput.tsx";
 import {ListTitle, RecordTitle} from "../../components/Title.tsx";
-import { GamePlayView } from "./GamePlayView.tsx";
 import PlayWithBotView from "./PlayWithBotView.tsx";
 import {ClassesReferenceField} from "../classes.tsx";
+import {GamePlayView} from "./GamePlayView.tsx";
 
-export const GameList = (props: any) => {
+export const GameList = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const { classId, className, enrollmentId, student_id} = location.state || {};
@@ -63,7 +54,7 @@ export const GameList = (props: any) => {
 
                 const {data: games} = await dataProvider.getList("games", {
                     filter: {class_id: classId},
-                    meta: {prefetch: ["students"]},
+                    // meta: {prefetch: ["students"]},
                     pagination: {page: 1, perPage: 10000}
                 });
 
@@ -187,12 +178,12 @@ const Games = ({classId}) => {
     );
 };
 
-export const GameShow = (props: any) => {
+export const GameShow = () => {
     const classGamesState = getLocalStorage("class_game_state");
     const { classId } = classGamesState && JSON.parse(classGamesState) || {};
 
     return (
-        <Show {...showDefaults(props)} actions={false} component={"div"} sx={{ p: 0 }} title={<GameTitle classId={classId}/>}
+        <Show actions={false} component={"div"} sx={{ p: 0 }} title={<GameTitle classId={classId}/>}
               queryOptions={{meta: { prefetch: ['classes', 'time_controls']}}}>
             <SimpleShowLayout sx={{ overflow: 'auto', p: 0}}>
                 <NotaBoardField mode={"show"}/>
@@ -211,10 +202,10 @@ export const GamePlay = () => {
             component={"div"} sx={{ p: 0 }}
             title={<GameTitle classId={classId}/>} 
             queryOptions={{ meta: {
-                prefetch: ["students", "time_controls", "users"]
+                prefetch: ["time_controls", "users"]
             }}}
         >
-            {/*<GamePlayView classId={classId}/>*/}
+            <GamePlayView classId={classId}/>
         </Show>
     )
 }
@@ -241,7 +232,7 @@ export const GamePlayWithBot = () => {
     return (
         <Show actions={false}
             component={"div"} sx={{ p: 0 }}
-            queryOptions={{ meta: { prefetch: ["students", "classes", "time_controls"] } }}
+            queryOptions={{ meta: { prefetch: ["classes", "time_controls"] } }}
             title={<GameTitle />}>
            <PlayWithBotView />
         </Show>

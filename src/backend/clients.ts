@@ -67,15 +67,8 @@ export const afterCreateClient = async (response: any) => {
             if (isLargeAcademy()) {
                 student = {...student, division_id: getDivisionId()};
             }
-            const metaData = {
-                studentUser: {first_name: meta.first_name, last_name: meta.last_name, email: clientData?.email},
-                parentUser: student.parent_user
-            }
-            student.user = undefined;
-            student.parent_user = undefined;
-    //         student.parent_name = `${student.parent_user.first_name} ${student.parent_user.last_name}`;
             student = {...student, client_id : clientData.id}
-            await dataProvider.create('students', { data: student, meta: metaData })
+            await dataProvider.create('students', { data: student })
         }
         const { client_type, ...newData } = clientData
         response.data = newData;

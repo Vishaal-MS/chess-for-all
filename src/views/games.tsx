@@ -1,21 +1,21 @@
-import { Resource, createDefaults, tableDefaults,
-	editDefaults, formDefaults, listDefaults,
-	showDefaults, RowActions, DataTable, SimpleShowLayout, SimpleForm,
-	type ResourceActionDefs, type FieldSchema, SimpleFileField, SimpleFileInput, CardGrid, createReferenceField, createReferenceInput, BooleanLiveFilter, ReferenceLiveFilter, DateLiveFilter, NumberLiveFilter, TextLiveFilter} from '@mahaswami/vc-frontend';
-import { Create, Edit, List, Menu, Show,
-    type ListProps, TextField, TextInput, DateField, DateInput, BooleanField, BooleanInput, NumberField, NumberInput} from "react-admin";
-import { StudentsReferenceField, StudentsReferenceInput } from './students.js';
-import { ClassesReferenceField, ClassesReferenceInput } from './classes.js';
-import { UsersReferenceField, UsersReferenceInput } from './users.js';
-import { DivisionsReferenceField, DivisionsReferenceInput } from './divisions.js';
-import { TimeControlsReferenceField, TimeControlsReferenceInput } from './time_controls.js';
+import { Resource, createDefaults, editDefaults, formDefaults, listDefaults, SimpleForm,
+	type ResourceActionDefs, type FieldSchema, SimpleFileField, SimpleFileInput, CardGrid, createReferenceField,
+    createReferenceInput, BooleanLiveFilter, ReferenceLiveFilter, DateLiveFilter, NumberLiveFilter, TextLiveFilter
+} from '@mahaswami/vc-frontend';
+import { Create, Edit, List, Menu,
+    type ListProps, TextField, TextInput, DateInput, BooleanField, BooleanInput, NumberInput} from "react-admin";
+import { StudentsReferenceInput } from './students.js';
+import { ClassesReferenceInput } from './classes.js';
+import { UsersReferenceInput } from './users.js';
+import { DivisionsReferenceInput } from './divisions.js';
+import { TimeControlsReferenceInput } from './time_controls.js';
 import {GameIcon} from "./games/GameIcon.tsx";
 import {GameList, GamePlay, GamePlayWithBot, GameShow} from "./games/games.tsx";
 import {Route} from "react-router-dom";
 
 export const RESOURCE = "games"
 export const ICON = GameIcon
-export const PREFETCH: string[] = ["students", "classes", "users", "divisions", "time_controls"]
+export const PREFETCH: string[] = ["classes", "users", "divisions", "time_controls"]
 
 export const GamesReferenceField = createReferenceField(RESOURCE, PREFETCH);
 export const GamesReferenceInput = createReferenceInput(RESOURCE, PREFETCH);

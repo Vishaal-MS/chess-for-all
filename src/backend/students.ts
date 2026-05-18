@@ -52,10 +52,10 @@ export async function  getStudentsForClient(dataProvider, clientId) {
 }
 
 export const beforeCreateStudentUserAndParentUser = async (params: any) => {
-    console.log("Student before: ", params)
-    const { data, meta } =  params;
-    if (data.client_id) {
-        const { studentUser, parentUser } = meta;
+    const { data } =  params;
+    if (data?.client_id) {
+        const studentUser = data.user;
+        const parentUser = data?.parent_user;
         const userData = await createUser({
             first_name: studentUser?.first_name,
             last_name: studentUser?.last_name,
@@ -63,7 +63,6 @@ export const beforeCreateStudentUserAndParentUser = async (params: any) => {
             role: UserRoles.STUDENT,
             is_active: false
         })
-        console.log("userData 123: ", userData)
         data.user_id = userData.id;
         //Create User Account for Parent
         if (parentUser?.first_name) {
@@ -74,21 +73,16 @@ export const beforeCreateStudentUserAndParentUser = async (params: any) => {
                 role: UserRoles.PARENT,
                 is_active: data.is_integrated_parental_engagement
             })
-            console.log("parent: ", parent)
             // TODO: Move this email creation logic to after create of user.
             if (data.is_integrated_parental_engagement) {
                 await sendEmailToStudentAndParent(parent, undefined);
             }
             data.parent_user_id = parent ? parent.id : null;
-            console.log("Data: ", data);
         }
         data.user = undefined;
         data.parent_user = undefined;
-//         data.parent_name = parentUser?.fullName;
-//         data.parent_email = parentUser?.email;
     }
     params.data =  data;
-    console.log("BEFORE ______ ", params)
     return params;
 }
 

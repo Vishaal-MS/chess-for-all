@@ -1,6 +1,6 @@
 import {remoteLog, setLocalStorage, showDefaults} from "@mahaswami/vc-frontend";
 import {
-    ListBase, ReferenceField, Show, Title, Loading, useSidebarState, useGetRecordId
+    ListBase, Show, Title, Loading, useSidebarState, useGetRecordId
 } from "react-admin";
 import {useEffect, useState} from "react";
 import {Button, Card, CardContent, CardHeader, Grid, Tooltip, Typography} from "@mui/material";
@@ -15,6 +15,7 @@ import ParentAndStudentDashBoard from "../dashboard/ParentAndStudentDashBoard.ts
 import {TeachingMode} from "../../helpers/constants.ts";
 import {useNavigate} from "react-router-dom";
 import { GameIcon } from "../games/GameIcon.tsx";
+import {ClassesReferenceField} from "../classes.tsx";
 
 export const EnrollmentShowDetails = () => {
     const recordId = Number(useGetRecordId());
@@ -135,9 +136,9 @@ export const EnrollmentShowDetails = () => {
                         <CardContent sx={cardContentSx}>
                             {(isRemoteMode && !isSchoolClass) &&
                                 <AccordionSection defaultExpanded title={"Schedule"} color="LightSlateGrey">
-                                    <ReferenceField reference={"classes"} source={"class_id"} link={false}>
+                                    <ClassesReferenceField reference={"classes"} source={"class_id"} link={false}>
                                         <SchedulePreview/>
-                                    </ReferenceField>
+                                    </ClassesReferenceField>
                                 </AccordionSection>}
 
                                 {isRemoteMode && <AccordionSection title={isStudent() ? "My Assignments" : "Assignments"} defaultExpanded={true}  color={"LightSlateGrey"}>

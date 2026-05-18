@@ -38,6 +38,7 @@ export const GamePlayView = ({classId}: { classId?: number }) => {
     const gameRecord = useRecordContext<GameResourceType>();
     const notify = useNotify();
     const navigateUrl = isCoach() || classId ? `/games/${gameId}/show` : '/enrollments';
+    const dataProvider = window.swanAppFunctions.dataProvider;
 
     const [gameState, setGameState] = useState<GameStateType>({
         pgn: "",
@@ -63,15 +64,20 @@ export const GamePlayView = ({classId}: { classId?: number }) => {
     }, [])
 
     // TODO: Move this logic into reducer later.
-    const handleGameEvents = useCallback((event: GameEventType) => {
+    const handleGameEvents = useCallback(async (event: GameEventType) => {
         switch (event.action) {
             case GAME_ACTIONS.INIT_GAME:
                 let gameResult = event.payload.result;
                 let gameStatus = event.payload.status;
                 let resultForMe = undefined;
-                const player1Student = event.payload.player1_student;
-                const player2Student = event.payload.player2_student;
-
+                const player1StudentId = event.payload.player1_student_id;
+                const player2StudentId = event.payload.player2_student_id;
+                const students = await dataProvider.getList('students', {
+                    filter: { id: [player1StudentId, player2StudentId] },
+                    meta: { prefetch: ['users'] }
+                });
+                const player1Student = students?.filter((student: any) => student?.id === player1StudentId);
+                const player2Student = students?.filter((student: any) => student?.id === player1StudentId);
                 // Result for me after the game is over
                 if (gameResult != null) {
                     // result = 1 -> draw, 2 -> white won, 0 -> black won

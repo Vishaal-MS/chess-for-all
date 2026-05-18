@@ -20,7 +20,11 @@ export const ClassProgressesLogic: any = {
     beforeGetMany: [],
     beforeGetManyReference: [],
     beforeGetOne: [],
-    beforeUpdate: [],
+    beforeUpdate: [(params) => {
+        const data = params?.data;
+        data.__index__ = undefined;
+        return params;
+    }],
     beforeUpdateMany: [],
     beforeSave: [],
     afterRead: [],

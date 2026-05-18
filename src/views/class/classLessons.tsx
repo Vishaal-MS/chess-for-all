@@ -1,24 +1,23 @@
-import {DataGridWithIndex} from "../../components/DatagridWithIndex";
+import {DataTableWithIndex} from "../../components/DataTableWithIndex.tsx";
 import {Empty} from "../common/empty";
-import {EmptyDatagridHeader} from "../../fields/EmptyDatagridHeader";
 import AssignmentRoundedIcon from "@mui/icons-material/AssignmentRounded";
 import CircularProgress from '@mui/material/CircularProgress';
-import {useEffect, useState,useRef} from "react";
+import {useEffect, useState, useRef, Fragment} from "react";
 import {Grid, IconButton, Tooltip, Typography,Box, FormControlLabel, Switch} from "@mui/material";
 import {DragDropContext, Droppable, Draggable} from "@hello-pangea/dnd";
-import {useNotify, FunctionField,
- useListContext,List,TopToolbar, Datagrid,
- ReferenceField, TextField, Loading, Button, useUnselectAll,useRedirect,
- ListContextProvider,
- ResourceContextProvider} from "react-admin";
+import {useNotify,
+ useListContext,List,TopToolbar, Loading, Button, useUnselectAll,useRedirect,
+ ListContextProvider, ResourceContextProvider
+} from "react-admin";
  import AccordionSection from "../../components/AccordionSection";
- import {formatDateWithShortYear, formatStatus} from "../../utils.ts";
-import {openDialog, closeDialog, remoteLog} from "@mahaswami/vc-frontend";
+ import {formatDateWithShortYear} from "../../utils.ts";
+import {openDialog, closeDialog, remoteLog, DataTable} from "@mahaswami/vc-frontend";
 import {assignAssignments, sendStudentsAssignmentEmail} from "../../backend/assignments.ts";
 import {ClassesStatus, ClassProgressStatus, TeachingMode} from "../../helpers/constants.ts";
 import {isExecutiveCoachingFlavored} from "../../businessLogic.ts";
 import { Info } from "@mui/icons-material";
 import {getStudentIdsByEnrollments} from "../../backend/classLessons.ts";
+import {UsersReferenceField} from "../users.tsx";
 
 export const ClassLessons = ({classId}) => {
     const dataProvider = window.swanAppFunctions.dataProvider;
@@ -224,9 +223,9 @@ const ClassLessonListByStatus = ({contentHeight, classId, dropperId, classProgre
         }, [data]);
 
         return (
-             <Datagrid {...props}>
+             <DataTable {...props}>
                 {children}
-            </Datagrid>
+            </DataTable>
         );
     };
 
@@ -274,9 +273,7 @@ const ClassLessonListByStatus = ({contentHeight, classId, dropperId, classProgre
                     <CustomDatagrid
                         bulkActionButtons={<AssignToStudentButton classProgress={classProgress} classData={classData} students={students} isAssessment={isAssessment}/>} 
                         rowClick={false} data={students}>
-                        <ReferenceField source="user_id" reference="users" link={false}>
-                            <TextField source="fullName" />
-                        </ReferenceField>
+                        <DataTable.Col label='User' field={() => <UsersReferenceField source="user_id" link={false}/>} />
                     </CustomDatagrid>
                 </List>
            </>
@@ -319,7 +316,7 @@ const ClassLessonListByStatus = ({contentHeight, classId, dropperId, classProgre
                         students={students}
                         classData={classData}
                         assignedStudentCount={assignedStudentCount}
-                    />
+                    />, { width: '50vw' }
                 );
             } else {
                 setClickedButtonId(null);
@@ -377,12 +374,9 @@ const ClassLessonListByStatus = ({contentHeight, classId, dropperId, classProgre
                                     transition: 'background-color 0.2s ease',
                                 }}
                             >
-                                <DataGridWithIndex
-                                    empty={<Empty showIcon={false} emptyText={emptyText} />}
-                                    header={<EmptyDatagridHeader isIndexCol={false} />}
-                                    bulkActionButtons={false}>
-                                    <FunctionField label=" " render={record => (
-                                        <>
+                                <DataTableWithIndex empty={<Empty showIcon={false} emptyText={emptyText} />}
+                                                    bulkActionButtons={false} sx={{ '& .MuiTableCell-head': { display: 'none' }}}>
+                                    <DataTable.Col label={false} render={record => (
                                         <Draggable key={record.id} draggableId={record.id.toString()} index={record.__index__}>
                                             {(provided, draggableSnapshot) => (
                                                 <div
@@ -419,9 +413,8 @@ const ClassLessonListByStatus = ({contentHeight, classId, dropperId, classProgre
                                                 </div>
                                             )}
                                         </Draggable>
-                                        </>
                                     )} />
-                                </DataGridWithIndex>
+                                </DataTableWithIndex>
                                 {!isBlocked && provided.placeholder}
                             </div>
                         )
