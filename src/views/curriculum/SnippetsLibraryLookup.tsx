@@ -1,12 +1,11 @@
 import { Fab, Tooltip, Typography, Switch, Box, FormControlLabel } from "@mui/material";
 import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
 import {
-  Button, Datagrid, List, Pagination, TextField, useRecordContext,
-    SearchInput, AutocompleteArrayInput, ReferenceArrayInput, SelectInput,
+  Button, List, Pagination, useRecordContext,
+  SearchInput, AutocompleteArrayInput, ReferenceArrayInput, SelectInput, Datagrid, TextField,
 } from "react-admin";
 import {useState} from "react";
-import {closeDialog, openDialog} from "@mahaswami/vc-frontend";
-import { EmptyDatagridHeader } from "../../fields/EmptyDatagridHeader.tsx";
+import {closeDialog, DataTable, openDialog} from "@mahaswami/vc-frontend";
 import { clearChessBoards } from "../../fields/ai_lesson/ai_lesson_utils.ts";
 import {getTypeChoices} from "../snippets_library/SnippetsLibrary.tsx";
 import {Empty} from "../common/empty.tsx";
@@ -15,6 +14,7 @@ const SelectButton = ({onSelect}) => {
   const record = useRecordContext();
 
   const handleSelection = (event) => {
+    console.log("record: ", record)
     event.stopPropagation();
     onSelect(record);
     closeDialog();
@@ -63,7 +63,7 @@ export const SnippetsChooser = ({setSample}) => {
     pagination={isAdvanced && <PostPagination />}
     {...perPage}
   >
-    <Datagrid header={<EmptyDatagridHeader/>}
+    <DataTable
       bulkActionButtons={false}
       rowClick={false}
       sx={{
@@ -73,17 +73,18 @@ export const SnippetsChooser = ({setSample}) => {
         minWidth: '100%',
       }}
     >
-      <TextField source="type" />
-      <TextField source="title" />
-      <SelectButton onSelect={setSample}></SelectButton>
-    </Datagrid>
+      <DataTable.Col source="type" />
+      <DataTable.Col source="title" />
+      <DataTable.Col render={(record: any) => <Button variant="contained" label="Insert"
+                                                      onClick={() => {setSample(record)}} />} />
+    </DataTable>
   </List></>);
 }
 
 export const SnippetsLibraryLookup = ({setSample}) => {
   const handleClick = (event) => {
     clearChessBoards();
-    openDialog(<SnippetsChooser setSample={setSample} />);
+    openDialog(<SnippetsChooser setSample={setSample} />, { width: '70vw' });
   }
   return (
     <Fab variant="extended" size={"small"} color="primary" onClick={handleClick}

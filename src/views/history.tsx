@@ -4,7 +4,6 @@ import {
     FieldProps,
     List, Menu,
     RecordRepresentation,
-    ReferenceField,
     ReferenceFieldClasses,
     SelectField,
     ShowBase,
@@ -22,9 +21,10 @@ import React, { useCallback, useMemo } from 'react';
 import { DateLiveFilter, ReferenceLiveFilter, 
     Resource, showDefaults, tableDefaults, RelativeDateField, humanize,
     TextLiveFilter, isEnhancedSecurityModuleActive, listDefaults, 
-    ChoicesLiveFilter, HistoryRepresentationViewer,     HistoryLogType,
+    ChoicesLiveFilter, HistoryRepresentationViewer,
     DataTable,
 } from '@mahaswami/vc-frontend';
+import {UsersReferenceField} from "./users.tsx";
 
 export const RESOURCE = "history"
 export const ICON = History
@@ -65,7 +65,7 @@ export const HistoryList = (props: ListProps) => {
                 />
                 <DataTable.Col source="type" label="Activity" field={(props: any) => <SelectField {...props} choices={typeChoices} />}/>
                 <DataTable.Col source="user_id" field={(props: any) =>
-                    <ReferenceField {...props} reference="users" link={false}
+                    <UsersReferenceField {...props} link={false}
                         render={({ referenceRecord }) => UserOptionText(referenceRecord)} />}
                 />
                 {isEnhancedSecurityModuleActive() && (
@@ -131,14 +131,9 @@ export const HistoryShowTitle = ({ record }: { record: any }) => (
         <Typography variant='h6'>
             by
         </Typography>
-        <ReferenceField
-            record={record}
-            source="user_id"
-            reference="users"
-            link={false}
-        >
+        <UsersReferenceField record={record} source="user_id" link={false}>
             <TextField source="fullName" variant='h6'/>
-        </ReferenceField>
+        </UsersReferenceField>
         
         <RelativeDateField
             record={record}

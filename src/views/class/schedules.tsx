@@ -1,14 +1,15 @@
-import React, {useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import {closeDialog} from "@mahaswami/vc-frontend";
 import {Box, Typography} from "@mui/material";
 import {BooleanInput, Edit, Loading, required, useNotify, useRecordContext, Toolbar, SaveButton} from "react-admin";
-import {Create, SimpleForm, ReferenceInput, AutocompleteInput, TextInput, DateInput,SelectInput, SelectArrayInput, Form} from 'react-admin';
-import {constructDateTime, getSimpleDate, parseTime} from "../../utils";
+import {Create, SimpleForm, AutocompleteInput, TextInput, DateInput,SelectInput, SelectArrayInput} from 'react-admin';
+import {getSimpleDate, parseTime} from "../../utils";
 import timezones from 'google-timezones-json';
 import { FormDataConsumer } from 'react-admin';
 import {useFormContext} from "react-hook-form";
 import {differenceInDays} from "date-fns";
 import {validateStartDate} from "../../backend/classes.ts";
+import {ScheduleTypesReferenceInput} from "../schedule_types.tsx";
 
 const DAILY = 1;
 const ONCE_A_WEEK = 2;
@@ -155,16 +156,14 @@ export const ScheduleForm = ({ mode, calenderRef }: { mode?: string, calenderRef
                         ];
                         return (
                             <>
-                                <ReferenceInput
+                                <ScheduleTypesReferenceInput
                                     source="schedule_type_id"
-                                    reference="schedule_types"
                                     link={false}
                                     queryOptions={{ meta: { scopingEscapeHatch: true } }}
-                                    perPage={1000}
                                     {...rest}
                                 >
                                     <AutocompleteInput optionText="name" label="Schedule Type" validate={isRequired ? [required(),scheduleTypeValidation] : undefined}/>
-                                </ReferenceInput>
+                                </ScheduleTypesReferenceInput>
                                 {(scheduleTypeId && scheduleTypeId !== DAILY && scheduleTypeId !== ONCE) && ( // DAILY = 1, ONCE = 4
                                     scheduleTypeId === ONCE_A_WEEK ? ( // ONCE_A_WEEK = 2
                                         <SelectInput source="days" label="Schedule Days" choices={daysChoices}

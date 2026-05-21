@@ -1,10 +1,27 @@
-import { Resource, createDefaults, tableDefaults,
-	editDefaults, formDefaults, listDefaults,
-	showDefaults, RowActions, DataTable, SimpleShowLayout, SimpleForm,
-	type ResourceActionDefs, type FieldSchema, CardGrid, createReferenceField, createReferenceInput, TextLiveFilter} from '@mahaswami/vc-frontend';
+import {
+    Resource,
+    createDefaults,
+    tableDefaults,
+    editDefaults,
+    formDefaults,
+    listDefaults,
+    showDefaults,
+    RowActions,
+    DataTable,
+    SimpleShowLayout,
+    SimpleForm,
+    type ResourceActionDefs,
+    type FieldSchema,
+    createReferenceField,
+    createReferenceInput,
+    TextLiveFilter,
+    useRealtimeComms
+} from '@mahaswami/vc-frontend';
 import { Business } from '@mui/icons-material';
-import { Create, Edit, List, Menu, Show,
-    type ListProps, TextField, TextInput} from "react-admin";
+import {
+    Create, Edit, List, Menu, Show,
+    type ListProps, TextField, TextInput, useRedirect
+} from "react-admin";
 
 export const RESOURCE = "divisions"
 export const ICON = Business
@@ -29,35 +46,28 @@ export const DivisionsList = (props: ListProps) => {
     )
 }
 
-export const DivisionsCardList = (props: ListProps) => {
-    return (
-        <List {...listDefaults(props)} component={'div'}>
-            <CardGrid title={<TextField source="name" variant='h6' />}>
-            </CardGrid>
-        </List>
-    )
-}
-
-const DivisionForm = (props: any) => {
-    return (
-        <SimpleForm {...formDefaults(props)}>
-            <TextInput source="name" />
-        </SimpleForm>
-    )
-}
-
 const DivisionEdit = (props: any) => {
     return (
         <Edit {...editDefaults(props)}>
-            <DivisionForm />
+            <SimpleForm {...formDefaults(props)}>
+                <TextInput source="name" />
+            </SimpleForm>
         </Edit>
     )
 }
 
 const DivisionCreate = (props: any) => {
+    const realtimeComms = useRealtimeComms();
+    const redirect = useRedirect();
+    const onSuccess = () => {
+        realtimeComms.publish(("divisions_updated"), { action: "new" });
+        redirect("/divisions");
+    }
     return (
-    	<Create {...createDefaults(props)}>
-            <DivisionForm />
+        <Create {...createDefaults(props)} mutationOptions={{onSuccess}}>
+            <SimpleForm {...formDefaults(props)}>
+                <TextInput source="name"/>
+            </SimpleForm>
         </Create>
     )
 }
@@ -95,7 +105,6 @@ export const DivisionsResource = (
         show={<DivisionShow/>}
         hasDialog
         hasLiveUpdate
-        cardList={<DivisionsCardList/>}
         sort={{ field: 'name', order: 'ASC' }}
     />
 )

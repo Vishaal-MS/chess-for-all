@@ -1,0 +1,5 @@
+class_name,lesson_name,student_email,status,assigned_timestamp,completed_date
+Demo class 1,Demo lesson 1,ccai.demo.student1+7097@gmail.com,not_started,0,
+Demo class 1,Demo lesson 1,ccai.demo.student1+5676@gmail.com,completed,-10,-1
+Demo class 2,Demo lesson 2,ccai.demo.student1+7097@gmail.com,not_started,-5,
+Demo class 2,Demo lesson 2,ccai.demo.student1+5676@gmail.com,not_started,-4,

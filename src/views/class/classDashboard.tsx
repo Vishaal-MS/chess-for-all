@@ -1,15 +1,15 @@
 import {
     Button,
-    EditButton, FunctionField, ImageField, Loading, ReferenceField,
+    EditButton, FunctionField, Loading,
     ReferenceManyCount,
-    ReferenceManyField,
+    ReferenceManyField, Show,
     SimpleList,
     useGetRecordId,
     useNotify,
     useRefresh, useSidebarState
 } from "react-admin";
-import React, {useEffect, useState} from "react";
-import {Avatar, Box, Card, CardContent, CardHeader, Grid, Stack, Tooltip, Typography} from "@mui/material";
+import {useEffect, useState} from "react";
+import {Box, Card, CardContent, CardHeader, Grid, Stack, Tooltip, Typography} from "@mui/material";
 import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
 import PlayCircleFilledRoundedIcon from "@mui/icons-material/PlayCircleFilledRounded";
 import {ClassLessons} from "./classLessons.tsx";
@@ -20,12 +20,13 @@ import DiscussionBoard from "../discussion/DiscussionBoard.tsx";
 import {ClassesStatus, TeachingMode} from "../../helpers/constants.ts";
 import {RecordTitle} from "../../components/Title.tsx";
 import StopCircleIcon from '@mui/icons-material/StopCircle';
-import {isExecutiveCoachingFlavored, isRegularSchoolFlavored, isSchoolStandardLinked} from "../../businessLogic.ts";
+import {isExecutiveCoachingFlavored, isRegularSchoolFlavored} from "../../businessLogic.ts";
 import {remoteLog, setLocalStorage} from "@mahaswami/vc-frontend";
 import { AvatarField } from "../../fields/AvatarField.tsx";
-import { SwanShow } from "../swan_crud/SwanCrud.tsx";
 import {useNavigate} from "react-router-dom";
 import { GameIcon } from "../games/GameIcon.tsx";
+import {StudentsReferenceField} from "../students.tsx";
+import {UsersReferenceField} from "../users.tsx";
 
 const cardHeaderSx = (theme) => ({
     p: 0,
@@ -135,7 +136,7 @@ export const MyClassShow = () => {
     if (loading) return <Loading />;
     
     return (
-        <SwanShow title={<RecordTitle resourceName={`${isRegularSchoolFlavored() ? 'Teacher' : 'Coach'} Workspace`}/>} component={'div'} actions={false} sx={{
+        <Show title={<RecordTitle resourceName={`${isRegularSchoolFlavored() ? 'Teacher' : 'Coach'} Workspace`}/>} component={'div'} actions={false} sx={{
             '& .MuiToolbar-root': {
                 justifyContent: 'right',
             },
@@ -198,25 +199,23 @@ export const MyClassShow = () => {
                                         primaryText={() => (
                                             <Stack direction="row" spacing={1} sx={{width: '100%', alignItems: 'center', flexWrap: 'nowrap'}}>
                                                 <Box sx={{maxWidth: '80%', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>
-                                                    <ReferenceField source="student_id" reference="students" link={false}>
-                                                        <ReferenceField source="user_id" reference="users" link={false}>
-                                                            <FunctionField render={(record) => (
-                                                                <Tooltip title={record.fullName}>
-                                                                    <Typography sx={{
-                                                                            fontSize: '0.85rem',
-                                                                            overflow: 'hidden',
-                                                                            textOverflow: 'ellipsis',
-                                                                            whiteSpace: 'nowrap',
-                                                                        }}
-                                                                    >
-                                                                        {record.fullName}
-                                                                    </Typography>
-                                                                </Tooltip>
-                                                            )}/>
-                                                        </ReferenceField>
-                                                    </ReferenceField>
+                                                    <StudentsReferenceField source="student_id" link={false}>
+                                                        <FunctionField render={(record) => (
+                                                            <Tooltip title={record.user.fullName}>
+                                                                <Typography sx={{
+                                                                        fontSize: '0.85rem',
+                                                                        overflow: 'hidden',
+                                                                        textOverflow: 'ellipsis',
+                                                                        whiteSpace: 'nowrap',
+                                                                    }}
+                                                                >
+                                                                    {record.user.fullName}
+                                                                </Typography>
+                                                            </Tooltip>
+                                                        )}/>
+                                                    </StudentsReferenceField>
                                                 </Box>
-                                                <ReferenceField
+                                                <StudentsReferenceField
                                                     reference="students"
                                                     source="student_id"
                                                     link={false}
@@ -262,15 +261,15 @@ export const MyClassShow = () => {
                                                             );
                                                         }}
                                                     />
-                                                </ReferenceField>
+                                                </StudentsReferenceField>
                                             </Stack>
                                         )}
                                         leftAvatar={() => (
-                                            <ReferenceField source="student_id" reference="students" link={false}>
-                                                <ReferenceField source="user_id" reference="users" link={false}>
+                                            <StudentsReferenceField source="student_id" reference="students" link={false}>
+                                                <UsersReferenceField source="user_id" reference="users" link={false}>
                                                     <AvatarField />
-                                                </ReferenceField>
-                                            </ReferenceField>
+                                                </UsersReferenceField>
+                                            </StudentsReferenceField>
                                         )}
                                         sx={{
                                             paddingTop: 0,
@@ -295,6 +294,6 @@ export const MyClassShow = () => {
                     </Grid>
                 }
             </Grid>
-        </SwanShow>
+        </Show>
     )
 };

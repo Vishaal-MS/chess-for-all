@@ -2,7 +2,6 @@ import {isAcademy, isExecutiveCoachingFlavored} from "../../../businessLogic.ts"
 import {
     AutocompleteInput,
     DateInput,
-    ReferenceInput,
     required,
     TextInput
 } from "react-admin";
@@ -11,6 +10,7 @@ import {ExtendedSchoolClassFields} from "../ExtendedSchoolClassFields.tsx";
 import { Box } from '@mui/material';
 import { getSimpleDate } from "../../../utils.ts";
 import {TeachingModesReferenceInput} from "../../teaching_modes.tsx";
+import {CoachesReferenceInput} from "../../coaches.tsx";
 
 interface ClassDetailsProps {
     status: string;
@@ -21,9 +21,9 @@ const ClassDetails = ({ status, isSchool }: ClassDetailsProps) => {
     return (
         <Box sx={tabFormStyle}>
             <TextInput source="name" validate={[required(), classNameValidation]}/>
-            {isAcademy() && <ReferenceInput source={"coach_id"} filter={{'user.is_active': true}} queryOptions={{ meta:{prefetch: ['users'] }}} reference={"coaches"} link={false}>
+            {isAcademy() && <CoachesReferenceInput source={"coach_id"} filter={{'user.is_active': true}} link={false}>
                 <AutocompleteInput optionText={"user.fullName"} validate={required()} label={isSchool ? "Teacher": "Coach"}/>
-            </ReferenceInput>}
+            </CoachesReferenceInput>}
             {!(isSchool || isExecutiveCoachingFlavored()) &&
                 <TeachingModesReferenceInput source={"teaching_mode_id"} sort={{field: 'name', order: 'ASC'}}
                                              link={false} queryOptions={{ meta: {scopingEscapeHatch: true }}}>

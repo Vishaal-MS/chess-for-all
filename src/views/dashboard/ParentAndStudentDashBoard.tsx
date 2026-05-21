@@ -1,16 +1,16 @@
 import {
-    Button, Create, List, ReferenceField, TopToolbar, useNotify, WrapperField,
+    Button, Create, List, useNotify, WrapperField,
 } from "react-admin";
-import {Datagrid, FunctionField, TextField, useGetList, useRecordContext, useSidebarState} from "react-admin";
+import {FunctionField, TextField, useSidebarState} from "react-admin";
 import {Box, Card, CardContent, CardHeader, Grid, IconButton, Typography, Tooltip} from "@mui/material";
-import {camelCaseToLabel, formatDateWithShortYear, formatStatus} from "../../utils.ts";
+import {formatDateWithShortYear, formatStatus} from "../../utils.ts";
 import {Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, XAxis, YAxis, Tooltip as TooltipRechart} from "recharts";
-import React, {useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import {isCoach} from "../../businessLogic.ts";
 import ParentNoteList, {ParentNoteCreate, ParentNotesForm} from "../parent_notes/parentNotes.tsx";
-import {AssignmentStatus, EnrolmentStatus} from "../../helpers/constants.ts";
+import {AssignmentStatus} from "../../helpers/constants.ts";
 import AddIcon from "@mui/icons-material/Add";
-import {closeDialog, openDialog, remoteLog, setLocalStorage} from "@mahaswami/vc-frontend";
+import {closeDialog, DataTable, openDialog, remoteLog, setLocalStorage} from "@mahaswami/vc-frontend";
 import {Empty} from "../common/empty"
 import KeyboardReturnIcon from "@mui/icons-material/KeyboardReturn";
 import {useLocation, useNavigate} from "react-router-dom";
@@ -171,8 +171,8 @@ const ParentAndStudentDashBoard = ({studentId, classRecord, parentId, assignment
                                 <List actions={false} resource="assignments" exporter={false} perPage={1000} empty={<Empty showIcon={false} emptyText={"No Assignments yet"}/>}
                                           filter={{student_id: studentId, class_id: classRecord?.id || null}} pagination={false}
                                           queryOptions={{meta: {prefetch: ['lessons', 'classes']}}} title={false}>
-                                    <Datagrid bulkActionButtons={false} rowClick={handleAssignmentRowClick}>
-                                        <FunctionField label="Lesson" render={(record) => {
+                                    <DataTable bulkActionButtons={false} rowClick={handleAssignmentRowClick}>
+                                        <DataTable.Col label="Lesson" render={(record) => {
                                             return (<Box display={"flex"} alignItems={"center"}> 
                                                 <TextField sx={{fontSize:'0.8rem' }} label="Lesson" source="lesson.name"/>
                                                 {!isCoach() &&
@@ -181,12 +181,12 @@ const ParentAndStudentDashBoard = ({studentId, classRecord, parentId, assignment
                                                     </>
                                                 }</Box>)
                                         }}/>
-                                        <FunctionField style={{fontSize: '0.8rem'}} source={"is_assessment"} label="" render={record => record.is_assessment && <Stars sx={{ color: theme => theme.palette.info.light }}/>}/>
-                                        <FunctionField style={{fontSize: '0.8rem'}} source={"status"} label="Status" render={record => formatStatus(record.status)}/>
+                                        <DataTable.Col style={{fontSize: '0.8rem'}} source={"is_assessment"} label="" render={record => record.is_assessment && <Stars sx={{ color: theme => theme.palette.info.light }}/>}/>
+                                        <DataTable.Col style={{fontSize: '0.8rem'}} source={"status"} label="Status" render={record => formatStatus(record.status)}/>
                                         <WrapperField label="Progress">
                                             <StudentProgressField/>
                                         </WrapperField>
-                                        <FunctionField label={"Date"} render={(recode) => {
+                                        <DataTable.Col label={"Date"} render={(recode) => {
                                             return (<div>
                                                 <div style={{display: 'flex', marginBottom: '0.1rem'}}>
                                                     <span style={{
@@ -226,7 +226,7 @@ const ParentAndStudentDashBoard = ({studentId, classRecord, parentId, assignment
                                                 </div>}
                                             </div>)
                                         }}/>
-                                    </Datagrid>
+                                    </DataTable>
                                 </List>
                             </CardContent>
                         </Card>

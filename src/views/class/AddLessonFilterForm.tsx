@@ -1,6 +1,4 @@
-import { AutocompleteArrayInput, AutocompleteInput, Form, ReferenceArrayInput, 
-   ReferenceInput, TextInput, useListContext, 
-   useUnselectAll
+import { AutocompleteArrayInput, AutocompleteInput, Form, ReferenceArrayInput, TextInput, useListContext, useUnselectAll
 } from "react-admin";
 import { getCurriculumLessons } from "../../backend/curriculum";
 import { Box, Grid, IconButton, Typography } from '@mui/material';
@@ -11,6 +9,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import { useFormContext } from 'react-hook-form';
 import { useEffect, useState } from "react";
 import {getStandardId, isRegularSchoolFlavored} from "../../businessLogic.ts";
+import {CurriculumsReferenceInput} from "../curriculums.tsx";
 
 //TODO Clean up this code. Default Lesson Filter may not be needed.
 export const LessonFilterForm = ({isCurriculumAddLessons, setSelectedCurriculumId, state, isSchoolClass, existLessonIds, mergedLessons, curriculumIds, setListFilter, isDialog}) => {
@@ -76,11 +75,11 @@ export const LessonFilterForm = ({isCurriculumAddLessons, setSelectedCurriculumI
                </Grid>
 
                <Grid item md={isDialog ? 6 : 3} sx={{pr: '0.5rem', mb: '-1.5rem'}}>
-                  <ReferenceInput label="Curriculum" source="curriculum_id" reference="curriculum" perPage={1000}
+                  <CurriculumsReferenceInput label="Curriculum" source="curriculum_id"
                                   filter={curriculumFilter} queryOptions={{ meta: {scopingEscapeHatch: true} }}>
                      <AutocompleteInput defaultValue={!isCurriculumAddLessons ? defaultCurriculumId : null}
                                         optionText={(record) => `${record.name}`}/>
-                  </ReferenceInput>
+                  </CurriculumsReferenceInput>
                </Grid>
                <Grid item md={isDialog ? 5 : 2} sx={{pr: '0.5rem'}}>
                   <AutocompleteInput

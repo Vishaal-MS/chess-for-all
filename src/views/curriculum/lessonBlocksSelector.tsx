@@ -1,11 +1,11 @@
-import { Button, Datagrid, List, SearchInput, SelectField, TextField, useRecordContext } from "react-admin";
+import { Button, List, SearchInput, SelectField, useRecordContext } from "react-admin";
 import { getBlockTypeChoices } from "./lesson_blocks";
 import {Box,Typography} from "@mui/material";
 import { useEffect } from "react";
 import {useState} from "react";
 import { LessonBlockField } from "../../fields/ai_lesson/lesson_block_field.tsx";
 import { clearChessBoards, loadChessBoards } from "../../fields/ai_lesson/ai_lesson_utils.ts";
-import {closeDialog, openDialog} from "@mahaswami/vc-frontend";
+import {closeDialog, DataTable, openDialog} from "@mahaswami/vc-frontend";
 import {Empty} from "../common/empty.tsx";
 
 const blockFilters = [
@@ -113,7 +113,7 @@ export const  LessonBlockSelectors = ({ onInsert }) => {
           exporter={false}
           empty={<Empty emptyText="No Lesson Blocks Found" />}
         >
-          <Datagrid
+          <DataTable
             bulkActionButtons={false}
             rowClick={false}
             sx={{
@@ -123,10 +123,10 @@ export const  LessonBlockSelectors = ({ onInsert }) => {
               minWidth: '100%',
             }}
           >
-            <TextField source="name" />
-            <SelectField source="block_type" label={"Type"} choices={getBlockTypeChoices()} />
-            <SelectButton onInsert={onInsert} />
-          </Datagrid>
+            <DataTable.Col source="name" />
+            <DataTable.Col label={"Type"} field={() => <SelectField source="block_type"  choices={getBlockTypeChoices()} />} />
+            <DataTable.Col label={false} field={() => <SelectButton onInsert={onInsert} />} />
+          </DataTable>
         </List>
       </Box>
     </Box>

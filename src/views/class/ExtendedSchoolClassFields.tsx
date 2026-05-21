@@ -1,11 +1,9 @@
-import {
-    AutocompleteInput,
-    ReferenceInput,
-    required,
-} from "react-admin";
-import {useEffect, useState} from "react";
+import { AutocompleteInput, required} from "react-admin";
+import {Fragment, useEffect, useState} from "react";
 import {useWatch} from "react-hook-form";
 import {isRegularSchoolFlavored} from "../../businessLogic.ts";
+import {ClientsReferenceInput} from "../clients.tsx";
+import {StandardSectionsReferenceInput} from "../standard_sections.tsx";
 
 export const ExtendedSchoolClassFields = () => {
     const dataProvider = window.swanAppFunctions.dataProvider;
@@ -44,16 +42,12 @@ export const ExtendedSchoolClassFields = () => {
     const {clientId: currentClientId, standardId} = state;
 
     return (
-        <>
-            <ReferenceInput source={'client_id'} reference={'clients'} filter={{client_type_id: 1, standard_id_neq: null}} >
+        <Fragment>
+            <ClientsReferenceInput source={'client_id'} filter={{client_type_id: 1, standard_id_neq: null}} >
                 <AutocompleteInput optionText={'name'} defaultValue={currentClientId}
-                                   sx={{display: isRegularSchoolFlavored() ? 'none' : 'flex'}}
-                                   validate={[required()]}
-                                   label="Client"/>
-            </ReferenceInput>
-            <ReferenceInput source="standard_grade_id" filter={{standard_id: standardId || ''}} reference="standard_grades">
-                <AutocompleteInput optionText="name" label="Grade"/>
-            </ReferenceInput>
-        </>
+                                   sx={{display: isRegularSchoolFlavored() ? 'none' : 'flex'}} validate={[required()]} label="Client"/>
+            </ClientsReferenceInput>
+            <StandardSectionsReferenceInput label="Grade" source="standard_grade_id" filter={{standard_id: standardId || ''}} />
+        </Fragment>
     )
 }

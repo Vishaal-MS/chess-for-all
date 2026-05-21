@@ -1,26 +1,31 @@
 import { RESOURCE } from "../views/coaches"
+import {
+    addDivisionIdForCoach,
+    addUserForCoach,
+    beforeUpdateCoach,
+    filterCoachesAndAdminsByDivisionId
+} from "../backend/coaches.ts";
+import {populateMultipleUser, populateSingleUser} from "../backend/students.ts";
 
 export const CoachesLogic: any = {
     resource: RESOURCE,
     afterCreate: [],
     afterDelete: [],
     afterDeleteMany: [],
-    afterGetList: [(params: any) => {
-        return params;
-    }],
-    afterGetMany: [],
+    afterGetList: [populateMultipleUser],
+    afterGetMany: [populateMultipleUser],
     afterGetManyReference: [],
-    afterGetOne: [],
+    afterGetOne: [populateSingleUser],
     afterUpdate: [],
     afterUpdateMany: [],
-    beforeCreate: [],
+    beforeCreate: [addDivisionIdForCoach, addUserForCoach],
     beforeDelete: [],
     beforeDeleteMany: [],
-    beforeGetList: [],
+    beforeGetList: [filterCoachesAndAdminsByDivisionId],
     beforeGetMany: [],
     beforeGetManyReference: [],
     beforeGetOne: [],
-    beforeUpdate: [],
+    beforeUpdate: [beforeUpdateCoach],
     beforeUpdateMany: [],
     beforeSave: [],
     afterRead: [],

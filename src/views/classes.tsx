@@ -2,13 +2,13 @@ import { Resource, listDefaults, createReferenceField, createReferenceInput,
 	type ResourceActionDefs, type FieldSchema, CardGrid, MultiselectChoicesFilter, TextLiveFilter
 } from '@mahaswami/vc-frontend';
 import { CastForEducation } from '@mui/icons-material';
-import { List, Menu, type ListProps, TextField, DateField} from "react-admin";
-import { ScheduleTypesReferenceField } from './schedule_types.js';
+import { List, Menu, type ListProps, TextField} from "react-admin";
 import CreateClass from "./class/create/Create.tsx";
 import {ClassEdit} from "./class/ClassEdit.tsx";
 import {MyClassesList} from "./class/ClassList.tsx";
 import {MyClassShow} from "./class/ClassShow.tsx";
 import {TeachingModesReferenceField} from "./teaching_modes.tsx";
+import {isCoach} from "../businessLogic.ts";
 
 export const RESOURCE = "classes"
 export const ICON = CastForEducation
@@ -93,5 +93,5 @@ export const ClassesResource = (
     />
 )
 export const ClassesMenu = () => (
-    <Menu.Item to={`/${RESOURCE}`} primaryText="Workspace" leftIcon={<ICON />} />
+    <Menu.Item to={`/${RESOURCE}`} primaryText={isCoach() ? 'Workspace': 'Classes'} leftIcon={<ICON />} />
 )

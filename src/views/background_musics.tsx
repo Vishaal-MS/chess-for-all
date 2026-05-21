@@ -1,10 +1,12 @@
 import { Resource, createDefaults, tableDefaults,
 	editDefaults, formDefaults, listDefaults,
-	showDefaults, RowActions, DataTable, SimpleShowLayout, SimpleForm,
+	showDefaults, DataTable, SimpleShowLayout, SimpleForm,
 	type ResourceActionDefs, type FieldSchema, SimpleFileField, SimpleFileInput, CardGrid, createReferenceField, createReferenceInput, TextLiveFilter} from '@mahaswami/vc-frontend';
 import { Category } from '@mui/icons-material';
-import { Create, Edit, List, Menu, Show,
-    type ListProps, TextField, TextInput} from "react-admin";
+import {
+    Create, Edit, List, Menu, Show,
+    type ListProps, TextField, TextInput, required, useRecordContext
+} from "react-admin";
 
 export const RESOURCE = "background_music"
 export const ICON = Category
@@ -23,7 +25,15 @@ export const BackgroundMusicsList = (props: ListProps) => {
         <List {...listDefaults(props)}>
             <DataTable {...tableDefaults(RESOURCE)}>
                 <DataTable.Col source="name" />
-                <RowActions/>
+                <DataTable.Col label={"File Name"} render={(record: any) => {
+                    return <SimpleFileField  source="music_attachment_file_id" src={"src"} title={record.music_attachment_file_id[0].title}/>
+                }} />
+                <DataTable.Col render={(record: any) => {
+                    const fileData = record.music_attachment_file_id[0];
+                    return fileData && <audio controls={true} style={{height: '5vh'}}>
+                        <source src={fileData?.src} />
+                    </audio>
+                }} />
             </DataTable>
         </List>
     )
@@ -38,20 +48,17 @@ export const BackgroundMusicsCardList = (props: ListProps) => {
     )
 }
 
-const BackgroundMusicForm = (props: any) => {
-    return (
-        <SimpleForm {...formDefaults(props)}>
-            <TextInput source="name" />
-            <SimpleFileInput source="music_attachment_file_id" />
-            <SimpleFileField source="music_attachment_file_id" title="music_attachment_file_name" />
-        </SimpleForm>
-    )
-}
-
 const BackgroundMusicEdit = (props: any) => {
+    const record = useRecordContext();
+    const fileData = record?.music_attachment_file_id[0];
+
     return (
         <Edit {...editDefaults(props)}>
-            <BackgroundMusicForm />
+            <SimpleForm { ...formDefaults(props)}>
+                <TextInput source="name" />
+                <SimpleFileInput label="Background Music" source="music_attachment_file_id"/>
+                <SimpleFileField source="music_attachment_file_id" src="src" title={fileData?.title}/>
+            </SimpleForm>
         </Edit>
     )
 }
@@ -59,7 +66,11 @@ const BackgroundMusicEdit = (props: any) => {
 const BackgroundMusicCreate = (props: any) => {
     return (
     	<Create {...createDefaults(props)}>
-            <BackgroundMusicForm />
+            <SimpleForm {...formDefaults(props)}>
+                <TextInput source="name" />
+                <SimpleFileInput source="music_attachment_file_id" accept={".mp3"} validate={required()} />
+                <SimpleFileField source="music_attachment_file_id" title="music_attachment_file_name" />
+            </SimpleForm>
         </Create>
     )
 }

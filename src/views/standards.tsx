@@ -1,10 +1,16 @@
-import { Resource, createDefaults, tableDefaults,
+import { Resource, createDefaults,
 	editDefaults, formDefaults, listDefaults,
 	showDefaults, RowActions, DataTable, SimpleShowLayout, SimpleForm,
 	type ResourceActionDefs, type FieldSchema, CardGrid, createReferenceField, createReferenceInput, TextLiveFilter} from '@mahaswami/vc-frontend';
 import { Description } from '@mui/icons-material';
-import { Create, Edit, List, Menu, Show,
-    type ListProps, TextField, TextInput, required} from "react-admin";
+import {
+    Create, Edit, List, Menu, Show,
+    type ListProps, TextField, TextInput, required, TabbedForm, useGetRecordId
+} from "react-admin";
+import {StandardList} from "./standards/StandardList.tsx";
+import { CategoryList } from './categories/Categories.tsx';
+import {GradeList} from "./grade/Grades.tsx";
+import {SectionList} from "./standard_sections.tsx";
 
 export const RESOURCE = "standards"
 export const ICON = Description
@@ -17,26 +23,6 @@ const standardsActionDefs: ResourceActionDefs = {};
 const filters = [
     <TextLiveFilter source="search" show />
 ]
-
-export const StandardsList = (props: ListProps) => {
-    return (
-        <List {...listDefaults(props)}>
-            <DataTable {...tableDefaults(RESOURCE)}>
-                <DataTable.Col source="name" />
-                <RowActions/>
-            </DataTable>
-        </List>
-    )
-}
-
-export const StandardsCardList = (props: ListProps) => {
-    return (
-        <List {...listDefaults(props)} component={'div'}>
-            <CardGrid title={<TextField source="name" variant='h6' />}>
-            </CardGrid>
-        </List>
-    )
-}
 
 const StandardForm = (props: any) => {
     return (
@@ -68,8 +54,27 @@ const StandardShow = (props: any) => {
             <SimpleShowLayout>
                 <TextField source="name" />
             </SimpleShowLayout>
+            <StandardTabs />
         </Show>
     )
+}
+
+export const StandardTabs = () => {
+    const standardId = Number(useGetRecordId());
+
+    return (
+        <TabbedForm toolbar={false}>
+            <TabbedForm.Tab label="grades">
+                <GradeList standardId={standardId}/>
+            </TabbedForm.Tab>
+            <TabbedForm.Tab label="categories">
+                <CategoryList standardId={standardId} />
+            </TabbedForm.Tab>
+            <TabbedForm.Tab label="sections">
+                <SectionList standardId={standardId} />
+            </TabbedForm.Tab>
+        </TabbedForm>
+    );
 }
 
 const standardsFieldSchema: FieldSchema = {
@@ -89,13 +94,11 @@ export const StandardsResource = (
         searchableFields={ standardsSearchableFields}
         filters={filters}
         filtersPlacement="top"
-        list={<StandardsList/>}
+        list={<StandardList/>}
         create={<StandardCreate/>}
         edit={<StandardEdit/>}
         show={<StandardShow/>}
-        hasDialog
         hasLiveUpdate
-        cardList={<StandardsCardList/>}
         sort={{ field: 'name', order: 'ASC' }}
     />
 )

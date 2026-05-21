@@ -1,7 +1,6 @@
 import { openDialog, useRealtimeComms } from '@mahaswami/vc-frontend';
 import { Add, MarkChatRead, Reply, School } from '@mui/icons-material';
 import {
-    Avatar,
     Box,
     Card,
     CardHeader,
@@ -11,18 +10,13 @@ import {
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import {
-    DateField,
     FunctionField,
-    ImageField,
-    List,
     Loading,
-    ReferenceField,
     ReferenceManyField,
-    WithListContext,
     useListContext,
     useRefresh
 } from 'react-admin';
-import {getUserId, isCoach} from '../../businessLogic';
+import {getUserId} from '../../businessLogic';
 import { Empty } from '../common/empty';
 import DiscussionPostCreate from './DiscussionPostCreate';
 import ReplyLineItem from './ReplyLineItem';
@@ -30,6 +24,7 @@ import TopicLineItem from './TopicLineItem';
 import {updateDiscussionReadStatus} from "../../backend/classes.ts";
 import {formatDateWithShortYear} from "../../utils.ts";
 import { AvatarField } from '../../fields/AvatarField.tsx';
+import {UsersReferenceField} from "../users.tsx";
 
 const cardHeaderSx = (theme) => ({
     p: 0,
@@ -73,7 +68,7 @@ const RepliesList = ({ refreshKey }: { refreshKey: number }) => {
                             theme.palette.mode === 'dark' ? theme.palette.grey[800] : theme.palette.grey[200],
                     }}
                 >
-                    <ReferenceField source="replied_by_user_id" record={record} reference="users" link={false}>
+                    <UsersReferenceField source="replied_by_user_id" record={record} link={false}>
                         <FunctionField render={(user: any) => (
                             <Box sx={{ display: 'flex', alignItems: 'center' }}>
                                 <AvatarField /> 
@@ -89,7 +84,7 @@ const RepliesList = ({ refreshKey }: { refreshKey: number }) => {
                                 </Typography>
                             </Box>
                         )} />
-                    </ReferenceField>
+                    </UsersReferenceField>
                     <ReplyLineItem text={record.reply} replyId={record.id} refreshKey={refreshKey} />
                 </Box>
             ))}
@@ -132,7 +127,7 @@ const TopicList = ({ data, onReply, topicRefreshKey }) => {
                         }}
                     >
                         <Box sx={{ display: 'flex', flex: 1, alignItems: 'center', gap: 0.5 }}>
-                            <ReferenceField source="created_by_user_id" record={record} reference="users" link={false}>
+                            <UsersReferenceField source="created_by_user_id" record={record} reference="users" link={false}>
                                 <FunctionField render={(user: any) => (
                                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
                                         <AvatarField/>
@@ -148,17 +143,12 @@ const TopicList = ({ data, onReply, topicRefreshKey }) => {
                                         </Typography>
                                     </Box>
                                 )} />
-                            </ReferenceField>
+                            </UsersReferenceField>
                             <Box sx={{ display: 'grid', alignItems: 'start', ml: 0.5 }}>
                                 <TopicLineItem topicId={record.id} text={record.topic} refreshKey={refreshKey} topicRefreshKey={topicRefreshKey} />
                             </Box>
                         </Box>
                         <Typography variant="caption" color="text.secondary">
-                            {/*<DateField*/}
-                            {/*    options={{ year: '2-digit', month: '2-digit', day: '2-digit' }}*/}
-                            {/*    source="created_date"*/}
-                            {/*    record={record}*/}
-                            {/*/>*/}
                             {formatDateWithShortYear(record.created_date)}
                         </Typography>
                         <Tooltip title="Mark As Read">

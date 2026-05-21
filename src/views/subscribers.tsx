@@ -1,15 +1,20 @@
 import { Resource, createDefaults, tableDefaults,
 	editDefaults, formDefaults, listDefaults,
-	showDefaults, RowActions, DataTable, SimpleShowLayout, SimpleForm,
+	showDefaults, DataTable, SimpleShowLayout, SimpleForm,
 	type ResourceActionDefs, type FieldSchema, CardGrid, recordRep, createReferenceField, createReferenceInput, ReferenceLiveFilter, DateLiveFilter, TextLiveFilter} from '@mahaswami/vc-frontend';
 import { People } from '@mui/icons-material';
-import { Create, Edit, List, Menu, Show,
-    type ListProps, TextField, TextInput, DateField, DateInput} from "react-admin";
+import {
+    Create, Edit, List, Menu, Show,
+    type ListProps, TextField, TextInput, DateField, DateInput, ReferenceField
+} from "react-admin";
 import { SubscribablesReferenceField, SubscribablesReferenceInput } from './subscribables.js';
+import { isSuperAdmin } from '../businessLogic.js';
+import {formatDateWithShortYear} from "../utils.ts";
+import {CurriculumsReferenceField} from "./curriculums.tsx";
 
 export const RESOURCE = "subscribers"
 export const ICON = People
-export const PREFETCH: string[] = ["subscribables", "subscriber_tenants"]
+export const PREFETCH: string[] = ["subscribables"]
 
 export const SubscribersReferenceField = createReferenceField(RESOURCE, PREFETCH);
 export const SubscribersReferenceInput = createReferenceInput(RESOURCE, PREFETCH);
@@ -18,7 +23,6 @@ const subscribersActionDefs: ResourceActionDefs = {};
 const filters = [
     <TextLiveFilter source="search" show />,
     <ReferenceLiveFilter source="subscribable_id" reference="subscribables" label="Subscribable" />,
-    <ReferenceLiveFilter source="subscriber_tenant_id" reference="subscriber_tenants" label="Subscriber Tenant" />,
     <DateLiveFilter source="start_date" label="Start" />,
     <DateLiveFilter source="end_date" label="End" />
 ]
@@ -27,11 +31,21 @@ export const SubscribersList = (props: ListProps) => {
     return (
         <List {...listDefaults(props)}>
             <DataTable {...tableDefaults(RESOURCE)}>
-                <DataTable.Col source="subscribable_id" field={SubscribablesReferenceField}/>
-                <DataTable.Col source="start_date" field={DateField}/>
-                <DataTable.Col source="end_date" field={DateField}/>
-                <DataTable.Col source="subscription_type" />
-                <RowActions/>
+                <DataTable.Col label="Curriculum" field={() =>
+                    <SubscribablesReferenceField source="subscribable_id" link={false}>
+                        <CurriculumsReferenceField source='curriculum_id' link={false} />
+                    </SubscribablesReferenceField>
+                } />
+                { isSuperAdmin() && <DataTable.Col label="Publisher" field={() =>
+                    <SubscribablesReferenceField source="subscribable_id">
+                        <ReferenceField reference="tenants" source="publisher_tenant_id" label="Publisher" link={false} />
+                    </SubscribablesReferenceField>}
+                />}
+                <DataTable.Col label="Subscriber" field={() =>
+                    <ReferenceField reference="tenants" source="subscriber_tenant_id" link={false} />} />
+                <DataTable.Col source="subscription_type"  label="Subscription Type" />
+                <DataTable.Col label="Start Date" render={(record: any) => formatDateWithShortYear(record.start_date)} />
+                <DataTable.Col label="End Date" render={(record: any) => formatDateWithShortYear(record.end_date)} />
             </DataTable>
         </List>
     )
@@ -89,7 +103,7 @@ const SubscriberShow = (props: any) => {
 
 const subscribersFieldSchema: FieldSchema = {
     subscribable_id: { resource: 'subscribables' },
-    subscriber_tenant_id: { resource: 'subscriber_tenants' },
+    subscriber_tenant_id: {},
     start_date: {},
     end_date: {},
     subscription_type: {}

@@ -1,21 +1,14 @@
 import {
-    Button,
-    Create,
-    Datagrid,
-    DateField, DateInput, DeleteButton, Edit, EditButton, FunctionField,
-    List,
-    ReferenceField, SaveButton,
-    Show,
-    SimpleForm, SimpleShowLayout,
-    TextField,
-    TextInput, Toolbar, useNotify
+    Create, DateField, DeleteButton, Edit, List, SaveButton, Show,
+    SimpleShowLayout, TextField, TextInput, Toolbar, useNotify
 } from "react-admin";
-import {closeDialog, openDialog} from "@mahaswami/vc-frontend";
-import React from "react";
-import AddIcon from "@mui/icons-material/Add";
-import {Box, IconButton, Typography, Tooltip} from "@mui/material";
+import {closeDialog, DataTable, openDialog, SimpleForm} from "@mahaswami/vc-frontend";
+import {Box, Typography, Tooltip} from "@mui/material";
 import {isCoach, isRegularSchoolFlavored} from "../../businessLogic.ts";
 import {formatDateWithShortYear} from "../../utils.ts";
+import {UsersReferenceField} from "../users.tsx";
+import {ClassesReferenceField} from "../classes.tsx";
+import {CoachesReferenceField} from "../coaches.tsx";
 
 const ParentNoteCustomToolbar = () => (
     <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -59,27 +52,26 @@ const ParentNoteList = ({classId, coachId, parentId, studentId}) => {
     return (
         <List actions={false} empty={<CustomEmpty/>}
               filter={filter} sort={{ field: 'created_date', order: 'DESC' }} title=" " resource={"parent_notes"} pagination={false} exporter={false}>
-            <Datagrid  sx={{ '& .RaDatagrid-rowCell:last-child': { padding: 0 } }} bulkActionButtons={false}
+            <DataTable bulkActionButtons={false}
                        rowClick={(_id, _resource, record) => {
                            isCoach() && onEditParentNoteClick(record)
                            return false;
                        }}>
                 {!isCoach() &&
-                    <FunctionField label={isRegularSchoolFlavored() ? "Teacher" : "Coach"} render={() => {
+                    <DataTable.Col label={isRegularSchoolFlavored() ? "Teacher" : "Coach"} render={() => {
                     return (<Box sx={{maxWidth: 120}}>
-                            <ReferenceField reference={"coaches"} source={"coach_id"}>
-                                <ReferenceField reference={"users"} source={"user_id"} link={false}>
-                                    <TextField style={{fontSize: '0.8rem'}} source={"fullName"}/>
-                                </ReferenceField>
-                            </ReferenceField> {'- '}
-                            <ReferenceField source={"class_id"} reference={"classes"} link={false}>
+                            <CoachesReferenceField source={"coach_id"}>
+                                <TextField style={{fontSize: '0.8rem'}} source={"user.fullName"}/>
+                            </CoachesReferenceField> {'- '}
+                            <ClassesReferenceField source={"class_id"} link={false}>
                                 <TextField style={{fontSize: '0.8rem'}} sx={{color: 'gray'}} source={"name"}/>
-                            </ReferenceField>
+                            </ClassesReferenceField>
                         </Box>
                     )
                 }}/>}
-                <FunctionField label={"Date"} render={(recode) => <Typography style={{fontSize: '0.8rem'}}>{formatDateWithShortYear(recode.created_date)}</Typography>}/>
-                <FunctionField label={"Note"} render={(record) => {
+                <DataTable.Col label={"Date"} render={(recode) =>
+                    <Typography style={{fontSize: '0.8rem'}}>{formatDateWithShortYear(recode.created_date)}</Typography>}/>
+                <DataTable.Col label={"Note"} render={(record) => {
                     return (
                         <Tooltip title={record.note || "No note available"}>
                             <Typography
@@ -99,7 +91,7 @@ const ParentNoteList = ({classId, coachId, parentId, studentId}) => {
                     )
                 }}/>
                 {isCoach() &&
-                <FunctionField
+                <DataTable.Col
                     label=""
                     className={"delete-button"}
                     render={(record) => (
@@ -113,7 +105,7 @@ const ParentNoteList = ({classId, coachId, parentId, studentId}) => {
                         </Box>
                     )}
                 />}
-            </Datagrid>
+            </DataTable>
         </List>
     );
 }
@@ -170,17 +162,11 @@ export const ParentNoteShow = (params) => {
     return (
         <Show resource={"parent_notes"} {...params} >
             <SimpleShowLayout>
-                <ReferenceField reference={"users"} source={"coach_id"}>
-                    <TextField source={"fullName"}/>
-                </ReferenceField>
+                <UsersReferenceField source={"coach_id"} />
                 <DateField source={"created_date"}/>
                 <TextField source={"note"}/>
-                <ReferenceField source={"parent_user_id"} reference={"users"}>
-                    <TextField source={"fullName"}/>
-                </ReferenceField>
-                <ReferenceField source={"class_id"} reference={"classes"}>
-                    <TextField source={"name"}/>
-                </ReferenceField>
+                <UsersReferenceField source={"parent_user_id"} />
+                <ClassesReferenceField source={"class_id"} />
             </SimpleShowLayout>
         </Show>
     );

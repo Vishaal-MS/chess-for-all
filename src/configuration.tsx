@@ -38,7 +38,7 @@ export const postLogin = async (dataProvider: any, user: any) => {
     const postLoginPromises = [
         dataProvider.getList('classes'),
         dataProvider.getList('coaches', {filter:{user_id: user.id}}),
-        dataProvider.getList('settings')
+        dataProvider.getList('settings', { meta: { prefetch: ['tenants'] } })
     ]
     if (isStudent) {
         postLoginPromises.push(vcDataProvider.getList('students', {
@@ -51,7 +51,6 @@ export const postLogin = async (dataProvider: any, user: any) => {
     const {data: classes} = classesResult;
     const {data: coaches} = coachesResult;
     const {data: settings} = settingsResult;
-    console.log("Data: ", classes, coaches, settings, studentResult)
     if (settings.length > 0) {
         const tenantType = settings.find(s => s.config_name === TenantConfigNames.TENANT_TYPE).config_value;
         const allowPublishing = settings.find(s => s.config_name === TenantConfigNames.ALLOW_PUBLISHING).config_value;
@@ -64,6 +63,7 @@ export const postLogin = async (dataProvider: any, user: any) => {
         const regularSchoolFlavored = settings.find(s => s.config_name === TenantConfigNames.REGULAR_SCHOOL_FLAVORED)?.config_value;
         const executiveCoachingFlavored = settings.find(s => s.config_name === TenantConfigNames.EXECUTIVE_COACHING_FLAVORED)?.config_value;
         const schoolStandardId = settings.find(s => s.config_name === TenantConfigNames.SCHOOL_STANDARD_ID)?.config_value;
+        setLocalStorage('tenant_name', settings[0]?.tenant?.name);
         setLocalStorage('tenant_allowed_publishing', allowPublishing);
         setLocalStorage('tenant_allowed_coaching', allowCoaching);
         setLocalStorage('tenant_academy_type', TenantTypeLookup[tenantType]);

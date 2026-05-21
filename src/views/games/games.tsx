@@ -1,5 +1,6 @@
-import {DateField, EditGuesser, Loading, ReferenceField, ReferenceFieldProps, SelectInput, SimpleShowLayout,
-    TextField, useRecordContext, useListContext, ReferenceInput, AutocompleteInput, List, Show
+import {
+    DateField, EditGuesser, Loading, ReferenceFieldProps, SelectInput, SimpleShowLayout,
+    TextField, useRecordContext, useListContext, AutocompleteInput, List, Show
 } from "react-admin"
 import GameListActions from "./GameListActions"
 import { Empty } from "../common/empty";
@@ -29,8 +30,9 @@ import {
 import FilterMultiChoiceInput from "../common/FilterMultiChoiceInput.tsx";
 import {ListTitle, RecordTitle} from "../../components/Title.tsx";
 import PlayWithBotView from "./PlayWithBotView.tsx";
-import {ClassesReferenceField} from "../classes.tsx";
+import {ClassesReferenceField, ClassesReferenceInput} from "../classes.tsx";
 import {GamePlayView} from "./GamePlayView.tsx";
+import {StudentsReferenceInput} from "../students.tsx";
 
 export const GameList = () => {
     const location = useLocation();
@@ -103,9 +105,9 @@ export const GameList = () => {
 
     if (!classId) {
         GameListFilters.push(
-            <ReferenceInput source="class_id" reference="classes" alwaysOn label="Class">
+            <ClassesReferenceInput source="class_id" alwaysOn label="Class">
                 <SelectInput optionText="name" sx={{width: "15rem"}}/>
-            </ReferenceInput>
+            </ClassesReferenceInput>
         );
     } else {
         GameListFilters.push(<FilterMultiChoiceInput style={{'& .MuiFilledInput-input': {paddingTop: '1.3rem'}}}
@@ -246,7 +248,7 @@ export const GameEdit = () => {
 }
 
 export const StudentField = (props: Omit<ReferenceFieldProps, "reference">) => (
-    <ReferenceField reference="students" queryOptions={{ meta: {prefetch: ["users"]}}} {...props}>
+    <StudentsReferenceInput {...props}>
         <TextField source="user.fullName" />
-    </ReferenceField>
+    </StudentsReferenceInput>
 )

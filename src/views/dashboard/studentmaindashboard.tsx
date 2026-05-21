@@ -1,22 +1,18 @@
-import React from 'react';
-import {Grid,Box,Chip,LinearProgress,Avatar,Button,Typography} from "@mui/material";
-import {useState,useEffect} from "react";
-import {Card} from "@mui/material";
-import {ResourceContextProvider,Link,useDataProvider,TextField,ReferenceField,List,Datagrid,SimpleList,ImageField,DateField,FunctionField,WithListContext, useRedirect, Loading} from "react-admin";
-import {CardWithIcon} from "../../components/CardWithIcon";
+import {Grid,Box,Chip,Avatar,Button,Typography} from "@mui/material";
+import {useState, useEffect, Fragment} from "react";
+import {ResourceContextProvider,Link,TextField,List,
+    ImageField, WithListContext, useRedirect, Loading} from "react-admin";
 import {CardWithBGIconOnRight} from "../../components/CardWithIcon";
 import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
-import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import CastForEducationIcon from '@mui/icons-material/CastForEducation';
 import {getCurrentUserStudentId} from "../../businessLogic";
-import {ReferenceArea} from "recharts";
 import {DBCard} from "../../components/DBCard";
-import {ActivityHoursChart} from "../../components/ActivityHoursChart";
 import {formatStatus} from "../../utils";
 import StackedProgressBar from "../../components/StackedProgressBar";
-import {remoteLog, setLocalStorage} from "@mahaswami/vc-frontend";
+import {DataTable, remoteLog} from "@mahaswami/vc-frontend";
 import {AssignmentStatus, ClassesStatus, CertificateStatus, TrophiesStatus} from "../../helpers/constants.ts";
-import {SwanView} from "../swan_crud/SwanCrud.tsx";
+import {ClassesReferenceField} from "../classes.tsx";
+import {UsersReferenceField} from "../users.tsx";
 
 export const Studentmaindashboard = () =>{
     const dataProvider = window.swanAppFunctions.dataProvider;
@@ -26,7 +22,6 @@ export const Studentmaindashboard = () =>{
     const [certificatesCount, setCertificatesCount] = useState("");
     const [trophiesCount,setTrophiesCount] = useState("");
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
     const [assignments, setAssignments] = useState([]);
     const redirect = useRedirect();
 
@@ -143,7 +138,7 @@ export const Studentmaindashboard = () =>{
 
     if(loading) return <Loading/>;
     return(
-        <SwanView>
+        <Fragment>
             <Grid container spacing={2} style={{padding: "12px"}}>
                 <Grid item xs={12}>
                     <Box sx={{display: "flex", flexDirection: "column", gap: 2, marginBottom: 3}}>
@@ -164,49 +159,36 @@ export const Studentmaindashboard = () =>{
                     <Box sx={{display: "flex", flexDirection: "column", gap: 2, marginBottom: 3}}>
                         <ResourceContextProvider value="enrollments">
                             <List title=" " filter={{student_id:studentId}} exporter={false} queryOptions={{meta: {prefetch: ['classes']}}} actions={false} perPage={2} pagination={false} sx={{'& .RaList-content': {
-                                    boxShadow: '0px 0px 0px 0px',
-                                },}}>
+                                    boxShadow: '0px 0px 0px 0px'}}}>
                                 <DBCard cardHeight={380} component={
-
-                                <Datagrid pending={false} header={<></>}  bulkActionButtons={false} empty={false}>
-                                 {/*   <ReferenceField source="class_id" reference="classes" link={false}>
-                                        <ReferenceField source="curriculum_id" reference="curriculum" link={false}>
-                                            <ImageField source="image_file_id" src="src" sx={{'& .RaImageField-image': { width:'100%',height:100,objectFit: 'contain' }}}/>
-                                        </ReferenceField>
-                                    </ReferenceField>*/}
-                                    {/*<Box sx={{ display:'flex',flexDirection:'column', width: '100%',marginTop:2 }}>*/}
-                                    <ReferenceField source="class_id" reference="classes" link={false}>
-                                        {/*<ReferenceField source="curriculum_id" reference="curriculum" link={false}>*/}
-                                            <TextField source="name" sx={{ fontSize: '20px', paddingRight:2}}/>
-                                        {/*</ReferenceField>*/}
-                                    </ReferenceField>
-                                        {/*<Box sx={{ display:'flex',flexDirection:'row', width: '100%', justifyContent:'center',alignItems:'center' }}>*/}
-                                            <ReferenceField source="class_id" reference="classes">
-                                                <ReferenceField source="coach_id" reference="coaches">
-                                                    <ReferenceField source="user_id" reference="users" >
-                                                        <Avatar>
-                                                            <ImageField source="image_file_id" src="src"/>
-                                                        </Avatar>
-                                                    </ReferenceField>
-                                                </ReferenceField>
-                                            </ReferenceField>
-                                            <ReferenceField source="class_id" reference="classes" link={false}>
-                                                <ReferenceField source="coach_id" reference="coaches" link={false}>
-                                                    <ReferenceField source="user_id" reference="users" link={false}>
-                                                        <TextField source="fullName" sx={{paddingLeft:1}}/>
-                                                    </ReferenceField>
-                                                </ReferenceField>
-                                            </ReferenceField>
-                                        {/*</Box>*/}
-                                    {/*</Box>*/}
-                                    <FunctionField render={record =><>
-                                        <Box sx={{ display:'flex',flexDirection:'column', width: '100%' }}>
-                                        <Chip label={formatStatus(record.class.status)}
-                                              color={record.class.status === ClassesStatus.COMPLETED ? 'success' : record.class.status === ClassesStatus.ACTIVE ? 'info' : 'warning'}>  </Chip>
-                                        </Box>
-                                    </>
+                                <DataTable pending={false} header={<></>}  bulkActionButtons={false} empty={false}>
+                                    <DataTable.Col source="class_id" field={ClassesReferenceField} />
+                                    <DataTable.Col source='class_id' field={() => 
+                                        <ClassesReferenceField source="class_id">
+                                            <UsersReferenceField source="coach.user_id">
+                                                <Avatar>
+                                                    <ImageField source="image_file_id" src="src"/>
+                                                </Avatar>
+                                            </UsersReferenceField>
+                                        </ClassesReferenceField>
                                     } />
-                                </Datagrid>
+                                    <DataTable.Col source="class_id" field={() =>
+                                        <ClassesReferenceField source="class_id" link={false}>
+                                            <UsersReferenceField source="coach.user_id" link={false}>
+                                                <TextField source="fullName" />
+                                            </UsersReferenceField>
+                                        </ClassesReferenceField>
+                                    } />
+                                    <DataTable.Col render={record =>
+                                        <Fragment>
+                                            <Box sx={{ display:'flex',flexDirection:'column', width: '100%' }}>
+                                                <Chip label={formatStatus(record.class.status)}
+                                                      color={record.class.status === ClassesStatus.COMPLETED ? 'success' :
+                                                      record.class.status === ClassesStatus.ACTIVE ? 'info' : 'warning'} />
+                                            </Box>
+                                        </Fragment>
+                                    } />
+                                </DataTable>
                             } title={"My Classes"} color={"blue"} footer={
                         <WithListContext render={({isPending,total}) => (
                             !isPending &&  <Button
@@ -234,44 +216,34 @@ export const Studentmaindashboard = () =>{
                 <Grid item xs={6}>
                     <DBCard cardHeight={380} component={ <List title={" "} resource={"assignments"} exporter={false} actions={false} perPage={5} pagination={false} sx={{'& .RaList-content': {
                             boxShadow: '0px 0px 0px 0px',
-                        },}} filter={{student_id:studentId}} sort={{field:'status',order:'desc'}}>
+                        },}} filter={{student_id:studentId}} sort={{field:'status', order:'desc'}}>
                         <Box sx={{padding:1}}>
-                        <Datagrid resource="lessons" header={<></>} bulkActionButtons={false} data={assignments} rowClick={handleAssignmentOnClick}>
-                        {/*<ReferenceField source="curriculum_lesson_id" reference="curriculum_lessons" link={false}>}
-                            <ReferenceField source="lesson_id" reference={"lessons"} link={false}>
-                                <TextField variant="h7" source={"name"} />
-                            </ReferenceField>
-                        </ReferenceField>*/}
-                            <TextField variant="h7" source={"lesson"} label={"lesson"}/>
-                            <FunctionField label="Status" render={record => {
-                                const total = record.completed + record.in_progress + record.not_started;
-
-                                if (total === record.completed) {
-                                    return  <Typography sx={{fontSize:'small'}}>Completed</Typography>
-                                }
-                                else if(total === record.not_started){
-                                    return <Typography sx={{fontSize:'small'}}>Not Started</Typography>
-                                }
-                                else
-                                    return <Typography sx={{fontSize:'small'}}>In Progress</Typography>
-                            }}/>
-                            <FunctionField label="Progress" render={record => {
-                                const total = record.completed + record.in_progress + record.not_started;
-                                const completed = (record.completed) / total * 100;
-                                /* return (<><LinearProgress variant="determinate" value={completed} valueBuffer={(record.total - record.completed)*100} color={'success'} />
-                                   <Typography sx={{fontSize:'small'}}> {record.completed} out of {total} completed</Typography></>);*/
-                                const progressValues = [
-                                    {label: 'Completed', value: record.completed, percent: (record.completed) / total * 100, color: 'success'},
-                                    {label: 'In Progress', value: record.in_progress,percent: (record.in_progress) / total * 100, color: 'info'},
-                                    {label: 'Not Started', value: record.not_started, percent: (record.not_started) / total * 100, color: 'warning'}
-                                ];
-                                return (<>
-                                        <StackedProgressBar progressValues={progressValues}/>
-                                        <Typography sx={{fontSize:'small',paddingTop:2}}> {record.completed} out of {total} completed</Typography>
-                                    </>
-                                );
-                            }} />
-                    </Datagrid></Box>
+                            <DataTable resource="lessons" header={<></>} bulkActionButtons={false} data={assignments} rowClick={handleAssignmentOnClick}>
+                                <DataTable.Col source={"lesson"} label={"lesson"}/>
+                                <DataTable.Col label="Status" render={record => {
+                                    const total = record.completed + record.in_progress + record.not_started;
+                                    if (total === record.completed) {
+                                        return  <Typography sx={{fontSize:'small'}}>Completed</Typography>
+                                    } else if (total === record.not_started){
+                                        return <Typography sx={{fontSize:'small'}}>Not Started</Typography>
+                                    } else return <Typography sx={{fontSize:'small'}}>In Progress</Typography>
+                                }}/>
+                                <DataTable.Col label="Progress" render={record => {
+                                    const total = record.completed + record.in_progress + record.not_started;
+                                    const progressValues = [
+                                        {label: 'Completed', value: record.completed, percent: (record.completed) / total * 100, color: 'success'},
+                                        {label: 'In Progress', value: record.in_progress,percent: (record.in_progress) / total * 100, color: 'info'},
+                                        {label: 'Not Started', value: record.not_started, percent: (record.not_started) / total * 100, color: 'warning'}
+                                    ];
+                                    return (
+                                        <Fragment>
+                                            <StackedProgressBar progressValues={progressValues}/>
+                                            <Typography sx={{fontSize:'small',paddingTop:2}}> {record.completed} out of {total} completed</Typography>
+                                        </Fragment>
+                                    );
+                                }} />
+                            </DataTable>
+                        </Box>
                     </List>} title={"My Assignments"} color={'blue'} footer={
                         assignments.length > 0 && <Button
                         sx={{ borderRadius: 0, padding:1,fontSize:"18px" }}
@@ -287,6 +259,6 @@ export const Studentmaindashboard = () =>{
                         </Button>} />
                 </Grid>
             </Grid>
-        </SwanView>
+        </Fragment>
     )
 }

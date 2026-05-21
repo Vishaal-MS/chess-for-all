@@ -1,13 +1,11 @@
-import { Resource, createDefaults, tableDefaults,
-	editDefaults, formDefaults, listDefaults,
-	showDefaults, RowActions, DataTable, SimpleShowLayout, SimpleForm,
-	type ResourceActionDefs, type FieldSchema, CardGrid, recordRep, createReferenceField, createReferenceInput, ReferenceLiveFilter, DateLiveFilter, TextLiveFilter} from '@mahaswami/vc-frontend';
+import { Resource, tableDefaults, listDefaults, RowActions, DataTable,
+    type ResourceActionDefs, type FieldSchema, recordRep, createReferenceField, createReferenceInput,
+    ReferenceLiveFilter, DateLiveFilter, TextLiveFilter} from '@mahaswami/vc-frontend';
 import { Receipt } from '@mui/icons-material';
-import { Create, Edit, List, Menu, Show,
-    type ListProps, TextField, TextInput, DateField, DateInput} from "react-admin";
-import { CoachesReferenceField, CoachesReferenceInput } from './coaches.js';
-import { ClientsReferenceField, ClientsReferenceInput } from './clients.js';
-import { ClassesReferenceField, ClassesReferenceInput } from './classes.js';
+import { List, type ListProps, DateField, Toolbar, Button } from "react-admin";
+import { ClientsReferenceField } from './clients.js';
+import { ClassesReferenceField } from './classes.js';
+import {formatAmount} from "../utils.ts";
 
 export const RESOURCE = "invoices"
 export const ICON = Receipt
@@ -25,77 +23,25 @@ const filters = [
     <DateLiveFilter source="invoice_date" label="Invoice" />
 ]
 
+const InvoiceListActions = () => (
+    <Toolbar>
+        <Button variant="contained" sx={{marginRight:1}} label="Generate Invoices" onClick={() => {alert('This is coming soon. We\'re working on it!')}} />
+    </Toolbar>
+);
+
 export const InvoicesList = (props: ListProps) => {
     return (
-        <List {...listDefaults(props)}>
-            <DataTable {...tableDefaults(RESOURCE)} hiddenColumns={['amount', 'status']} >
-                <DataTable.Col source="coach_id" field={CoachesReferenceField}/>
+        <List {...listDefaults(props)} actions={<InvoiceListActions/>}>
+            <DataTable {...tableDefaults(RESOURCE)} sort={{field:'date',order:'ASC'}} hiddenColumns={['amount', 'status']}>
                 <DataTable.Col source="client_id" field={ClientsReferenceField}/>
                 <DataTable.Col source="class_id" field={ClassesReferenceField}/>
                 <DataTable.Col source="invoice_date" field={DateField}/>
+                <DataTable.Col label={"Amount"} render={record => formatAmount(record.amount)}/>
                 <DataTable.Col source="date" />
-                <DataTable.Col source="amount" />
-                <DataTable.Col source="status" />
+                <DataTable.Col source="status" sx={{ textTransform: 'capitalize' }} />
                 <RowActions/>
             </DataTable>
         </List>
-    )
-}
-
-export const InvoicesCardList = (props: ListProps) => {
-    return (
-        <List {...listDefaults(props)} component={'div'}>
-            <CardGrid title={<CoachesReferenceField source="coach_id" variant='h6' link={false} />}>
-                <ClientsReferenceField source="client_id" />
-                <ClassesReferenceField source="class_id" />
-            </CardGrid>
-        </List>
-    )
-}
-
-const InvoiceForm = (props: any) => {
-    return (
-        <SimpleForm {...formDefaults(props)} display="grid"  gridTemplateColumns={{ xs: '1fr', md: '1fr 1fr' }}  gap="1rem" >
-            <CoachesReferenceInput source="coach_id" />
-            <ClientsReferenceInput source="client_id" />
-            <ClassesReferenceInput source="class_id" />
-            <DateInput source="invoice_date" />
-            <TextInput source="date" />
-            <TextInput source="amount" />
-            <TextInput source="status" />
-        </SimpleForm>
-    )
-}
-
-const InvoiceEdit = (props: any) => {
-    return (
-        <Edit {...editDefaults(props)}>
-            <InvoiceForm />
-        </Edit>
-    )
-}
-
-const InvoiceCreate = (props: any) => {
-    return (
-    	<Create {...createDefaults(props)}>
-            <InvoiceForm />
-        </Create>
-    )
-}
-
-const InvoiceShow = (props: any) => {
-    return (
-        <Show {...showDefaults(props)}>
-            <SimpleShowLayout display="grid"  gridTemplateColumns={{ xs: '1fr', md: '1fr 1fr' }}  gap="1rem" >
-                <CoachesReferenceField source="coach_id" />
-                <ClientsReferenceField source="client_id" />
-                <ClassesReferenceField source="class_id" />
-                <DateField source="invoice_date" />
-                <TextField source="date" />
-                <TextField source="amount" />
-                <TextField source="status" />
-            </SimpleShowLayout>
-        </Show>
     )
 }
 
@@ -126,17 +72,10 @@ export const InvoicesResource = (
         filters={filters}
         filtersPlacement="top"
         list={<InvoicesList/>}
-        create={<InvoiceCreate/>}
-        edit={<InvoiceEdit/>}
-        show={<InvoiceShow/>}
         hasDialog
         hasLiveUpdate
         hasFilterChooser
-        cardList={<InvoicesCardList/>}
         hasColumnChooser
         sort={{ field: 'date', order: 'ASC' }}
     />
-)
-export const InvoicesMenu = () => (
-    <Menu.Item to={`/${RESOURCE}`} primaryText="Invoices" leftIcon={<ICON />} />
 )

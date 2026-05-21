@@ -1,9 +1,20 @@
-import {RecordContextProvider, ReferenceField, ReferenceInput, SelectField, SelectInput, WithRecord, useGetRecordId} from 'react-admin';
+import {RecordContextProvider, SelectInput, WithRecord} from 'react-admin';
 import {useLayoutEffect, useRef, useState} from 'react';
 import useActiveTimeTracker from '../common/useActiveTimeTracker.ts';
-import {remoteLog, removeLocalStorage, setLocalStorage} from '@mahaswami/vc-frontend';
-import { AssignmentStatus } from '../../helpers/constants.ts';
+import {removeLocalStorage, setLocalStorage} from '@mahaswami/vc-frontend';
 import {VolumeOff, VolumeUp, Stars } from "@mui/icons-material";
+import { ChessAIField } from '../../fields/ai_lesson/ChessAIField';
+import {Box, Button, IconButton, Paper, Tooltip} from "@mui/material";
+import {StudentProgressField} from "./assignmentList.tsx";
+import { updateAssignmentTimeSpent } from '../../backend/assignments.ts';
+import {isCoach, isStudent} from "../../businessLogic.ts";
+import KeyboardReturnIcon from "@mui/icons-material/KeyboardReturn";
+import {Celebration} from "../../helpers/Celebration.tsx";
+import { useLocation, useNavigate } from 'react-router-dom';
+import {handleEnableGameSound, handleMuteHowler, playAssignmentCompleteSound} from "../../helpers/sounds.ts";
+import { Edit, SimpleForm,} from 'react-admin';
+import {LessonsReferenceField, LessonsReferenceInput} from "../lessons.tsx";
+import {UsersReferenceInput} from "../users.tsx";
 
 const getStatusChoices = () => {
     const choices = [
@@ -14,10 +25,6 @@ const getStatusChoices = () => {
 
     return choices;
 };
-
-import {Celebration} from "../../helpers/Celebration.tsx";
-import { useLocation, useNavigate } from 'react-router-dom';
-import {handleEnableGameSound, handleMuteHowler, playAssignmentCompleteSound} from "../../helpers/sounds.ts";
 
 export const AssignmentShow = ({assignment, title, processUpdate, lessonId, isDirect, marginTop=0}) => {
     const [showCelebration, setShowCelebration] = useState(false);
@@ -149,31 +156,17 @@ export const AssignmentShow = ({assignment, title, processUpdate, lessonId, isDi
     )
 }
 
-import { Edit, SimpleForm,} from 'react-admin';
-
 export const AssignmentEdit = () => (
     <Edit>
         <AssignmentForm />
     </Edit>
 );
 
-import { ChessAIField } from '../../fields/ai_lesson/ChessAIField';
-import {Box, Button, IconButton, Paper, Tooltip} from "@mui/material";
-import {StudentProgressField} from "./assignmentList.tsx";
-import React from "react";
-import { updateAssignmentTimeSpent } from '../../backend/assignments.ts';
-import {isCoach, isStudent} from "../../businessLogic.ts";
-import KeyboardReturnIcon from "@mui/icons-material/KeyboardReturn";
-
-
 export const AssignmentForm = () => (
     <SimpleForm>
-        <ReferenceInput source="lesson_id" reference="lessons" perPage={1000}>
-                
-            </ReferenceInput>
-            <ReferenceInput source="user_id" reference="users" perPage={1000}>                
-            </ReferenceInput>  
-            <SelectInput source="status" choices={getStatusChoices()} />      
+        <LessonsReferenceInput source="lesson_id" />
+        <UsersReferenceInput source="user_id" />
+        <SelectInput source="status" choices={getStatusChoices()} />
     </SimpleForm>
 );
 
@@ -210,11 +203,7 @@ export const AssignmentCard = ({ assignment, title }: { assignment: any, title: 
                 <Box sx={{ flexGrow: 1, width: "100%", height: "100%" }}>
                     <WithRecord
                         render={(record) => (
-                            <ReferenceField
-                                source="lesson_id"
-                                reference="lessons"
-                                link={false}
-                            >
+                            <LessonsReferenceField source="lesson_id" link={false}>
                                 <WithRecord
                                     render={(lesson) => (
                                         <iframe
@@ -228,7 +217,7 @@ export const AssignmentCard = ({ assignment, title }: { assignment: any, title: 
                                         />
                                     )}
                                 />
-                            </ReferenceField>
+                            </LessonsReferenceField>
                         )}
                     />
                 </Box>

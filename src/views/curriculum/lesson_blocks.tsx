@@ -1,96 +1,25 @@
 import {
-    AutocompleteArrayInput,
-    BooleanInput,
-    Datagrid,
-    FormDataConsumer, NumberInput,
-    Labeled,
-    ReferenceArrayField, ReferenceArrayInput,
-    SelectField,
-    SelectInput, ShowButton, SingleFieldList,
-    TextField,
-    useNotify,
-    useRecordContext,
-    useUpdate,
-    WithRecord,
-    Confirm, Show
+    AutocompleteArrayInput, BooleanInput, FormDataConsumer, NumberInput, Labeled,
+    ReferenceArrayInput, SelectField, SelectInput, ShowButton,
+    TextField, useNotify, useRecordContext, useUpdate, WithRecord, Confirm, Show,
 } from 'react-admin';
 import {
-    Box,
-    CircularProgress,
-    FormControl,
-    Grid,
-    InputLabel, MenuItem,
-    Select,
-    Typography,
-    useMediaQuery
+    Box, CircularProgress, FormControl, Grid, InputLabel, MenuItem, Select, useMediaQuery
 } from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
 import { LessonBlockForm } from "./LessonBlockForm.tsx";
 import { Create} from 'react-admin';
 import {SimpleShowLayout } from 'react-admin';
 import { LessonBlockField } from '../../fields/ai_lesson/lesson_block_field';
-import {PER_PAGE, remoteLog, SensibleDefaultPagination, showDefaults} from "@mahaswami/vc-frontend";
-import { SearchInput, Button, TopToolbar, Edit, SimpleForm, TextInput} from 'react-admin';
+import {remoteLog, showDefaults} from "@mahaswami/vc-frontend";
+import { Button, TopToolbar, Edit, SimpleForm, TextInput} from 'react-admin';
 import {useLocation, useNavigate} from "react-router-dom";
 import React, { useEffect, useMemo, useState, useCallback } from "react";
 import { extractMessageAndConstructKeyMap } from '../../utils.ts';
 import {voiceChoices, VoiceStatus} from "../../helpers/constants.ts";
 import { isAllowedVoiceOver, sendEmail } from '../../businessLogic.ts';
-import { getEmailsBasedOnEnv } from '../../configuration.tsx';
 import { GraphicEq } from '@mui/icons-material';
 import {generateVoiceOverMessages} from "../../backend/voiceOver.ts";
-
-const LessonBlockListActions = () => {
-     const navigate = useNavigate();
-
-    return(
-        <TopToolbar>
-            <Button startIcon={<AddIcon />} label={"AI Lesson Block"} onClick={() => navigate("/lesson_blocks/create?param=AI_NEW")}/>
-            <Button startIcon={<AddIcon />} label={"Advanced Lesson Block"} onClick={() => navigate("/lesson_blocks/create?param=ADVANCE_NEW")}/>
-        </TopToolbar>
-    );
-}
-const CustomEmptyList = () => {
-    return (
-    <Box
-        display="flex"
-        flexDirection="column"
-        justifyContent="center"
-        alignItems="center"
-        height="calc(100vh - 200px)"
-    >
-        <Typography sx={{color: 'grey'}} variant="h4" gutterBottom>
-            No Lesson Blocks yet
-        </Typography>
-        <LessonBlockListActions/>
-    </Box>
-)};
-
-export const LessonBlocksList = () => {
-    const blockFilters = [
-        <SearchInput source="q" alwaysOn />,
-        <SelectInput source="block_type" label="Block Type" choices={getBlockTypeChoices()} alwaysOn />,
-        <ReferenceArrayInput source="tag_ids" reference="tags" queryOptions={{meta: {scopingEscapeHatch:true}}}
-                             perPage={1000} sort={{ field: 'name', order: 'ASC' }} alwaysOn>
-            <AutocompleteArrayInput label="Tags" />
-        </ReferenceArrayInput>
-    ];
-
-    return (
-        <SwanList filters={blockFilters}
-              actions={<LessonBlockListActions/>} empty={<CustomEmptyList/>} pagination={<SensibleDefaultPagination/>} perPage={PER_PAGE}
-              sort={{field: 'name', order: 'ASC'}} exporter={false}>
-            <Datagrid>
-                <TextField source="name"/>
-                <SelectField source="block_type" label="Block Type" choices={getBlockTypeChoices()} />
-                <ReferenceArrayField source="tag_ids" reference="tags" label="Tags" perPage={1000}>
-                    <SingleFieldList linkType={false} />
-                </ReferenceArrayField>
-            </Datagrid>
-        </SwanList>
-    );
-}
-
 
 export const getBlockTypeChoices = () => {
     const choices = [
@@ -122,10 +51,6 @@ export const LessonBlockShow = (props: any) => {
                     </Labeled>
                 </Grid>
             </Grid>
-            {/* <TextField source="board_title" />
-            <TextField source="board_subtitle" />
-            <TextField source="starting_board" /> */}
-            {/* <TextField source="animated_tutorial" />             */}
             <LessonBlockField label="Tutorial" source="animated_tutorial" maxSize={maxBoardSize}/>                        
         </SimpleShowLayout>
     </Show>
@@ -159,13 +84,6 @@ export const LessonBlockEdit = () => (
             </Edit>
 );
 
-
-export const LessonBlockCreate = () => (
-    <Create>
-        <LessonBlockForm formMode={"AI_NEW"}/>
-    </Create>
-);
-
 const fenStartingBoard = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR"
 
 const ChoiceCorrect = ({rest, index, data}) => {
@@ -174,7 +92,6 @@ const ChoiceCorrect = ({rest, index, data}) => {
     return <BooleanInput readOnly={currentIndex && currentIndex !== index} source={`is_choice_${index}_correct`} label={`Correct`} {...rest} sx={{p: "0.5rem"}}/> ;
 }
 
-const emptyBoard = "8/8/8/8/8/8/8/8";
 const BoardFields = (
     <>
         <TextInput required source="board_title" label="Board Title" />

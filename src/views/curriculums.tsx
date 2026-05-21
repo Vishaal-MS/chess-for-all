@@ -228,7 +228,7 @@ export const CurriculumsResource = (
 const curriculumLessonsActionDefs: ResourceActionDefs = {};
 
 const curriculumLessonsFieldSchema: FieldSchema = {
-    curriculum_id: { required: true, resource: 'curricula' },
+    curriculum_id: { required: true, resource: 'curriculum' },
     lesson_id: { resource: 'lessons' },
     position_number: {},
     mapping1_standard_section_id: {},

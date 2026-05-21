@@ -1,22 +1,17 @@
-import {
-    Datagrid,
-    ListBase,
-    ReferenceField,
-    ReferenceManyField,
-    TextField, useListContext,
-    useRecordContext, useRedirect,
-    WithListContext, useGetList, useRefresh, WrapperField, FunctionField, Pagination
-} from "react-admin";
+import { useListContext, useRecordContext, WrapperField, Pagination } from "react-admin";
 import {Empty} from "../common/empty.tsx";
-import {Box, Typography} from "@mui/material";
-import {isExecutiveCoachingFlavored, isOrgAdmin, isParent, isStudent} from "../../businessLogic.ts";
+import {Box} from "@mui/material";
+import {isExecutiveCoachingFlavored, isParent, isStudent} from "../../businessLogic.ts";
 import React, {useState} from "react";
-import {remoteLog, useRealtimeComms} from "@mahaswami/vc-frontend";
-import {AssignmentBlockStatus, AssignmentStatus} from "../../helpers/constants.ts";
+import {DataTable, remoteLog, useRealtimeComms} from "@mahaswami/vc-frontend";
+import {AssignmentStatus} from "../../helpers/constants.ts";
 import {formatStatus} from "../../utils.ts";
 import {useNavigate} from "react-router-dom";
 import TimeField from "../../fields/TimeField.tsx";
 import { Stars } from "@mui/icons-material";
+import {StudentsReferenceField} from "../students.tsx";
+import {UsersReferenceField} from "../users.tsx";
+import {LessonsReferenceField} from "../lessons.tsx";
 
 
 export const AssignmentList = ({classId, enrollmentId}) => {
@@ -64,34 +59,34 @@ export const AssignmentList = ({classId, enrollmentId}) => {
     return (
         <>
             {isStudent() || isParent() ? (
-                <Datagrid empty={<Empty emptyText={"No Assignments yet"}/>} bulkActionButtons={false} rowClick={handleAssignmentClick}>
-                    <FunctionField label="Lesson" render={(assignment) => (
+                <DataTable empty={<Empty emptyText={"No Assignments yet"}/>} bulkActionButtons={false} rowClick={handleAssignmentClick}>
+                    <DataTable.Col label="Lesson" render={(assignment) => (
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: "0.5rem" }}>
-                            <ReferenceField reference="lessons" source="lesson_id" link={false} />
+                            <LessonsReferenceField source="lesson_id" link={false} />
                             {assignment.is_assessment && 
                                 <Stars sx={{ color: (theme) => theme.palette.info.light, borderRadius: "50%" }}/>}
                         </Box>
                     )}/>
-                    {isParent() && <TimeField source="time_spent" />}
+                    {isParent() && <DataTable.Col source='time_spent' field={() => <TimeField source="time_spent" />} />}
                     <WrapperField label="Progress">
                         <StudentProgressField />
                     </WrapperField>
-                </Datagrid>
+                </DataTable>
             ) : (
-                <Datagrid empty={<Empty emptyText={"No Assignments yet"}/>} bulkActionButtons={false} 
+                <DataTable empty={<Empty emptyText={"No Assignments yet"}/>} bulkActionButtons={false}
                     rowClick={handleAssignmentClick} data={updatedAssignments}>
-                    <ReferenceField source="student_id" reference="students" label={isExecutiveCoachingFlavored() ? "Executive" : "Student"} 
+                    <StudentsReferenceField source="student_id" label={isExecutiveCoachingFlavored() ? "Executive" : "Student"}
                         queryOptions={{meta: {embed: ['users']}}} link={false}>
-                        <ReferenceField source="user_id" reference="users" link={false} />
-                    </ReferenceField>
-                    <FunctionField render={assignment => assignment.is_assessment && 
+                        <UsersReferenceField source="user_id" link={false} />
+                    </StudentsReferenceField>
+                    <DataTable.Col render={assignment => assignment.is_assessment &&
                                 <Stars sx={{ color: (theme) => theme.palette.info.light}}/>}/>
-                    <FunctionField source={"status"} label="Status" render={record => formatStatus(record.status)}/>
-                    <TimeField source="time_spent" label="Time Spent (mm:ss)"/>
+                    <DataTable.Col source={"status"} label="Status" render={record => formatStatus(record.status)}/>
+                    <DataTable.Col source='time_spent' field={() => <TimeField source="time_spent" label="Time Spent (mm:ss)"/>} />
                     <WrapperField label="Progress">
                         <StudentProgressField/>
                     </WrapperField>
-                </Datagrid>
+                </DataTable>
             )
             }
             <Pagination />

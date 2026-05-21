@@ -21,6 +21,9 @@ import {DataTable, PER_PAGE, SensibleDefaultPagination} from "@mahaswami/vc-fron
 import {ListTitle} from "../../components/Title.tsx";
 import {CurriculumListView} from "../curriculum/curriculumListView.tsx";
 import {Box, Typography} from "@mui/material";
+import {SubscriptionsReferenceField} from "../subscriptions.tsx";
+import {SubscribablesReferenceField} from "../subscribables.tsx";
+import {CurriculumsReferenceField} from "../curriculums.tsx";
 
 const ListActions = () => {
     return(
@@ -138,44 +141,24 @@ export const SubscriptionsList = () => {
 
 export const SubscriptionInvoiceList = () => (
     <List>
-        <Datagrid>
-            <ReferenceField source="subscription_id" reference="subscriptions" label={"Curriculum"}>
-                <ReferenceField source="subscribable_id" reference="subscribables" link={false}>
-                    <ReferenceField source="curriculum_id" reference="curriculum" link={false}>
+        <DataTable>
+            <DataTable.Col label="Curriculum" field={() =>
+                <SubscriptionsReferenceField source="subscription_id">
+                    <SubscribablesReferenceField source="subscribable_id" link={false}>
+                        <CurriculumsReferenceField source="curriculum_id" link={false} />
+                    </SubscribablesReferenceField>
+                </SubscriptionsReferenceField>
+            } />
+            <DataTable.Col label={"Subscriber"} field={() =>
+                <SubscriptionsReferenceField source="subscription_id">
+                    <ReferenceField source="subscriber_tenant_id" reference="tenants" link={false} >
                         <TextField source="name"/>
                     </ReferenceField>
-                </ReferenceField>
-            </ReferenceField>
-            <ReferenceField source="subscription_id" reference="subscriptions" label={"Subscriber"}>
-                <ReferenceField source="subscriber_tenant_id" reference="tenants" link={false} >
-                        <TextField source="name"/>
-                </ReferenceField>
-            </ReferenceField>
-            <DateField source="invoice_date" label={"Invoice Date"}/>
-            <FunctionField label="Amount" render={record => formatAmount(record.amount)} />
-            <TextField source="status" sx={{textTransform: 'capitalize'}}/>
-        </Datagrid>
+                </SubscriptionsReferenceField>
+            } />
+            <DataTable.Col source="invoice_date" label={"Invoice Date"} field={DateField}/>
+            <DataTable.Col label="Amount" render={record => formatAmount(record.amount)} />
+            <DataTable.Col source="status" sx={{ textTransform: 'capitalize' }}/>
+        </DataTable>
     </List>
 );
-
-const ContentFilter = (props) => {
-    return (
-        <SearchInput source="q" alwaysOn/>
-    )
-}
-
-export const SubscriptionCreate = (props) => {
-    return(
-        <Create {...props} title={<ListTitle resourceName="Create Subscriptions"/>}>
-            <SimpleForm>
-                <List resource={"subscribables"} filters={<ContentFilter/>} exporter={false}>
-                </List>
-                <DateInput source="start_date" label="Start Date"/>
-                <DateInput source="end_date" label="End Date"/>
-                <ReferenceInput source="tenant_id" reference={"tenants"} perPage={1000}>
-                    <SelectInput optionText="name"/>
-                </ReferenceInput>
-            </SimpleForm>
-        </Create>
-    )
-}

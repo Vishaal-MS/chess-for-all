@@ -1,20 +1,19 @@
 import {ChessAIInput} from "../../fields/ai_lesson/ChessAIInput.tsx";
 import {
-    Button,
+    Button, Create, Edit,
     Loading,
     Show,
     SimpleForm,
-    SimpleShowLayout, TopToolbar, useUserMenu,
+    SimpleShowLayout, TopToolbar,
 } from "react-admin";
 import {remoteLog} from "@mahaswami/vc-frontend";
 import {currentTenantId} from "../../businessLogic.ts";
-import React, {useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import {ChessAIField} from "../../fields/ai_lesson/ChessAIField.tsx";
 import {ModeEditTwoTone} from "@mui/icons-material";
 import {RecordTitle} from "../../components/Title.tsx";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import {TenantConfigNames} from "../../helpers/constants.ts";
-import {SwanCreate, SwanEdit, SwanView} from "../swan_crud/SwanCrud.tsx";
 
 export const PublisherProfile = () => {
     const dataProvider = window.swanAppFunctions.dataProvider;
@@ -65,20 +64,18 @@ export const PublisherProfile = () => {
 
     if (record?.config_value && !editMode) {
         return (
-            <SwanView>
-                <Show actions={<PublishTopToolbar/>} resource="settings" id={record?.id}
-                      title={<RecordTitle resourceName={"My Profile Show"}/>}>
-                    <SimpleShowLayout>
-                        <ChessAIField source="config_value" record={record} label={""}/>
-                    </SimpleShowLayout>
-                </Show>
-            </SwanView>
+            <Show actions={<PublishTopToolbar/>} resource="settings" id={record?.id}
+                  title={<RecordTitle resourceName={"My Profile Show"}/>}>
+                <SimpleShowLayout>
+                    <ChessAIField source="config_value" record={record} label={""}/>
+                </SimpleShowLayout>
+            </Show>
         );
     }
 
     if (record?.config_value && editMode) {
         return (
-            <SwanEdit actions={<ShowActions/>}
+            <Edit actions={<ShowActions/>}
                 title={<RecordTitle resourceName={"My Profile Edit"}/>}
                 resource="settings"
                 id={record.id}
@@ -94,12 +91,12 @@ export const PublisherProfile = () => {
                 <SimpleForm>
                     <ChessAIInput source="config_value" label={false} fullWidth/>
                 </SimpleForm>
-            </SwanEdit>
+            </Edit>
         );
     }
 
     return (
-        <SwanCreate
+        <Create
             title={<RecordTitle resourceName="My Profile Create"/>}
             resource="settings"
             mutationOptions={{
@@ -111,6 +108,6 @@ export const PublisherProfile = () => {
             <SimpleForm defaultValues={{tenant_id: currentTenantId(), config_name: TenantConfigNames.PUBLISHER_PROFILE}}>
                 <ChessAIInput source="config_value" label={false} fullWidth/>
             </SimpleForm>
-        </SwanCreate>
+        </Create>
     );
 };

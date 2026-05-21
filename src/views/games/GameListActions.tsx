@@ -13,12 +13,12 @@ import {
     useRedirect,
     Loading,
     SelectInput, FormDataConsumer, BooleanInput,
-    required, ReferenceInput,
+    required,
     useChoicesContext,
     regex,
 } from "react-admin";
 import {
-    closeDialog, createDefaults,
+    closeDialog,
     dataProvider as swanDataProvider,
     getLocalStorage,
     openDialog,
@@ -60,6 +60,7 @@ import FullscreenIcon from "@mui/icons-material/Fullscreen";
 import { getTimeControlLabel, getTimeControlText } from "../time_controls/timeControlUtils.tsx";
 import { updateGameById } from "../../backend/games.ts";
 import {ClassesReferenceInput} from "../classes.tsx";
+import {TimeControlsReferenceInput} from "../time_controls.tsx";
 
 // TODO: Later need to consolidate the code.
 const GameListActions = () => {
@@ -343,10 +344,10 @@ const CreatePGNDialog = ({classId, uploadedPGN, gameEntryMode = GameEntryMethods
                                         <DateInput source={"event_date"} label={"Event Date"}/>
                                     </Grid>
                                     <Grid item md={(classId || bothExternal) ? 3 : 2.1} xs={12}>
-                                        <ReferenceInput source="time_control_id" reference="time_controls" perPage={1000}
+                                        <TimeControlsReferenceInput source="time_control_id"
                                             queryOptions={{ meta: { scopingEscapeHatch: true } }} sort={{ field: 'name', order: 'ASC' }}>
                                             <TimeControlDropdown data={formData} onChange={handleTimeControlChange} />
-                                        </ReferenceInput>
+                                        </TimeControlsReferenceInput>
                                     </Grid>
                                     <Grid item md={1.9} xs={12}>
                                         <SelectInput source={"result"} label={"Result"} name={"result"} 
@@ -623,10 +624,10 @@ const PlayGameDialog = ({ classId, props }: { classId: number, props: any }) => 
                         )
                     }}
                 </FormDataConsumer>
-                <ReferenceInput source="time_control_id" reference="time_controls" perPage={1000}
+                <TimeControlsReferenceInput source="time_control_id"
                     queryOptions={{ meta: { scopingEscapeHatch: true } }} sort={{ field: 'name', order: 'ASC' }}>
                     <AutocompleteInput validate={required()} optionText={getTimeControlLabel} inputText={getTimeControlText} />
-                </ReferenceInput>
+                </TimeControlsReferenceInput>
                 {isCoach() &&
                     <TextInput source={"starting_board"} label="Starting Position (FEN)" validate={emptyFENValidator}/>
                 }
@@ -683,10 +684,10 @@ const PlayBotGameDialog = ({ classId }: { classId: number }) => {
                 <Typography variant="h6" sx={{ mb: 2 }}>Play With Bot</Typography>
                 <SelectInput choices={botChoices} source="bot_difficulty" label="Bot Difficulty" validate={required()}/>
                 <SelectInput choices={colorChoices} source="chosen_color" label="Play As" validate={required()}/>
-                <ReferenceInput source="time_control_id" reference="time_controls" perPage={1000}
+                <TimeControlsReferenceInput source="time_control_id"
                     queryOptions={{ meta: { scopingEscapeHatch: true } }} sort={{ field: 'name', order: 'ASC' }}>
                     <AutocompleteInput validate={required()} optionText={getTimeControlLabel} inputText={getTimeControlText} /> 
-                </ReferenceInput>
+                </TimeControlsReferenceInput>
             </SimpleForm>
         </Create>
     )

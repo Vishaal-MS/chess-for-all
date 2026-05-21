@@ -1,0 +1,7 @@
+name,existing_name,block_type,is_game_engine_active,starting_board,board_title,board_subtitle,additional_visuals,animated_tutorial,help,solution,goals,game_engine_guidance,choice_title,choice_hint,choice_1_text,choice_1_feedback,is_choice_1_correct,choice_2_text,choice_2_feedback,is_choice_2_correct,choice_3_text,choice_3_feedback,is_choice_3_correct,pgn,block_description,division_id,ccai_pub_id
+Demo Block 1,,mcq,TRUE,"wKd5/bKb1,Ph5",A square or not a square,,,,,,"eval:blackwins/go-FEARFUL/Damn, that seems to be lost. The position could actually have been held.;
+ mate:w/stop/OK, that could no longer be avoided, Mate.;
+ piece:wKxP/success-STRONG/Bravo, you have managed it.;",,Can White catch the passed pawn,,"No, it has got through",White just manages to get into the square,FALSE,"Yes, White moves and stops the pawn.",Correct. Try it out.,TRUE,,,,,,,
+Demo Block 2,,mcq,TRUE,"wKd5/bKb1,Ph6",A square or not a square,,,,,,"eval:blackwins/go-FEARFUL/Damn, that seems to be lost. The position could actually have been held.;
+ mate:w/stop/OK, that could no longer be avoided, Mate.;
+ piece:wKxP/success-STRONG/Bravo, you have managed it.;",,Can White catch the passed pawn,,"No, it has got through",White just manages to get into the square,FALSE,"Yes, White moves and stops the pawn.",Correct. Try it out.,TRUE,,,,,,,

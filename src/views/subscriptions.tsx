@@ -1,10 +1,12 @@
-import { Resource, createDefaults,
-	editDefaults, formDefaults, listDefaults,
-	showDefaults, SimpleShowLayout, SimpleForm,
-	type ResourceActionDefs, type FieldSchema, CardGrid, recordRep, createReferenceField, createReferenceInput, ReferenceLiveFilter, DateLiveFilter, TextLiveFilter} from '@mahaswami/vc-frontend';
+import { Resource, editDefaults, formDefaults, listDefaults, showDefaults, SimpleShowLayout, SimpleForm,
+	type ResourceActionDefs, type FieldSchema, CardGrid, recordRep, createReferenceField,
+    createReferenceInput, ReferenceLiveFilter, DateLiveFilter, TextLiveFilter
+} from '@mahaswami/vc-frontend';
 import { Subscriptions } from '@mui/icons-material';
-import { Create, Edit, List, Menu, Show,
-    type ListProps, DateField, DateInput} from "react-admin";
+import {
+    Edit, List, Menu, Show,
+    type ListProps, DateField, DateInput
+} from "react-admin";
 import { SubscribablesReferenceField, SubscribablesReferenceInput } from './subscribables.js';
 import { DivisionsReferenceField, DivisionsReferenceInput } from './divisions.js';
 import {SubscriptionsList} from "./subscriptions/subscriptions.tsx";
@@ -20,7 +22,6 @@ const subscriptionsActionDefs: ResourceActionDefs = {};
 const filters = [
     <TextLiveFilter source="search" show />,
     <ReferenceLiveFilter source="subscribable_id" reference="subscribables" label="Subscribable" />,
-    <ReferenceLiveFilter source="subscriber_tenant_id" reference="subscriber_tenants" label="Subscriber Tenant" />,
     <DateLiveFilter source="start_date" label="Start" />,
     <DateLiveFilter source="end_date" label="End" />,
     <ReferenceLiveFilter source="division_id" reference="divisions" label="Division" />
@@ -55,14 +56,6 @@ const SubscriptionEdit = (props: any) => {
     )
 }
 
-const SubscriptionCreate = (props: any) => {
-    return (
-    	<Create {...createDefaults(props)}>
-            <SubscriptionForm />
-        </Create>
-    )
-}
-
 const SubscriptionShow = (props: any) => {
     return (
         <Show {...showDefaults(props)}>
@@ -78,7 +71,7 @@ const SubscriptionShow = (props: any) => {
 
 const subscriptionsFieldSchema: FieldSchema = {
     subscribable_id: { resource: 'subscribables' },
-    subscriber_tenant_id: { resource: 'subscriber_tenants' },
+    subscriber_tenant_id: {},
     start_date: {},
     end_date: {},
     division_id: { resource: 'divisions' }
@@ -97,7 +90,6 @@ export const SubscriptionsResource = (
         filters={filters}
         filtersPlacement="top"
         list={<SubscriptionsList/>}
-        create={<SubscriptionCreate/>}
         edit={<SubscriptionEdit/>}
         show={<SubscriptionShow/>}
         hasDialog

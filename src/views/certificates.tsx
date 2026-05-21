@@ -1,15 +1,15 @@
-import { Resource, createDefaults, tableDefaults,
-	editDefaults, formDefaults, listDefaults,
-	showDefaults, RowActions, DataTable, SimpleShowLayout, SimpleForm,
-	type ResourceActionDefs, type FieldSchema, CardGrid, recordRep, createReferenceField, createReferenceInput, ReferenceLiveFilter, DateLiveFilter, TextLiveFilter} from '@mahaswami/vc-frontend';
+import { Resource, createDefaults, formDefaults, showDefaults, SimpleShowLayout, SimpleForm,
+	type ResourceActionDefs, type FieldSchema, recordRep, createReferenceField,
+    createReferenceInput, ReferenceLiveFilter, DateLiveFilter, TextLiveFilter
+} from '@mahaswami/vc-frontend';
 import { School } from '@mui/icons-material';
-import { Create, Edit, List, Menu, Show,
-    type ListProps, TextField, TextInput, DateField, DateInput} from "react-admin";
+import { Create, Menu, Show, TextField, TextInput, DateField, DateInput} from "react-admin";
 import { CertificateTemplatesReferenceField, CertificateTemplatesReferenceInput } from './certificate_templates.js';
 import { CoachesReferenceField, CoachesReferenceInput } from './coaches.js';
 import { StudentsReferenceField, StudentsReferenceInput } from './students.js';
 import { ClientsReferenceField, ClientsReferenceInput } from './clients.js';
 import {CurriculumsReferenceField, CurriculumsReferenceInput} from "./curriculums.tsx";
+import {CertificateEdit, CertificateList, CertificateShow} from './certificates/certificates.tsx';
 
 export const RESOURCE = "certificates"
 export const ICON = School
@@ -31,38 +31,6 @@ const filters = [
     <DateLiveFilter source="issued_date" label="Issued" />
 ]
 
-export const CertificatesList = (props: ListProps) => {
-    return (
-        <List {...listDefaults(props)}>
-            <DataTable {...tableDefaults(RESOURCE)} hiddenColumns={['status', 'ordered_date', 'received_date', 'issued_date', 'attachment_file_id', 'image_file_id']} >
-                <DataTable.Col source="certificate_template_id" field={CertificateTemplatesReferenceField}/>
-                <DataTable.Col source="coach_id" field={CoachesReferenceField}/>
-                <DataTable.Col source="student_id" field={StudentsReferenceField}/>
-                <DataTable.Col source="curriculum_id" field={CurriculumsReferenceField}/>
-                <DataTable.Col source="client_id" field={ClientsReferenceField}/>
-                <DataTable.Col source="status" />
-                <DataTable.Col source="ordered_date" field={DateField}/>
-                <DataTable.Col source="received_date" field={DateField}/>
-                <DataTable.Col source="issued_date" field={DateField}/>
-                <DataTable.Col source="attachment_file_id" />
-                <DataTable.Col source="image_file_id" />
-                <RowActions/>
-            </DataTable>
-        </List>
-    )
-}
-
-export const CertificatesCardList = (props: ListProps) => {
-    return (
-        <List {...listDefaults(props)} component={'div'}>
-            <CardGrid title={<CertificateTemplatesReferenceField source="certificate_template_id" variant='h6' link={false} />}>
-                <CoachesReferenceField source="coach_id" />
-                <StudentsReferenceField source="student_id" />
-            </CardGrid>
-        </List>
-    )
-}
-
 const CertificateForm = (props: any) => {
     return (
         <SimpleForm {...formDefaults(props)} display="grid"  gridTemplateColumns={{ xs: '1fr', md: '1fr 1fr' }}  gap="1rem" >
@@ -81,39 +49,11 @@ const CertificateForm = (props: any) => {
     )
 }
 
-const CertificateEdit = (props: any) => {
-    return (
-        <Edit {...editDefaults(props)}>
-            <CertificateForm />
-        </Edit>
-    )
-}
-
 const CertificateCreate = (props: any) => {
     return (
     	<Create {...createDefaults(props)}>
             <CertificateForm />
         </Create>
-    )
-}
-
-const CertificateShow = (props: any) => {
-    return (
-        <Show {...showDefaults(props)}>
-            <SimpleShowLayout display="grid"  gridTemplateColumns={{ xs: '1fr', md: '1fr 1fr' }}  gap="1rem" >
-                <CertificateTemplatesReferenceField source="certificate_template_id" />
-                <CoachesReferenceField source="coach_id" />
-                <StudentsReferenceField source="student_id" />
-                <CurriculumsReferenceField source="curriculum_id" />
-                <ClientsReferenceField source="client_id" />
-                <TextField source="status" />
-                <DateField source="ordered_date" />
-                <DateField source="received_date" />
-                <DateField source="issued_date" />
-                <TextField source="attachment_file_id" />
-                <TextField source="image_file_id" />
-            </SimpleShowLayout>
-        </Show>
     )
 }
 
@@ -145,14 +85,13 @@ export const CertificatesResource = (
         searchableFields={ certificatesSearchableFields}
         filters={filters}
         filtersPlacement="top"
-        list={<CertificatesList/>}
+        list={<CertificateList/>}
         create={<CertificateCreate/>}
         edit={<CertificateEdit/>}
         show={<CertificateShow/>}
         hasDialog
         hasLiveUpdate
         hasFilterChooser
-        cardList={<CertificatesCardList/>}
         hasColumnChooser
         sort={{ field: 'status', order: 'ASC' }}
     />

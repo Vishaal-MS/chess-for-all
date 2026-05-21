@@ -1,0 +1,4 @@
+name,existing_name,content,language
+Demo lesson 1,,"<h3>Demo lesson 1</h3><p><lesson-block lesson_block_id=""Demo Block 1""></lesson-block> </p><p><h3>Mate in the corner with two bishops.</h3><lesson-block lesson_block_id=""Demo Block 2""></lesson-block></p>",EN
+Demo lesson 2,,"<h3>Demo lesson 2</h3><p><lesson-block lesson_block_id=""Demo Block 2""></lesson-block></p><p> <h3>Mate in the corner with two bishops.</h3><lesson-block lesson_block_id=""Demo Block 1""></lesson-block></p>",EN
+,,,

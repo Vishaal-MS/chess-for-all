@@ -1,15 +1,7 @@
 import {useEffect, useState} from "react";
 import {
-    Button,
-    DateField,
-    DateInput, DeleteButton, Edit,
-    FormDataConsumer,
-    ReferenceManyField, required,
-    TabbedForm,
-    TextField,
-    TextInput, TopToolbar,
-    useGetRecordId, useRecordContext,
-    useRefresh
+    Button, DateField, DateInput, DeleteButton, Edit, FormDataConsumer, ReferenceManyField, required,
+    TabbedForm, TextField, TextInput, TopToolbar, useGetRecordId, useRecordContext, useRefresh
 } from "react-admin";
 import {
     isAcademy, isRegularSchoolFlavored, isExecutiveCoachingFlavored
@@ -17,17 +9,13 @@ import {
 import { Box } from "@mui/material";
 import {useNavigate} from "react-router-dom";
 import {
-    DataTable, editDefaults,
-    openDialog,
-    PER_PAGE,
-    SensibleDefaultPagination, tableDefaults
+    DataTable, editDefaults, openDialog, PER_PAGE, SensibleDefaultPagination, tableDefaults
 } from "@mahaswami/vc-frontend";
 import {ScheduleCreate, ScheduleEdit} from "./schedules";
 import {AddLessons} from "./addLessons";
 import {ClassLessonsSorter} from "../common/draggableLessons";
 import {EnrollStudentsButton} from "./addStudents";
 import {Empty} from "../common/empty";
-import {RecordTitle} from "../../components/Title.tsx";
 import KeyboardReturnIcon from '@mui/icons-material/KeyboardReturn';
 import {ExtendedSchoolClassFields} from "./ExtendedSchoolClassFields.tsx";
 import {classNameValidation, validateEndDate} from "../../backend/classes.ts";
@@ -143,15 +131,14 @@ const ClassEnrolledStudentTab = (props) => {
         <Box sx={tabFormStyle}>
             <ReferenceManyField pagination={<SensibleDefaultPagination/>} perPage={PER_PAGE} reference="enrollments"
                                 target={"class_id"} queryOptions={{meta: {prefetch: ['students']}}}>
-                <DataTable {...tableDefaults(props)} empty={<Empty emptyText={`No ${isExecutiveCoachingFlavor ? 'executives' : 'students'} yet`}/>} bulkActionButtons={false}
-                          rowClick={false} sx={{maxHeight: '44vh', width: '100%', overflow: 'auto'}}>
-                    <DataTable.Col label={isExecutiveCoachingFlavor ? 'Executive' : 'Student'}  source='student.user_id'
-                                   field={(props) =>
-                                        <UsersReferenceField { ...props } link={false} sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                                            <AvatarField/>
-                                            <TextField source="fullName"/>
-                                        </UsersReferenceField>
-                                   } />
+                <DataTable {...tableDefaults(props)} empty={<Empty emptyText={`No ${isExecutiveCoachingFlavor ? 'executives' : 'students'} yet`}/>}
+                           bulkActionButtons={false} rowClick={false} sx={{maxHeight: '44vh', width: '100%', overflow: 'auto'}}>
+                    <DataTable.Col label={isExecutiveCoachingFlavor ? 'Executive' : 'Student'}  source='student.user_id' field={(props) =>
+                        <UsersReferenceField { ...props } link={false} sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                            <AvatarField/>
+                            <TextField source="fullName"/>
+                        </UsersReferenceField>
+                    } />
                     {!(isSchoolClass || isExecutiveCoachingFlavor) &&
                         <DataTable.Col label="Type" source="student.client_id" field={(props) =>
                             <ClientsReferenceField { ...props } link={false}>
@@ -206,8 +193,8 @@ const ClassScheduleTab = (props) => {
     return (
         <>
             {!isSchoolClass &&
-                    <TabbedForm.Tab label={"Schedules"} {...props}>
-                        <Box sx={tabFormStyle}>
+                <TabbedForm.Tab label={"Schedules"} {...props}>
+                    <Box sx={tabFormStyle}>
                         <ReferenceManyField pagination={<SensibleDefaultPagination/>} perPage={PER_PAGE} reference={"class_schedules"}
                                             target="class_id" queryOptions={{meta: {scopingEscapeHatch: true}}}>
                             <DataTable {...tableDefaults(props)} bulkActionButtons={false} empty={<Empty emptyText={'No schedules added yet'}/>}
@@ -225,9 +212,8 @@ const ClassScheduleTab = (props) => {
                             </DataTable>
                         </ReferenceManyField>
                         <Button label="Add" onClick={addScheduleAction}  variant="contained" sx={{marginY: "0.5rem"}}/>
-                        </Box>
-                    </TabbedForm.Tab>
-
+                    </Box>
+                </TabbedForm.Tab>
             }
         </>
     )

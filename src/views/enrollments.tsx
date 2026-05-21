@@ -1,17 +1,15 @@
-import { Resource, createDefaults, tableDefaults,
-	editDefaults, formDefaults, listDefaults,
-	RowActions, DataTable, SimpleForm,
-	type ResourceActionDefs, type FieldSchema, CardGrid, recordRep, createReferenceField, createReferenceInput, BooleanLiveFilter, ReferenceLiveFilter, DateLiveFilter, TextLiveFilter} from '@mahaswami/vc-frontend';
-import { Group } from '@mui/icons-material';
-import { Create, Edit, List, Menu,
-    type ListProps, TextInput, DateField, DateInput, BooleanField, BooleanInput} from "react-admin";
-import { ClassesReferenceField, ClassesReferenceInput } from './classes.js';
-import { StudentsReferenceField, StudentsReferenceInput } from './students.js';
+import { Resource, listDefaults, type ResourceActionDefs, type FieldSchema, CardGrid, recordRep, createReferenceField,
+    createReferenceInput, BooleanLiveFilter, ReferenceLiveFilter, DateLiveFilter, TextLiveFilter
+} from '@mahaswami/vc-frontend';
+import { CastForEducation } from '@mui/icons-material';
+import {List, Menu, type ListProps, DateField } from "react-admin";
+import { ClassesReferenceField } from './classes.js';
+import { StudentsReferenceField } from './students.js';
 import {EnrollmentShow} from "./class/studentDashBoard.tsx";
 import {EnrollmentsList} from "./class/enrollments.tsx";
 
 export const RESOURCE = "enrollments"
-export const ICON = Group
+export const ICON = CastForEducation
 export const PREFETCH: string[] = ["classes", "students"]
 
 export const EnrollmentsReferenceField = createReferenceField(RESOURCE, PREFETCH);
@@ -35,36 +33,6 @@ export const EnrollmentsCardList = (props: ListProps) => {
                 <DateField source="enrollment_date" />
             </CardGrid>
         </List>
-    )
-}
-
-const EnrollmentForm = (props: any) => {
-    return (
-        <SimpleForm {...formDefaults(props)} display="grid"  gridTemplateColumns={{ xs: '1fr', md: '1fr 1fr' }}  gap="1rem" >
-            <ClassesReferenceInput source="class_id" />
-            <StudentsReferenceInput source="student_id" />
-            <DateInput source="enrollment_date" />
-            <DateInput source="completion_date" />
-            <TextInput source="grade" />
-            <TextInput source="status" />
-            <BooleanInput source="is_certificate_due" />
-        </SimpleForm>
-    )
-}
-
-const EnrollmentEdit = (props: any) => {
-    return (
-        <Edit {...editDefaults(props)}>
-            <EnrollmentForm />
-        </Edit>
-    )
-}
-
-const EnrollmentCreate = (props: any) => {
-    return (
-    	<Create {...createDefaults(props)}>
-            <EnrollmentForm />
-        </Create>
     )
 }
 
@@ -94,8 +62,6 @@ export const EnrollmentsResource = (
         filters={filters}
         filtersPlacement="top"
         list={<EnrollmentsList/>}
-        create={<EnrollmentCreate/>}
-        edit={<EnrollmentEdit/>}
         show={<EnrollmentShow/>}
         hasLiveUpdate
         hasFilterChooser
@@ -105,5 +71,5 @@ export const EnrollmentsResource = (
     />
 )
 export const EnrollmentsMenu = () => (
-    <Menu.Item to={`/${RESOURCE}`} primaryText="Enrollments" leftIcon={<ICON />} />
+    <Menu.Item to={`/${RESOURCE}`} primaryText="My Classes" leftIcon={<ICON />} />
 )

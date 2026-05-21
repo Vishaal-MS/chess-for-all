@@ -1,15 +1,8 @@
 import {BulkAddLessonsButton} from "../curriculum/bulkAddLessons";
 import React, {useEffect, useState} from "react";
-import {
-    Datagrid,
-    FunctionField,
-    List,
-    TextField,
-    ReferenceArrayField, SingleFieldList,
-    Loading, ReferenceField, useListContext
-} from "react-admin";
+import { List, ReferenceArrayField, SingleFieldList, Loading, ReferenceField, useListContext} from "react-admin";
 import { getLanguageDescription } from "../../utils";
-import {remoteLog, SensibleDefaultPagination, PER_PAGE} from "@mahaswami/vc-frontend";
+import {remoteLog, SensibleDefaultPagination, PER_PAGE, DataTable} from "@mahaswami/vc-frontend";
 import { getExistLessonIds, getOwnAndSubscribedLessonIds, getSubscribedCurriculumIds } from "../../backend/classes";
 import { LessonFilterForm } from "./AddLessonFilterForm";
 import { getOwnAndSubscribedCurriculumIds } from "../../backend/curriculum";
@@ -23,7 +16,6 @@ export const AddLessons = ({classRecord, curriculumId, refreshFn, showLessonList
     const [addedLessonIds, setAddedLessonIds] = React.useState([]);
     const [mergedLessonIds, setMergedLessonIds] = React.useState([]);
     const isSchoolClass = classRecord?.is_school_class;
-    const gradeId = classRecord?.standard_grade_id || null;
     const classId = classRecord?.id || null;
     const [filter, setFilter] = React.useState({});
     const [curriculumCount, setCurriculumCount] = useState(0);
@@ -87,9 +79,8 @@ export const AddLessons = ({classRecord, curriculumId, refreshFn, showLessonList
         }
         const sortedData = [...data].filter(item => idOrder.includes(item.id)).sort((a, b) => idOrder.indexOf(a.id) - idOrder.indexOf(b.id));
         return (
-            <Datagrid
+            <DataTable
                 data={sortedData}
-                sx={{ "& .RaDatagrid-tableWrapper": { maxHeight: "42vh", overflow: "auto" } }}
                 pagination={!showLessonList}
                 bulkActionButtons={
                     <BulkAddLessonsButton
@@ -106,15 +97,15 @@ export const AddLessons = ({classRecord, curriculumId, refreshFn, showLessonList
                 }
                 rowClick={false}
             >
-                <TextField source="name" label="Lessons" />
-                <ReferenceArrayField source="tag_ids" reference="tags" label="Tags" perPage={1000}>
-                    <SingleFieldList linkType={false} />
-                </ReferenceArrayField>
-                <ReferenceField source="tenant_id" reference="tenants" link={false} label="Publisher">
-                    <TextField source="name" />
-                </ReferenceField>
-                <FunctionField label="Language" render={(lesson) => getLanguageDescription(lesson.language)} />
-            </Datagrid>
+                <DataTable.Col source="name" label="Lessons" />
+                <DataTable.Col label="Tags" source='tag_ids' field={() =>
+                    <ReferenceArrayField source="tag_ids" reference="tags" perPage={1000}>
+                        <SingleFieldList linkType={false} />
+                    </ReferenceArrayField>
+                } />
+                <DataTable.Col label="Publisher" field={() => <ReferenceField source="tenant_id" link={false} reference='tenants'/>} />
+                <DataTable.Col label="Language" render={(lesson) => getLanguageDescription(lesson.language)} />
+            </DataTable>
         );
     };
 

@@ -2,7 +2,6 @@ import {Box, Button, Card, Grid, Rating, Typography} from "@mui/material";
 import {
     DateField,
     FunctionField, Loading,
-    ReferenceField,
     ReferenceManyField, ReferenceOneField,
     TabbedShowLayout,
     WrapperField,
@@ -23,6 +22,7 @@ import {currentTenantId, getUserId} from "../../businessLogic.ts";
 import {Empty} from "../common/empty.tsx";
 import {ReviewDetail} from "../reviews/Reviews.tsx";
 import {UsersReferenceField} from "../users.tsx";
+import {CurriculumsReferenceField} from "../curriculums.tsx";
 
 const cardStyles = (theme) => ({
     background: `linear-gradient(45deg, 
@@ -92,7 +92,6 @@ export const CurriculumShowView = ({currentView}: CurriculumShowViewProps) => {
                                 <RichTextWithInlineReadMore description={description} currentView={currentView} maxLength={500} isReadMoreLight/>
                             </Box>
                         </Box>
-
                         <Box>
                             <CurriculumImageField source={imageSrc} width='31.25rem' height='9.063rem'/>
                         </Box>
@@ -127,7 +126,7 @@ const SubscribablesTabs = ({recordData}) => {
             <Grid item xs={12}>
                 <TabbedShowLayout>
                     <TabbedShowLayout.Tab label={"Lessons"}>
-                        <ReferenceField source="curriculum_id" reference="curriculum" link={false} label={false}>
+                        <CurriculumsReferenceField source="curriculum_id" link={false} label={false}>
                             <ReferenceManyField reference="curriculum_lessons" target="curriculum_id"
                                                 label="Lessons" pagination={<SensibleDefaultPagination/>}
                                                 perPage={100} sort={{field: 'position_number', order: 'ASC'}}
@@ -140,7 +139,7 @@ const SubscribablesTabs = ({recordData}) => {
                                     </DataTable.Col>
                                 </DataTable>
                             </ReferenceManyField>
-                        </ReferenceField>
+                        </CurriculumsReferenceField>
                     </TabbedShowLayout.Tab>
                     <TabbedShowLayout.Tab label={"Reviews"}>
                         {loading ? (
@@ -190,7 +189,7 @@ const SubscribablesInfoField = ({recordData}) => {
             display="flex"
             fontSize='0.75rem'
             flexWrap="wrap"
-            columnGap='2rem'
+            cloumnGap='2rem'
             rowGap='0.5rem'
             justifyContent='space-between'
         >

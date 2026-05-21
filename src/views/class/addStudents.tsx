@@ -1,24 +1,24 @@
 import * as React from 'react';
-import {Form, List, Loading, useNotify} from 'react-admin';
+import {Form, Loading, useNotify} from 'react-admin';
 import { Typography, Stack, Box } from '@mui/material';
-import { Datagrid, ReferenceField, TextField, TextInput, Button, ReferenceInput,
+import { TextField, TextInput, Button,
     AutocompleteInput, ListBase, Pagination 
 } from 'react-admin';
-import { openDialog,closeDialog, remoteLog } from '@mahaswami/vc-frontend';
+import {openDialog, closeDialog, remoteLog, DataTable} from '@mahaswami/vc-frontend';
 import { useListContext, useUnselectAll } from 'react-admin';
-import {useEffect, useState} from "react";
-import {Empty} from "../common/empty";
+import {Fragment, useEffect, useState} from "react";
 import {
     currentTenantId,
     isExecutiveCoachingFlavored,
 } from "../../businessLogic.ts";
 import {EnrolmentStatus} from "../../helpers/constants.ts";
-import { useFormContext } from 'react-hook-form';
-import FilterAltIcon from '@mui/icons-material/FilterAlt';
-import CloseIcon from '@mui/icons-material/Close';
 import { FilterButtons } from './AddLessonFilterForm.tsx';
 import { getUnEnrollmentStudents } from '../../backend/students.ts';
 import { AvatarField } from '../../fields/AvatarField.tsx';
+import {UsersReferenceField, UsersReferenceInput} from "../users.tsx";
+import {ClientsReferenceField, ClientsReferenceInput} from "../clients.tsx";
+import {StandardSectionsReferenceInput} from "../standard_sections.tsx";
+import {StandardGradesReferenceField} from "../standard_grades.tsx";
 
 const BulkEnrollButton =  ({dataProvider,classId,refreshFn, showStudentList, postEnroll}) => {
     const { selectedIds } = useListContext();
@@ -58,8 +58,7 @@ const BulkEnrollButton =  ({dataProvider,classId,refreshFn, showStudentList, pos
     }
 
     return (
-        <Button label="Enroll" loading={loading} variant="contained" onClick={handleClick}>
-        </Button>
+        <Button label="Enroll" loading={loading} variant="contained" onClick={handleClick} />
     );
 }
 
@@ -108,23 +107,23 @@ const StudentDialogFilterForm = ({classRecord, isDialog, userIds, clientIds }) =
         <Form onSubmit={(values: any) => setFilters(values)}>
             <Stack direction="row" sx={{ justifyContent: "space-between", gap: 1.5, width: isDialog ? "100%" : "70%", 
                 height: "4rem", alignItems: "center", mb: marginBottom, mt: 0.4 }}>
-                <ReferenceInput perPage={1000} source="user_id" reference="users" filter={{id: userIds}} alwaysOn>
+                <UsersReferenceInput perPage={1000} source="user_id" filter={{id: userIds}} alwaysOn>
                     <AutocompleteInput sx={{ flexGrow: 1 }} label={isExecutiveCoachingFlavor ? "Executive" : "Student"}/>
-                </ReferenceInput>
+                </UsersReferenceInput>
                 {!isExecutiveCoachingFlavor && (
                     !isSchoolClass ? (
-                        <>
-                            <ReferenceInput source="client_id" reference="clients" filter={{id: clientIds}}
-                                            perPage={1000} alwaysOn>
+                        <Fragment>
+                            <ClientsReferenceInput source="client_id" filter={{id: clientIds}} alwaysOn>
                                 <AutocompleteInput sx={{flexGrow: 1}} label="Client"/>
-                            </ReferenceInput>
+                            </ClientsReferenceInput>
                             <TextInput source="grade" label="Grade" alwaysOn/>
-                        </>) : (
-                        <ReferenceInput source={'standard_grade_id'} reference={'standard_grades'} filter={{standard_id: standardId}} queryOptions={{meta: {scopingEscapeHatch: true}}}>
+                        </Fragment>
+                    ) : (
+                        <StandardSectionsReferenceInput source={'standard_grade_id'} filter={{standard_id: standardId}}
+                                                        queryOptions={{ meta: {scopingEscapeHatch: true }}}>
                             <AutocompleteInput optionText={'name'} label={'Grade'} defaultValue={gradeId}/>
-                        </ReferenceInput>
+                        </StandardSectionsReferenceInput>
                     )
-
                 )}
                 <Box sx={{mb: 2}}>
                     <FilterButtons onClick={() => setFilters(defaultFilter)}/>
@@ -183,40 +182,34 @@ export const EnrollStudentsDialog = ({classRecord, dataProvider, refreshFn, ...p
     }
 
     return (
-            <>
-                {!showStudentList && <Typography variant="h6" sx={{padding:1, mb:1}}>{`Select ${isExecutiveCoachingFlavor ? 'Executives' : 'Students' }`}</Typography>}
-                <ListBase resource="students" storeKey={false} disableSyncWithLocation filterDefaultValues={gradeFilter}
+        <Fragment>
+            {!showStudentList && <Typography variant="h6" sx={{padding:1, mb:1}}>{`Select ${isExecutiveCoachingFlavor ? 'Executives' : 'Students' }`}</Typography>}
+            <ListBase resource="students" storeKey={false} disableSyncWithLocation filterDefaultValues={gradeFilter}
                     filter={filter} queryOptions={{ gcTime: 0 }}>
                     <StudentDialogFilterForm classRecord={classRecord} isDialog={!showStudentList} userIds={state.userIds} clientIds={state.clientIds}/>
-                <Datagrid sx={{
-                    "& .RaDatagrid-tableWrapper": {
-                        maxHeight: "39vh",
-                        overflow: "auto"
-                    }
-                 }}  bulkActionButtons={<BulkEnrollButton dataProvider={dataProvider} classId={classId} refreshFn={refreshFn} {...props}/>} rowClick={false} >
-                    <ReferenceField source="user_id" reference="users" link={false} label={isExecutiveCoachingFlavor ? "Executive" : "Student"} sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                        <AvatarField/>
-                        <TextField source='fullName'/>
-                    </ReferenceField>
+                <DataTable bulkActionButtons={<BulkEnrollButton dataProvider={dataProvider} classId={classId} refreshFn={refreshFn} {...props}/>} rowClick={false} >
+                    <DataTable.Col label={isExecutiveCoachingFlavor ? "Executive" : "Student"} field={() =>
+                        <UsersReferenceField source="user_id" link={false} sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                            <AvatarField/>
+                            <TextField source='fullName'/>
+                        </UsersReferenceField>}
+                    />
+                    {!(isSchoolClass || isExecutiveCoachingFlavor) && <DataTable.Col label="Type" field={() =>
+                        <ClientsReferenceField source="client_id" link={false}>
+                            <TextField  source="client_type.name" />
+                        </ClientsReferenceField>}
+                    /> }
                     {!(isSchoolClass || isExecutiveCoachingFlavor) &&
-                        <ReferenceField label="Type" source="client_id" reference="clients" link={false}
-                                                                  queryOptions={{meta: {prefetch: ['client_types']}}}>
-                        <TextField  source="client_type.name" />
-                    </ReferenceField>}
-                    {!(isSchoolClass || isExecutiveCoachingFlavor) &&
-                        <ReferenceField source="client_id" reference="clients" link={false}/>}
-                    <TextField source="emergency_contact" label="Emergency Contact" />
+                        <DataTable.Col label="Client" field={() => <ClientsReferenceField source="client_id" link={false}/>} /> }
+                    <DataTable.Col source="emergency_contact" label="Emergency Contact" />
                     {!isExecutiveCoachingFlavor && (
                         !isSchoolClass ?
-                            <TextField source="grade" label="Grade"/> :
-                            <ReferenceField source="standard_grade_id" reference={"standard_grades"} label="Grade" link={false}>
-                                <TextField source={'name'} label={"Grade"}/>
-                            </ReferenceField>
+                            <DataTable.Col source="grade" label="Grade"/> :
+                            <DataTable.Col source="standard_grade_id" label="Grade" field={StandardGradesReferenceField} />
                     )}
-                </Datagrid>
+                </DataTable>
                 <Pagination/>
             </ListBase>
-            </>
+        </Fragment>
     )
-
 }

@@ -6,6 +6,7 @@ import { Receipt } from '@mui/icons-material';
 import { Create, Edit, List, Menu, Show,
     type ListProps, TextField, TextInput, DateField, DateInput} from "react-admin";
 import { SubscriptionsReferenceField, SubscriptionsReferenceInput } from './subscriptions.js';
+import {SubscriptionInvoiceList} from "./subscriptions/subscriptions.tsx";
 
 export const RESOURCE = "subscription_invoices"
 export const ICON = Receipt
@@ -108,10 +109,7 @@ export const SubscriptionInvoicesResource = (
         searchableFields={ subscriptionInvoicesSearchableFields}
         filters={filters}
         filtersPlacement="top"
-        list={<SubscriptionInvoicesList/>}
-        create={<SubscriptionInvoiceCreate/>}
-        edit={<SubscriptionInvoiceEdit/>}
-        show={<SubscriptionInvoiceShow/>}
+        list={<SubscriptionInvoiceList/>}
         hasDialog
         hasLiveUpdate
         hasFilterChooser

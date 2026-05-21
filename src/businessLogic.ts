@@ -56,6 +56,7 @@ import {TenantConfigNames} from "./helpers/constants.ts";
 import { SnippetsLibrariesLogic } from './logic/snippets_libraries.ts';
 import {getEmailsBasedOnEnv} from "./configuration.tsx";
 import {TenantsLogic} from "./logic/tenants.ts";
+import {addAliasToEmail} from "./utils.ts";
 
 export const businessLogic = () => {
     return [
@@ -295,7 +296,9 @@ export const getTeachingModes = async (dataProvider: any) => {
     }
 }
 
-
+export const isShowLargeAcademyMenus = () => {
+    return isLargeAcademy() && getDivisionId() !== undefined || !isLargeAcademy() ;
+}
 
 export const isTenantAllowedCoaching = () => {
     const tenantAllowedCoaching = getLocalStorage('tenant_allowed_coaching');
@@ -303,6 +306,30 @@ export const isTenantAllowedCoaching = () => {
         return tenantAllowedCoaching.toLowerCase() === "true";
     }
     return false;
+}
+
+export const applyHashToTenant = async (hash: string, tenantId: number, tenantName: string) => {
+    try {
+        const dataProvider = window.swanAppFunctions.dataProvider;
+        const time = new Date().toLocaleString("en-IN",{timeStyle: 'short'});
+        await dataProvider.update("tenants", {
+            id: tenantId,
+            data: { name: `${tenantName} ${time}` }
+        })
+        const { data: users } = await dataProvider.getList("users", {
+            filter: { tenant_id: tenantId }
+        });
+        users.forEach(async (user) => {
+            const emailWithAlias = addAliasToEmail(user.email, hash);
+            await dataProvider.update("users", {
+                id: user.id,
+                data: { email: emailWithAlias }
+            })
+        })
+    } catch (error) {
+        console.error("Failed to apply Hash: ", error);
+        remoteLog("Failed to apply Hash: ", error);
+    }
 }
 
 export const sendEmailToStudentAndParent = async (user: any, withCredentials?:boolean, className?: string) => {

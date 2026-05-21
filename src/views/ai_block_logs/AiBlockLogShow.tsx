@@ -1,11 +1,13 @@
 import { openDialog } from "@mahaswami/vc-frontend";
-import { BooleanField, Button, DateField, FunctionField, Labeled, 
-   ReferenceField, Show, SimpleShowLayout, TextField, useRecordContext 
+import { BooleanField, Button, DateField, FunctionField, Labeled,
+    ReferenceField,
+    Show, SimpleShowLayout, TextField, useRecordContext
 } from "react-admin";
 import { Grid, Box, Input, useMediaQuery } from "@mui/material";
 import NoteIcon from '@mui/icons-material/StickyNote2';
 import { LessonBlockField } from "../../fields/ai_lesson/lesson_block_field";
 import { AiBlockLogNoteDialog } from "./AiBlockLogDialogs";
+import {UsersReferenceField} from "../users.tsx";
 
 export const AiBlockLogShow = () => {
 
@@ -89,9 +91,7 @@ export const AiBlockLogShow = () => {
                </Grid>
                <Grid item md={4}>
                   <Labeled label="User">
-                     <ReferenceField reference="users" source="user_id" link={false}>
-                        <TextField source="fullName"/>
-                     </ReferenceField>
+                     <UsersReferenceField source="user_id" link={false} />
                   </Labeled>
                </Grid>
                <Grid item md={1}><NoteButton/></Grid>

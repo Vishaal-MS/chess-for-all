@@ -9,6 +9,7 @@ import { TrophyTypesReferenceField, TrophyTypesReferenceInput } from './trophy_t
 import { CoachesReferenceField, CoachesReferenceInput } from './coaches.js';
 import { StudentsReferenceField, StudentsReferenceInput } from './students.js';
 import { ClientsReferenceField, ClientsReferenceInput } from './clients.js';
+import {TrophiesEdit, TrophyList, TrophyShow} from "./certificates/trophies.tsx";
 
 export const RESOURCE = "trophies"
 export const ICON = Star
@@ -29,37 +30,6 @@ const filters = [
     <DateLiveFilter source="issued_date" label="Issued" />
 ]
 
-export const TrophiesList = (props: ListProps) => {
-    return (
-        <List {...listDefaults(props)}>
-            <DataTable {...tableDefaults(RESOURCE)} hiddenColumns={['ordered_date', 'received_date', 'issued_date', 'image_file_id', 'details']} >
-                <DataTable.Col source="trophy_type_id" field={TrophyTypesReferenceField}/>
-                <DataTable.Col source="coach_id" field={CoachesReferenceField}/>
-                <DataTable.Col source="student_id" field={StudentsReferenceField}/>
-                <DataTable.Col source="client_id" field={ClientsReferenceField}/>
-                <DataTable.Col source="status" />
-                <DataTable.Col source="ordered_date" field={DateField}/>
-                <DataTable.Col source="received_date" field={DateField}/>
-                <DataTable.Col source="issued_date" field={DateField}/>
-                <DataTable.Col source="image_file_id" />
-                <DataTable.Col source="details" />
-                <RowActions/>
-            </DataTable>
-        </List>
-    )
-}
-
-export const TrophiesCardList = (props: ListProps) => {
-    return (
-        <List {...listDefaults(props)} component={'div'}>
-            <CardGrid title={<TrophyTypesReferenceField source="trophy_type_id" variant='h6' link={false} />}>
-                <CoachesReferenceField source="coach_id" />
-                <StudentsReferenceField source="student_id" />
-            </CardGrid>
-        </List>
-    )
-}
-
 const TrophyForm = (props: any) => {
     return (
         <SimpleForm {...formDefaults(props)} display="grid"  gridTemplateColumns={{ xs: '1fr', md: '1fr 1fr' }}  gap="1rem" >
@@ -77,38 +47,11 @@ const TrophyForm = (props: any) => {
     )
 }
 
-const TrophyEdit = (props: any) => {
-    return (
-        <Edit {...editDefaults(props)}>
-            <TrophyForm />
-        </Edit>
-    )
-}
-
 const TrophyCreate = (props: any) => {
     return (
-    	<Create {...createDefaults(props)}>
+        <Create {...createDefaults(props)}>
             <TrophyForm />
         </Create>
-    )
-}
-
-const TrophyShow = (props: any) => {
-    return (
-        <Show {...showDefaults(props)}>
-            <SimpleShowLayout display="grid"  gridTemplateColumns={{ xs: '1fr', md: '1fr 1fr' }}  gap="1rem" >
-                <TrophyTypesReferenceField source="trophy_type_id" />
-                <CoachesReferenceField source="coach_id" />
-                <StudentsReferenceField source="student_id" />
-                <ClientsReferenceField source="client_id" />
-                <TextField source="status" />
-                <DateField source="ordered_date" />
-                <DateField source="received_date" />
-                <DateField source="issued_date" />
-                <TextField source="image_file_id" />
-                <TextField source="details" />
-            </SimpleShowLayout>
-        </Show>
     )
 }
 
@@ -140,14 +83,13 @@ export const TrophiesResource = (
         searchableFields={ trophiesSearchableFields}
         filters={filters}
         filtersPlacement="top"
-        list={<TrophiesList/>}
+        list={<TrophyList/>}
         create={<TrophyCreate/>}
-        edit={<TrophyEdit/>}
+        edit={<TrophiesEdit/>}
         show={<TrophyShow/>}
         hasDialog
         hasLiveUpdate
         hasFilterChooser
-        cardList={<TrophiesCardList/>}
         hasColumnChooser
         sort={{ field: 'status', order: 'ASC' }}
     />

@@ -1,15 +1,8 @@
-import {
-    AutocompleteArrayInput,
-    BooleanField,
-    BooleanInput, Create,
-    Datagrid, Edit, List,
+import { AutocompleteArrayInput, BooleanField, BooleanInput, Create, Edit, List,
     NumberField, NumberInput, ReferenceArrayField, ReferenceArrayInput, SearchInput, SelectInput, Show,
-    SimpleForm,
-    SimpleShowLayout, SingleFieldList,
-    TextField,
-    TextInput,
+    SimpleShowLayout, SingleFieldList, TextField, TextInput,
 } from "react-admin";
-import {PER_PAGE, SensibleDefaultPagination} from "@mahaswami/vc-frontend";
+import {DataTable, editDefaults, PER_PAGE, SensibleDefaultPagination, showDefaults, SimpleForm} from "@mahaswami/vc-frontend";
 import {Grid} from "@mui/material";
 
 export const SnippetsLibraryList = () => {
@@ -28,22 +21,22 @@ export const SnippetsLibraryList = () => {
         <List pagination={<SensibleDefaultPagination/>} disableSyncWithLocation perPage={PER_PAGE}
               resource="snippets_library" filters={filters} exporter={false} sort={{field: 'position_number', order: "ASC"}}
               queryOptions={{meta: {scopingEscapeHatch: true}}}>
-            <Datagrid bulkActionButtons={false}>
-                <TextField source="title"/>
-                <TextField source="type"/>
-                <ReferenceArrayField source="tag_ids" reference="tags" label="Tags" perPage={1000}>
+            <DataTable bulkActionButtons={false}>
+                <DataTable.Col source="title"/>
+                <DataTable.Col source="type"/>
+                <DataTable.Col label="Tags" field={() => <ReferenceArrayField source="tag_ids" reference="tags" perPage={1000}>
                     <SingleFieldList linkType={false} />
-                </ReferenceArrayField>
-                <NumberField source="position_number"/>
-                <BooleanField label="Active?" source="is_active"/>
-                <BooleanField label="Advanced?" source="is_advanced"/>
-            </Datagrid>
+                </ReferenceArrayField>} />
+                <DataTable.Col source="position_number" field={NumberField}/>
+                <DataTable.Col label="Active?" source="is_active" field={BooleanField}/>
+                <DataTable.Col label="Advanced?" source="is_advanced" field={BooleanField}/>
+            </DataTable>
         </List>
     );
 }
 
-export const SnippetsLibraryShow = () => (
-    <Show resource="snippets_library">
+export const SnippetsLibraryShow = (props) => (
+    <Show { ...showDefaults(props)} resource="snippets_library">
         <SimpleShowLayout>
             <TextField source="title"/>
             <TextField source="type"/>
@@ -61,8 +54,8 @@ export const SnippetsLibraryCreate = () => (
     </Create>
 );
 
-export const SnippetsLibraryEdit = () => (
-    <Edit redirect={"show"} mutationMode="pessimistic">
+export const SnippetsLibraryEdit = (props) => (
+    <Edit {...editDefaults(props)} redirect={"show"} mutationMode="pessimistic">
         <CreateAndEditForm />
     </Edit>
 );

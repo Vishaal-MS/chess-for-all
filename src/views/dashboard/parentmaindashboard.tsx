@@ -1,15 +1,9 @@
-import React, { useEffect, useState } from "react";
-import {
-    Loading,
-    Title,
-    useSidebarState
-} from "react-admin";
+import {Fragment, useEffect, useState} from "react";
+import {Loading, Title, useSidebarState} from "react-admin";
 import {getCurrentParentStudent, getParentId} from "../../businessLogic";
 import {ListTitle} from "../../components/Title.tsx";
 import ParentStudentDashboard from "./ParentAndStudentDashBoard.tsx";
 import { remoteLog } from "@mahaswami/vc-frontend";
-import {SwanShow, SwanView} from "../swan_crud/SwanCrud.tsx";
-
 
 export const Parentmaindashboard = () => {
 
@@ -55,11 +49,9 @@ export const Parentmaindashboard = () => {
     if (loading) return <Loading />;
 
     return (
-        <>
-            <SwanView>
-                <Title title={<ListTitle resourceName={`${studentName} - Parent Dashboard`}/>} />
-                <ParentStudentDashboard studentId={studentId} parentId={parentId} assignments={assignments} parentRecord={parentRecord}/>
-            </SwanView>
-        </>
+        <Fragment>
+            <Title title={<ListTitle resourceName={`${studentName} - Parent Dashboard`}/>} />
+            <ParentStudentDashboard studentId={studentId} parentId={parentId} assignments={assignments} parentRecord={parentRecord}/>
+        </Fragment>
     )
 }

@@ -1,26 +1,25 @@
-import {ReferenceField,
+import {
     Show,
     TabbedShowLayout,
-    useGetRecordId,
-    useGetOne, ListBase, useRefresh,
-    Button, TopToolbar, useRecordContext, useListContext,
-    RecordContextProvider, WithRecord, useSidebarState
+    useGetOne, ListBase,
+    Button, TopToolbar, WithRecord, useSidebarState
 } from 'react-admin';
 import FullscreenIcon from '@mui/icons-material/Fullscreen';
 import {ChessAIField} from "../../fields/ai_lesson/ChessAIField";
-import React, {useEffect,useState,useCallback,useRef} from "react";
+import {useState} from "react";
 import { FullscreenPortal } from "../../components/FullscreenPortal";
-import {useLocation, useNavigate, Link, useSearchParams, useParams} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import {AssignmentList} from "./assignmentList.tsx";
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import {appTitlePrefix} from "../../configuration";
 import {AssignmentsLiveGrid} from "./assignmentsLiveGrid";
-import { Grid, Box, Typography, Paper } from "@mui/material";
+import { Grid, Box, Typography } from "@mui/material";
 import {AssignmentStatus} from "../../helpers/constants.ts";
 import KeyboardReturnIcon from '@mui/icons-material/KeyboardReturn';
 import {isOrgAdmin, isOrgCoach, isProCoach, isRegularSchoolFlavored} from "../../businessLogic.ts";
 import {formatDateWithShortYear} from "../../utils.ts";
 import {showDefaults} from "@mahaswami/vc-frontend";
+import {LessonsReferenceField} from "../lessons.tsx";
 
 
 const PostShowActions = ({ onPresent, onAssignmentsLive, classProgressId, classId}: { onPresent: any, onAssignmentsLive: any, classProgressId: number }) => {
@@ -105,18 +104,13 @@ export const ClassProgressShow = (props: any) => {
                 <TabbedShowLayout.Tab label="Lesson">
                     {((classProgress?.start_date || isSchoolClass) && (isProCoach() || isOrgCoach() || isOrgAdmin())) &&
                     <StaticDateProgressBar classProgress={classProgress} isSchoolClass={isSchoolClass}/>}
-                    {/*<ReferenceField source={"curriculum_lesson_id"} reference="curriculum_lessons" link={false} label={""}>*/}
-                        <ReferenceField source="lesson_id" reference="lessons" link={false} label={""}>
-                            <FullscreenPortal
-                                isActive={fullscreen}
-                                onClose={() => setFullscreen(false)}
-                            >
-                                <WithRecord render={record =>
-                                    <ChessAIField source="content" lessonId={record.id}/>
-                                }/>
-                            </FullscreenPortal>
-                        </ReferenceField>
-                    {/*</ReferenceField>*/}
+                    <LessonsReferenceField source="lesson_id" reference="lessons" link={false} label={""}>
+                        <FullscreenPortal
+                            isActive={fullscreen}
+                            onClose={() => setFullscreen(false)}>
+                            <WithRecord render={record => <ChessAIField source="content" lessonId={record.id}/>}/>
+                        </FullscreenPortal>
+                    </LessonsReferenceField>
                 </TabbedShowLayout.Tab>
                 <TabbedShowLayout.Tab label="Assignments" >
                     <ListBase resource="assignments" filter={assignmentsFilter}>

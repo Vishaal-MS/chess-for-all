@@ -1,0 +1,3 @@
+name,existing_name,primary_contact_name,primary_contact_number,email,address_line,area,city,state,zipcode,country,standard_name
+Demo client 1,,Primary Contact 1,555-0104,ccai.demo.student1@gmail.com,130 Example Ave,Central District,Test 1,ST,12348,USA,Common Core National
+Demo client 2,,Primary Contact 2,555-0104,ccai.demo.student1+2@gmail.com,130 Example Ave,Central District,Test 2,ST,12348,USA,Common Core National

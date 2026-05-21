@@ -1,13 +1,9 @@
-import { Resource,
-	editDefaults, formDefaults,
-	showDefaults, SimpleShowLayout, SimpleForm,
-	type ResourceActionDefs, type FieldSchema, createReferenceField, createReferenceInput,
-    ReferenceLiveFilter, NumberLiveFilter, TextLiveFilter} from '@mahaswami/vc-frontend';
+import {
+    Resource, type ResourceActionDefs, type FieldSchema, createReferenceField, createReferenceInput,
+    ReferenceLiveFilter, NumberLiveFilter, TextLiveFilter, editDefaults
+} from '@mahaswami/vc-frontend';
 import { Business } from '@mui/icons-material';
-import {Edit, Menu, Show, TextField, TextInput, NumberField, NumberInput, required, Button} from "react-admin";
-import { ClientTypesReferenceField, ClientTypesReferenceInput } from './client_types.js';
-import { DivisionsReferenceField, DivisionsReferenceInput } from './divisions.js';
-import { StandardsReferenceField, StandardsReferenceInput } from './standards.js';
+import {Edit, Menu } from "react-admin";
 import ClientCreate from "./clients/ClientCreate.tsx";
 import {ClientList} from "./clients/clientList.tsx";
 import ClientEditForm from "./clients/ClientEdit.tsx";
@@ -27,27 +23,6 @@ const filters = [
     <ReferenceLiveFilter source="division_id" reference="divisions" label="Division" />,
     <ReferenceLiveFilter source="standard_id" reference="standards" label="Standard" />
 ]
-
-const ClientForm = (props: any) => {
-    return (
-        <SimpleForm {...formDefaults(props)} display="grid"  gridTemplateColumns={{ xs: '1fr', md: '1fr 1fr' }}  gap="1rem" >
-            <TextInput source="name" validate={required()} />
-            <TextInput source="primary_contact_name" />
-            <NumberInput source="primary_contact_number" />
-            <TextInput source="email" validate={required()} />
-            <TextInput source="address_line" />
-            <TextInput source="area" />
-            <TextInput source="city" />
-            <TextInput source="state" />
-            <TextInput source="zipcode" />
-            <TextInput source="country" />
-            <TextInput source="image_file_id" />
-            <ClientTypesReferenceInput source="client_type_id" />
-            <DivisionsReferenceInput source="division_id" />
-            <StandardsReferenceInput source="standard_id" />
-        </SimpleForm>
-    )
-}
 
 const ClientEdit = (props: any) => (
     <Edit { ...editDefaults(props) } actions={false}>

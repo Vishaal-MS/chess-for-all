@@ -176,8 +176,8 @@ const CreateReviewDialogBox = ({recordId}) => {
         user_id: getUserId(),
         subscriber_tenant_id: currentTenantId(),
         publisher_tenant_id: subscribable_record?.publisher_tenant_id,
-        type: 'review',
-        division_id: subscribable_record?.curriculum?.division_id,
+        // type: 'review',
+        // division_id: subscribable_record?.curriculum?.division_id,
     };
 
     const ratingValidation = (value: any) => {

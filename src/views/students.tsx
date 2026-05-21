@@ -1,25 +1,13 @@
 import { Resource, createDefaults, tableDefaults,
 	editDefaults, formDefaults, listDefaults,
 	showDefaults, RowActions, DataTable, SimpleShowLayout, SimpleForm,
-	type ResourceActionDefs, type FieldSchema, CardGrid, recordRep, createReferenceField, createReferenceInput, BooleanLiveFilter, ReferenceLiveFilter, NumberLiveFilter, TextLiveFilter,
+	type ResourceActionDefs, type FieldSchema, CardGrid, recordRep, createReferenceField,
+    createReferenceInput, BooleanLiveFilter, ReferenceLiveFilter, NumberLiveFilter, TextLiveFilter,
     closeDialog} from '@mahaswami/vc-frontend';
 import { School } from '@mui/icons-material';
 import {
-    Create,
-    Edit,
-    List,
-    Menu,
-    Show,
-    type ListProps,
-    TextField,
-    TextInput,
-    BooleanField,
-    BooleanInput,
-    NumberField,
-    NumberInput,
-    SelectInput,
-    useNotify,
-    useRedirect
+    Create, Edit, List, Menu, Show, type ListProps, TextField, TextInput, BooleanField,
+    BooleanInput, NumberField, NumberInput, SelectInput, useNotify, useRedirect
 } from "react-admin";
 import { UsersReferenceField, UsersReferenceInput } from './users.js';
 import { ClientsReferenceField, ClientsReferenceInput } from './clients.js';
@@ -28,6 +16,8 @@ import { StandardGradesReferenceField, StandardGradesReferenceInput } from './st
 import { ClientTypes, UserStatus, EPOCHE_ZERO_DATE, studentStatusChoices } from "../helpers/constants.ts";
 import {getStandardId, isRegularSchoolFlavored} from "../businessLogic.ts";
 import {ExtendedStudentFields} from "./students/extendedStudentFields.tsx";
+import {MyStudentsList} from "./clients/students.tsx";
+import {AddStudents} from "./clients/addStudents.tsx";
 
 export const RESOURCE = "students"
 export const ICON = School
@@ -210,10 +200,8 @@ export const StudentsResource = (
         searchableFields={ studentsSearchableFields}
         filters={filters}
         filtersPlacement="top"
-        list={<StudentsList/>}
-        create={<StudentCreate/>}
-        edit={<StudentEdit/>}
-        show={<StudentShow/>}
+        list={<MyStudentsList/>}
+        create={<AddStudents/>}
         hasDialog
         hasLiveUpdate
         hasFilterChooser

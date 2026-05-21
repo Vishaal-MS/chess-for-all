@@ -1,21 +1,10 @@
 import {
-    Datagrid,
-    DateField,
-    FunctionField,
-    Link,
-    List,
-    Loading,
-    ReferenceField,
-    ResourceContextProvider,
-    SimpleList,
-    TextField,
-    Title,
-    useDataProvider,
-    useSidebarState
+    DateField, FunctionField, Link, List, Loading,
+    ResourceContextProvider, SimpleList, TextField, Title, useSidebarState
 } from 'react-admin';
 import {DBCard} from "../../components/DBCard";
 import {Box, Button, Card, Divider, Grid, Typography} from '@mui/material';
-import React, {useEffect, useState} from "react";
+import {Fragment, useEffect, useState} from "react";
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
 import {CardWithBGIconOnRight} from "../../components/CardWithIcon";
@@ -27,19 +16,16 @@ import {GenericBarChart} from "../../components/BarChart";
 import {groupByClient, groupByMonth} from "../../helpers/payments";
 import {getActiveClientsCount, getAllClients} from "../../backend/clients";
 import {getEnrollmentsByStatusAndClass} from  "../../backend/enrollments";
-import {
-    currentTenantId,
-    getCurrentUserCoachId,
-} from "../../businessLogic";
-import {addClientDetails} from "../../backend/dashboard";
-import {getCertificatesByCoach, getTrophiesByCoach} from "../../backend/certificates";
-import {getPaymentsForTenant} from "../../backend/payments";
+import { currentTenantId, getCurrentUserCoachId } from "../../businessLogic";
+import {addClientDetails} from "../../backend/dashboard.ts";
+import {getCertificatesByCoach, getTrophiesByCoach} from "../../backend/certificates.ts";
+import {getPaymentsForTenant} from "../../backend/payments.ts";
 import {getInvoicesForTenantByStatus} from "../../backend/invoices";
 import {getClassesForCoachByStatus} from "../../backend/classes";
 import {EnrolmentStatus, ClassesStatus, CertificateStatus, TrophiesStatus, InvoicesStatus} from "../../helpers/constants.ts";
-import { remoteLog } from '@mahaswami/vc-frontend';
-import {SwanView} from "../swan_crud/SwanCrud.tsx";
-
+import {DataTable, remoteLog} from '@mahaswami/vc-frontend';
+import {ClientsReferenceField} from "../clients.tsx";
+import {CurriculumsReferenceField} from "../curriculums.tsx";
 
 export const CoachDashBoard = () =>{
     const dataProvider = window.swanAppFunctions.dataProvider;
@@ -224,308 +210,285 @@ export const CoachDashBoard = () =>{
 
     if(loading) return <Loading/>;
     return (
-        <SwanView>
-            <>
-                <Title title='Coach Dashboard' />
+        <Fragment>
+            <Title title='Coach Dashboard' />
+            <Grid container spacing={2} style={{padding: '12px'}} >
+                <Grid item xs={9}>
+                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2,marginBottom: 3 }}>
+                        {/* First Row (Three Cards) */}
+                        <Box sx={{ display: 'flex', gap: 2 }}>
 
-                <Grid container spacing={2} style={{padding: '12px'}} >
-                    <Grid item xs={9}>
-                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2,marginBottom: 3 }}>
-                            {/* First Row (Three Cards) */}
-                            <Box sx={{ display: 'flex', gap: 2 }}>
+                    <CardWithBGIconOnRight title={"Active Clients"}
+                                           count={activeClientsCount !== null ?  activeClientsCount : null}
+                                           color={"blue"} Icon={BusinessIcon}></CardWithBGIconOnRight>
 
-                        <CardWithBGIconOnRight title={"Active Clients"}
-                                               count={activeClientsCount !== null ?  activeClientsCount : null}
-                                               color={"blue"} Icon={BusinessIcon}></CardWithBGIconOnRight>
-
-                        <CardWithBGIconOnRight title={"Active Classes"}
-                                               count={activeClassesCount !== null ?  activeClassesCount : null}
-                                               color={"blue"} Icon={CastForEducationIcon}></CardWithBGIconOnRight>
+                    <CardWithBGIconOnRight title={"Active Classes"}
+                                           count={activeClassesCount !== null ?  activeClassesCount : null}
+                                           color={"blue"} Icon={CastForEducationIcon}></CardWithBGIconOnRight>
 
 
-                        <CardWithBGIconOnRight title={"Active Students"}
-                                               count={activeStudentsCount !== null ?  activeStudentsCount : null}
-                                               color={"blue"} Icon={PeopleIcon}></CardWithBGIconOnRight>
+                    <CardWithBGIconOnRight title={"Active Students"}
+                                           count={activeStudentsCount !== null ?  activeStudentsCount : null}
+                                           color={"blue"} Icon={PeopleIcon}></CardWithBGIconOnRight>
+                    </Box>
+
+                        <Box sx={{ display: 'flex', gap: 2 }}>
+
+                            <CardWithBGIconOnRight title={"Total Clients"}
+                                                   count={totalClientsCount !== null ?  totalClientsCount : null}
+                                                   color={"green"} Icon={BusinessIcon}></CardWithBGIconOnRight>
+
+                            <CardWithBGIconOnRight title={"Completed Classes"}
+                                                   count={completedClassesCount !== null ?  completedClassesCount : null}
+                                                   color={"green"} Icon={CastForEducationIcon}></CardWithBGIconOnRight>
+
+
+                            <CardWithBGIconOnRight title={"Completed Students"}
+                                                   count={completedStudentsCount !== null ?  completedStudentsCount : null}
+                                                   color={"green"} Icon={PeopleIcon}></CardWithBGIconOnRight>
                         </Box>
 
-                            <Box sx={{ display: 'flex', gap: 2 }}>
+                        {/* Second Row (Three Cards) */}
+                        <Box sx={{ display: 'flex', gap: 2 }}>
 
-                                <CardWithBGIconOnRight title={"Total Clients"}
-                                                       count={totalClientsCount !== null ?  totalClientsCount : null}
-                                                       color={"green"} Icon={BusinessIcon}></CardWithBGIconOnRight>
-
-                                <CardWithBGIconOnRight title={"Completed Classes"}
-                                                       count={completedClassesCount !== null ?  completedClassesCount : null}
-                                                       color={"green"} Icon={CastForEducationIcon}></CardWithBGIconOnRight>
-
-
-                                <CardWithBGIconOnRight title={"Completed Students"}
-                                                       count={completedStudentsCount !== null ?  completedStudentsCount : null}
-                                                       color={"green"} Icon={PeopleIcon}></CardWithBGIconOnRight>
-                            </Box>
-
-                            {/* Second Row (Three Cards) */}
-                            <Box sx={{ display: 'flex', gap: 2 }}>
-
-                                <Card sx={{ flex:1, padding: 2, maxWidth:610,height:200,display: 'flex', flexDirection: 'column' }}>
-                                    {/* Title with Icon */}
-                                    <Box sx={{ display: 'flex', marginBottom: 2,align:'center',justifyContent:'center'}}>
-                                        <EmojiEventsIcon sx={{ fontSize: 50, marginRight: 1, color: 'blue',textAlign:'center' }} />
-                                        <Typography variant="h5" sx={{textAlign:'center'}}>
-                                           Trophies
+                            <Card sx={{ flex:1, padding: 2, maxWidth:610,height:200,display: 'flex', flexDirection: 'column' }}>
+                                {/* Title with Icon */}
+                                <Box sx={{ display: 'flex', marginBottom: 2,align:'center',justifyContent:'center'}}>
+                                    <EmojiEventsIcon sx={{ fontSize: 50, marginRight: 1, color: 'blue',textAlign:'center' }} />
+                                    <Typography variant="h5" sx={{textAlign:'center'}}>
+                                       Trophies
+                                    </Typography>
+                                </Box>
+                                <Box sx={{ display: 'flex',flexDirection: 'row', justifyContent: 'space-between', gap: 2 }}>
+                                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+                                       <Typography variant="h6" sx={{ color: 'blue' }}>
+                                            Ordered
+                                        </Typography>
+                                        <Typography variant="h5" sx={{ color: 'blue' }}>
+                                            {trophiesOrderedCount}
                                         </Typography>
                                     </Box>
-                                    <Box sx={{ display: 'flex',flexDirection: 'row', justifyContent: 'space-between', gap: 2 }}>
-                                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-                                           <Typography variant="h6" sx={{ color: 'blue' }}>
-                                                Ordered
-                                            </Typography>
-                                            <Typography variant="h5" sx={{ color: 'blue' }}>
-                                                {trophiesOrderedCount}
-                                            </Typography>
-                                        </Box>
-                                        <Divider orientation="vertical" flexItem />
-                                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-                                            <Typography variant="h6" sx={{ color: 'orange' }}>
-                                                Pending
-                                            </Typography>
-                                            <Typography variant="h5" sx={{ color: 'orange' }}>
-                                                {trophiesPendingCount}
-                                            </Typography>
-                                        </Box>
-                                        <Divider orientation="vertical" flexItem />
-                                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-                                            <Typography variant="h6" sx={{ color: 'green' }}>
-                                                Issued
-                                            </Typography>
-                                            <Typography variant="h5" sx={{ color: 'green' }}>
-                                                {trophiesIssuedCount}
-                                            </Typography>
-                                        </Box>
-                                    </Box>
-                                </Card>
-
-                                <Card sx={{ flex:1, padding: 2, maxWidth:610,height:200,display: 'flex', flexDirection: 'column' }}>
-                                    {/* Title with Icon */}
-                                    <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: 2,justifyContent:'center' }}>
-                                        <WorkspacePremiumIcon sx={{ fontSize: 50, marginRight: 1, color: 'blue',textAlign:'center' }} />
-                                        <Typography variant="h5" sx={{textAlign:'center'}} >
-                                            Certificates
+                                    <Divider orientation="vertical" flexItem />
+                                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+                                        <Typography variant="h6" sx={{ color: 'orange' }}>
+                                            Pending
+                                        </Typography>
+                                        <Typography variant="h5" sx={{ color: 'orange' }}>
+                                            {trophiesPendingCount}
                                         </Typography>
                                     </Box>
-                                    <Box sx={{ display: 'flex',flexDirection: 'row', justifyContent: 'space-between', gap: 2 }}>
-                                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-                                            <Typography variant="h6" sx={{ color: 'blue' }}>
-                                                Ordered
-                                            </Typography>
-                                            <Typography variant="h5" sx={{ color: 'blue' }}>
-                                                {certificatesOrderedCount}
-                                            </Typography>
-                                        </Box>
-                                        <Divider orientation="vertical" flexItem />
-                                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-                                            <Typography variant="h6" sx={{ color: 'orange' }}>
-                                                Pending
-                                            </Typography>
-                                            <Typography variant="h5" sx={{ color: 'orange' }}>
-                                                {certificatesPendingCount}
-                                            </Typography>
-                                        </Box>
-                                        <Divider orientation="vertical" flexItem />
-                                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-                                            <Typography variant="h6" sx={{ color: 'green' }}>
-                                                Issued
-                                            </Typography>
-                                            <Typography variant="h5" sx={{ color: 'green' }}>
-                                                {certificatesIssuedCount}
-                                            </Typography>
-                                        </Box>
-                                    </Box>
-                                </Card>
-
-                            </Box>
-
-                            {/* Second Row (Two Charts) */}
-                             <Box sx={{ display: 'flex', gap: 2 }}>
-                                <Card sx={{width:"65%",maxHeight:500}}>
-                                    <GenericBarChart
-                                        footerComponent={
-                                        <Typography sx={{ fontSize:"14px", textAlign: 'center', marginTop:1, marginBottom: 2 }}>
-                                            Payments Over Last 6 Months
+                                    <Divider orientation="vertical" flexItem />
+                                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+                                        <Typography variant="h6" sx={{ color: 'green' }}>
+                                            Issued
                                         </Typography>
-                                        }
-                                        titleComponent={
-                                        <Box sx={{boxShadow:0} }>
-                                            <Typography variant="h6" sx={{ color:"green", padding:1, textAlign: 'center', marginTop:1, marginBottom: 1 }}>
-                                                Total Payments Received: {paymentsReceived}
-                                            </Typography>
-                                        </Box>
-                                        }
-                                        data={payments} XAxisDataKey={'month'} YAxisDataKey={'payments'} />
+                                        <Typography variant="h5" sx={{ color: 'green' }}>
+                                            {trophiesIssuedCount}
+                                        </Typography>
+                                    </Box>
+                                </Box>
+                            </Card>
 
-                                </Card>
-                                <Box sx={{width:"35%"}}><DBCard title={"My Top Clients"}
-                                        component={
-                                                    <Datagrid resource={"clients"} data={topClients} total={3} sort={{ field: 'id', order: 'DESC' }} pending={false} header={<></>}  bulkActionButtons={false} empty={false}>
-                                                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                                                            <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2,justifyContent:'space-between' }}>
-                                                                <ReferenceField reference={"clients"} source={"id"} linkType={false}>
-                                                                <TextField source="name" sx={{ fontSize: '18px', paddingLeft:1}}/>
-                                                                </ReferenceField>
-                                                                <FunctionField render={record => formatAmount(record.revenue)} sx={{ fontSize: '20px', paddingRight:1}}/>
-                                                            </Box>
-                                                            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2,justifyContent:'space-between' }}>
-                                                                <FunctionField render={record => {return 'Classes : ' + record.classes;}} sx={{ fontSize: '16px', paddingRight:2}}/>
-                                                                <FunctionField render={record => {return 'Students : ' + record.students;}} sx={{ fontSize: '16px', paddingRight:2}}/>
-                                                            </Box>
-                                                        </Box>
-                                                      </Datagrid>
-                                        }  footer={
-                                    <Button
-                                        sx={{ borderRadius: 0, padding:2,fontSize:"18px" }}
-                                        component={Link}
-                                        to={{
-                                            pathname: '/clients',
-                                            search: `filter=${JSON.stringify({tenant_id:currentTenantId() })}`,
-                                        }}
+                            <Card sx={{ flex:1, padding: 2, maxWidth:610,height:200,display: 'flex', flexDirection: 'column' }}>
+                                {/* Title with Icon */}
+                                <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: 2,justifyContent:'center' }}>
+                                    <WorkspacePremiumIcon sx={{ fontSize: 50, marginRight: 1, color: 'blue',textAlign:'center' }} />
+                                    <Typography variant="h5" sx={{textAlign:'center'}} >
+                                        Certificates
+                                    </Typography>
+                                </Box>
+                                <Box sx={{ display: 'flex',flexDirection: 'row', justifyContent: 'space-between', gap: 2 }}>
+                                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+                                        <Typography variant="h6" sx={{ color: 'blue' }}>
+                                            Ordered
+                                        </Typography>
+                                        <Typography variant="h5" sx={{ color: 'blue' }}>
+                                            {certificatesOrderedCount}
+                                        </Typography>
+                                    </Box>
+                                    <Divider orientation="vertical" flexItem />
+                                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+                                        <Typography variant="h6" sx={{ color: 'orange' }}>
+                                            Pending
+                                        </Typography>
+                                        <Typography variant="h5" sx={{ color: 'orange' }}>
+                                            {certificatesPendingCount}
+                                        </Typography>
+                                    </Box>
+                                    <Divider orientation="vertical" flexItem />
+                                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+                                        <Typography variant="h6" sx={{ color: 'green' }}>
+                                            Issued
+                                        </Typography>
+                                        <Typography variant="h5" sx={{ color: 'green' }}>
+                                            {certificatesIssuedCount}
+                                        </Typography>
+                                    </Box>
+                                </Box>
+                            </Card>
 
-                                        color="primary"
-                                    >
-                                        View All
-                                    </Button>} color={"blue"} /> </Box>
-                            </Box>
                         </Box>
-                    </Grid>
-                    <Grid item xs={3}>
-                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2,marginBottom: 3 }}>
-                            <Box sx={{ display: 'flex', gap: 2 }}>
-                                <DBCard title={"Upcoming Classes" } component={
-                                    <ResourceContextProvider value="classes">
-                                        <List title=" " disableSyncWithLocation exporter={false} filter={{tenant_id:currentTenantId(), coach_id:currentCoachId, status: ClassesStatus.SCHEDULED  }}
-                                              perPage={3} pagination={false} actions={false} sx={{'& .RaList-content': {
-                                                boxShadow: '0px 0px 0px 0px',
-                                            },}}
-                                               >
-                                            <SimpleList primaryText={
-                                                <ReferenceField reference={"curriculum"} source={"curriculum_id"} linkType={false}>
-                                                    <TextField source="name" sx={{ fontSize: '18px', paddingRight:2}}/>
-                                                </ReferenceField>
-                                            }
-                                                // tertiaryText={}
-                                                        secondaryText={<>
-                                                            <div style={{display:'flex', flexDirection:'row'}}>
-                                                                <Typography variant={"h7"}> Starting :
-                                                                    <DateField source="start_date" variant={"h7"} /></Typography>
-                                                            </div>
-                                                            <div>
 
-                                                                        <ReferenceField reference={"clients"} source={"client_id"} linkType={false}>
-                                                                            <Typography variant={"h7"}> Client :
-                                                                                <TextField variant={"h7"} source="name" />
-                                                                            </Typography></ReferenceField>
+                        {/* Second Row (Two Charts) */}
+                         <Box sx={{ display: 'flex', gap: 2 }}>
+                            <Card sx={{width:"65%",maxHeight:500}}>
+                                <GenericBarChart
+                                    footerComponent={
+                                    <Typography sx={{ fontSize:"14px", textAlign: 'center', marginTop:1, marginBottom: 2 }}>
+                                        Payments Over Last 6 Months
+                                    </Typography>
+                                    }
+                                    titleComponent={
+                                    <Box sx={{boxShadow:0} }>
+                                        <Typography variant="h6" sx={{ color:"green", padding:1, textAlign: 'center', marginTop:1, marginBottom: 1 }}>
+                                            Total Payments Received: {paymentsReceived}
+                                        </Typography>
+                                    </Box>
+                                    }
+                                    data={payments} XAxisDataKey={'month'} YAxisDataKey={'payments'} />
 
-                                                            </div></>}
-                                            />
+                            </Card>
+                            <Box sx={{width:"35%"}}><DBCard title={"My Top Clients"}
+                                component={
+                                    <DataTable resource={"clients"} data={topClients} total={3} sort={{ field: 'id', order: 'DESC' }} pending={false} header={<></>}  bulkActionButtons={false} empty={false}>
+                                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                                            <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2,justifyContent:'space-between' }}>
+                                                <ClientsReferenceField source={"id"} />
+                                                <FunctionField render={record => formatAmount(record.revenue)} sx={{ fontSize: '20px', paddingRight:1}}/>
+                                            </Box>
+                                            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2,justifyContent:'space-between' }}>
+                                                <FunctionField render={record => {return 'Classes : ' + record.classes;}} sx={{ fontSize: '16px', paddingRight:2}}/>
+                                                <FunctionField render={record => {return 'Students : ' + record.students;}} sx={{ fontSize: '16px', paddingRight:2}}/>
+                                            </Box>
+                                        </Box>
+                                      </DataTable>
+                                }  footer={
+                                <Button
+                                    sx={{ borderRadius: 0, padding:2,fontSize:"18px" }}
+                                    component={Link}
+                                    to={{
+                                        pathname: '/clients',
+                                        search: `filter=${JSON.stringify({tenant_id:currentTenantId() })}`,
+                                    }}
 
-                                        </List>
-
-                                    </ResourceContextProvider> }
-                                        footer={
-                                            <Button
-                                                sx={{ borderRadius: 0, fontSize:"18px" }}
-                                                component={Link}
-                                                to={{
-                                                    pathname: '/classes',
-                                                    search: `filter=${JSON.stringify({ coach_id: currentCoachId,status:ClassesStatus.SCHEDULED })}`,
-                                                }}
-
-                                                color="primary"
-                                            >
-                                                View All
-                                            </Button>}
-                                        color={"orange"}/>
-                            </Box>
-                            <Box sx={{ display: 'flex', gap: 2 }}>
-                                <DBCard title={"Ongoing Classes" } component={
-                                    <ResourceContextProvider value="classes">
-                                        <List title=" " disableSyncWithLocation exporter={false} filter={{tenant_id:currentTenantId(), coach_id:currentCoachId, status: ClassesStatus.ACTIVE  }}
-                                              perPage={3} pagination={false} actions={false} sx={{'& .RaList-content': {
-                                                boxShadow: '0px 0px 0px 0px',
-                                            },}}
-                                        >
-                                            <SimpleList primaryText={
-                                                <ReferenceField reference={"curriculum"} source={"curriculum_id"} linkType={false}>
-                                                    <TextField source="name" sx={{ fontSize: '18px', paddingRight:2}}/>
-                                                </ReferenceField>
-                                            }
-                                                // tertiaryText={}
-                                                        secondaryText={<>
-                                                            <div style={{display:'flex', flexDirection:'row'}}>
-                                                                <Typography variant={"h7"}> Started :
-                                                                    <DateField source="start_date" variant={"h7"} /></Typography>
-                                                            </div>
-                                                            <div>
-
-                                                                <ReferenceField reference={"clients"} source={"client_id"} linkType={false}>
-                                                                    <Typography variant={"h7"}> Client :
-                                                                        <TextField variant={"h7"} source="name" />
-                                                                    </Typography></ReferenceField>
-
-                                                            </div></>}
-                                            />
-
-                                        </List>
-
-                                    </ResourceContextProvider> }
-                                        footer={
-                                            <Button
-                                                sx={{ borderRadius: 0, fontSize:"18px" }}
-                                                component={Link}
-                                                to={{
-                                                    pathname: '/classes',
-                                                    search: `filter=${JSON.stringify({ coach_id: currentCoachId,status:ClassesStatus.ACTIVE })}`,
-                                                }}
-
-                                                color="primary"
-                                            >
-                                                View All
-                                            </Button>}
-                                        color={"blue"}/>
-                            </Box>
-                            <Box sx={{ display: 'flex', gap: 2 }}>
-
-                                <DBCard title={"Pending Payments (" + paymentsPending + ")" } component={
-                                    <ResourceContextProvider value="invoices">
-                                        <List title=" " disableSyncWithLocation exporter={false} filter={{coach_id:currentCoachId,status:InvoicesStatus.UNPAID  }} perPage={3} pagination={false} actions={false} sx={{padding:0,'& .RaList-content': {
-                                                boxShadow: '0px 0px 0px 0px',
-                                            },}} >
-                                            <SimpleList primaryText={  <ReferenceField reference={"clients"} source={"client_id"} >
-                                                <TextField source="name" sx={{ fontSize: '18px', paddingLeft:1}}/>
-                                            </ReferenceField>}
-                                                        secondaryText={<>
-                                                            <DateField source="invoice_date" sx={{paddingLeft:1, paddingRight:5,fontSize: '16px'}} /><FunctionField render={record => formatAmount(record.amount)} sx={{fontSize: '16px',fontWeight:'bold'}}/></>}  />
-
-                                        </List>
-
-                                    </ResourceContextProvider> }
-                                        footer={
-                                            <Button
-                                                sx={{ borderRadius: 0, padding:2,fontSize:"18px" }}
-                                                component={Link}
-                                                to={{
-                                                    pathname: '/invoices',
-                                                    search: `filter=${JSON.stringify({ coach_id: currentCoachId,status:InvoicesStatus.UNPAID })}`,
-                                                }}
-
-                                                color="primary"
-                                            >
-                                                View All
-                                            </Button>} color={"orange"} />
-                            </Box>
+                                    color="primary"
+                                >
+                                    View All
+                                </Button>} color={"blue"} /> </Box>
                         </Box>
-                    </Grid>
+                    </Box>
                 </Grid>
-            </>
-        </SwanView>
+                <Grid item xs={3}>
+                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2,marginBottom: 3 }}>
+                        <Box sx={{ display: 'flex', gap: 2 }}>
+                            <DBCard title={"Upcoming Classes" } component={
+                                <ResourceContextProvider value="classes">
+                                    <List title=" " disableSyncWithLocation exporter={false} filter={{tenant_id:currentTenantId(), coach_id:currentCoachId, status: ClassesStatus.SCHEDULED  }}
+                                          perPage={3} pagination={false} actions={false} sx={{'& .RaList-content': {
+                                            boxShadow: '0px 0px 0px 0px',
+                                        },}}
+                                           >
+                                        <SimpleList
+                                            primaryText={<CurriculumsReferenceField source={"curriculum_id"} />}
+                                            secondaryText={<>
+                                                <div style={{display:'flex', flexDirection:'row'}}>
+                                                    <Typography variant={"h7"}> Starting :
+                                                        <DateField source="start_date" variant={"h7"} /></Typography>
+                                                </div>
+                                                <div>
+                                                    <ClientsReferenceField source={"client_id"}>
+                                                        <Typography variant={"h7"}> Client :
+                                                            <TextField variant={"h7"} source="name" />
+                                                        </Typography>
+                                                    </ClientsReferenceField>
+                                                </div>
+                                            </>}
+                                        />
+
+                                    </List>
+
+                                </ResourceContextProvider> }
+                                    footer={
+                                        <Button
+                                            sx={{ borderRadius: 0, fontSize:"18px" }}
+                                            component={Link}
+                                            to={{
+                                                pathname: '/classes',
+                                                search: `filter=${JSON.stringify({ coach_id: currentCoachId,status:ClassesStatus.SCHEDULED })}`,
+                                            }}
+
+                                            color="primary"
+                                        >
+                                            View All
+                                        </Button>}
+                                    color={"orange"}/>
+                        </Box>
+                        <Box sx={{ display: 'flex', gap: 2 }}>
+                            <DBCard title={"Ongoing Classes" } component={
+                                <ResourceContextProvider value="classes">
+                                    <List title=" " disableSyncWithLocation exporter={false} filter={{tenant_id:currentTenantId(), coach_id:currentCoachId, status: ClassesStatus.ACTIVE  }}
+                                          perPage={3} pagination={false} actions={false} sx={{'& .RaList-content': {
+                                            boxShadow: '0px 0px 0px 0px',
+                                        },}}>
+                                        <SimpleList
+                                            primaryText={<CurriculumsReferenceField source={"curriculum_id"} />}
+                                            secondaryText={<>
+                                                <div style={{display:'flex', flexDirection:'row'}}>
+                                                    <Typography variant={"h7"}> Started :
+                                                        <DateField source="start_date" variant={"h7"} />
+                                                    </Typography>
+                                                </div>
+                                                <div>
+                                                    <ClientsReferenceField source={"client_id"}>
+                                                        <Typography variant={"h7"}> Client :
+                                                            <TextField variant={"h7"} source="name" />
+                                                        </Typography>
+                                                    </ClientsReferenceField>
+                                                </div>
+                                            </>}
+                                        />
+                                    </List>
+                                </ResourceContextProvider> }
+                                    footer={
+                                        <Button
+                                            sx={{ borderRadius: 0, fontSize:"18px" }}
+                                            component={Link}
+                                            to={{
+                                                pathname: '/classes',
+                                                search: `filter=${JSON.stringify({ coach_id: currentCoachId,status:ClassesStatus.ACTIVE })}`,
+                                            }}
+
+                                            color="primary"
+                                        >
+                                            View All
+                                        </Button>}
+                                    color={"blue"}/>
+                        </Box>
+                        <Box sx={{ display: 'flex', gap: 2 }}>
+                            <DBCard title={"Pending Payments (" + paymentsPending + ")" } component={
+                                <ResourceContextProvider value="invoices">
+                                    <List title=" " disableSyncWithLocation exporter={false} filter={{coach_id:currentCoachId,status:InvoicesStatus.UNPAID  }}
+                                          perPage={3} pagination={false} actions={false} sx={{padding:0,'& .RaList-content': {boxShadow: '0px 0px 0px 0px'}}} >
+                                        <SimpleList
+                                            primaryText={<ClientsReferenceField source={"client_id"} />}
+                                            secondaryText={<>
+                                                <DateField source="invoice_date" sx={{paddingLeft:1, paddingRight:5,fontSize: '16px'}} />
+                                                <FunctionField render={record => formatAmount(record.amount)} sx={{fontSize: '16px',fontWeight:'bold'}}/>
+                                            </>}/>
+                                    </List>
+                                </ResourceContextProvider> }
+                                    footer={
+                                        <Button sx={{ borderRadius: 0, padding:2,fontSize:"18px" }} component={Link} color="primary" color={"orange"}
+                                            to={{
+                                                pathname: '/invoices',
+                                                search: `filter=${JSON.stringify({ coach_id: currentCoachId,status:InvoicesStatus.UNPAID })}`,
+                                            }}>View All</Button>
+                            }
+                            />
+                        </Box>
+                    </Box>
+                </Grid>
+            </Grid>
+        </Fragment>
     )
 }

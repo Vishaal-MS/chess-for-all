@@ -1,13 +1,27 @@
-import { Resource, createDefaults, tableDefaults,
-	editDefaults, formDefaults, listDefaults,
-	showDefaults, RowActions, DataTable, SimpleShowLayout, SimpleForm,
-	type ResourceActionDefs, type FieldSchema, CardGrid, createReferenceField, createReferenceInput, ReferenceLiveFilter, TextLiveFilter} from '@mahaswami/vc-frontend';
+import {
+    Resource,
+    formDefaults,
+    showDefaults,
+    DataTable,
+    SimpleShowLayout,
+    SimpleForm,
+    type ResourceActionDefs,
+    type FieldSchema,
+    createReferenceField,
+    createReferenceInput,
+    ReferenceLiveFilter,
+    TextLiveFilter,
+    openDialog
+} from '@mahaswami/vc-frontend';
 import { Class } from '@mui/icons-material';
-import { Create, Edit, List, Menu, Show,
-    type ListProps, TextField, TextInput, useUnique} from "react-admin";
+import {
+    Create, Edit, List, Menu, Show, TextField, TextInput, useUnique, AutocompleteInput, TopToolbar, Button
+} from "react-admin";
 import { StandardGradesReferenceField, StandardGradesReferenceInput } from './standard_grades.js';
 import { StandardCategoriesReferenceField, StandardCategoriesReferenceInput } from './standard_categories.js';
-import { StandardsReferenceField, StandardsReferenceInput } from './standards.js';
+import { StandardsReferenceField } from './standards.js';
+import {isSuperAdmin} from "../businessLogic.ts";
+import AddIcon from "@mui/icons-material/Add";
 
 export const RESOURCE = "standard_sections"
 export const ICON = Class
@@ -24,60 +38,69 @@ const filters = [
     <ReferenceLiveFilter source="standard_id" reference="standards" label="Standard" />
 ]
 
-export const StandardSectionsList = (props: ListProps) => {
-    return (
-        <List {...listDefaults(props)}>
-            <DataTable {...tableDefaults(RESOURCE)} hiddenColumns={['standard_id']} >
-                <DataTable.Col source="code" />
-                <DataTable.Col source="content_type" />
-                <DataTable.Col source="item" />
-                <DataTable.Col source="standard_grade_id" field={StandardGradesReferenceField}/>
-                <DataTable.Col source="standard_category_id" field={StandardCategoriesReferenceField}/>
-                <DataTable.Col source="standard_id" field={StandardsReferenceField}/>
-                <RowActions/>
+export const SectionList = ({standardId}) => {
+    const superAdmin = isSuperAdmin();
+    const CreateSectionToolBar = () => {
+        const createSectionDialog = () => (
+            openDialog(<SectionCreate standardId={standardId} width="70vw"/>)
+        )
+        return (
+            <TopToolbar>
+                <Button startIcon={<AddIcon />} label={"Create Section"} onClick={createSectionDialog}/>
+            </TopToolbar>
+        )
+    }
+    const showSectionDialog = (id) => (
+        openDialog(<SectionEdit sectionId={id} width="70vw"/>)
+    );
+
+    return(
+        <List resource="standard_sections" filters={filters} title={false} filter={{standard_id: standardId}}
+              exporter={false} actions={superAdmin ? <CreateSectionToolBar /> : false} sx={{width: '100%'}}
+              disableSyncWithLocation>
+            <DataTable rowClick={superAdmin ? showSectionDialog : false} bulkActionButtons={false}>
+                <DataTable.Col source="code"/>
+                <DataTable.Col source="content_type" label={"Content Type"}/>
+                <DataTable.Col source="standard_category_id" label={"Category"} field={StandardCategoriesReferenceField} />
+                <DataTable.Col source="standard_grade_id" label={"Grade"} field={StandardGradesReferenceField} />
             </DataTable>
         </List>
     )
 }
 
-export const StandardSectionsCardList = (props: ListProps) => {
-    return (
-        <List {...listDefaults(props)} component={'div'}>
-            <CardGrid title={<TextField source="code" variant='h6' />}>
-                <TextField source="content_type" />
-                <TextField source="item" />
-            </CardGrid>
-        </List>
-    )
-}
-
-const StandardSectionForm = (props: any) => {
+const SectionForm = (props: any) => {
     const unique = useUnique();
+    const { standardId } = props;
     return (
-        <SimpleForm {...formDefaults(props)} display="grid"  gridTemplateColumns={{ xs: '1fr', md: '1fr 1fr' }}  gap="1rem" >
+        <SimpleForm {...formDefaults(props)} defaultValues={standardId ? {standard_id: standardId} : {}}
+                    display="grid" gridTemplateColumns={{ xs: '1fr', md: '1fr 1fr' }}  gap="1rem" >
             <TextInput source="code" validate={unique()} />
             <TextInput source="content_type" />
             <TextInput source="item" />
+            <StandardGradesReferenceInput source="standard_grade_id" filter={{ standard_id: standardId }}>
+                <AutocompleteInput optionText="name" />
+            </StandardGradesReferenceInput>
+            <StandardCategoriesReferenceInput source="standard_category_id" filter={{standard_id: standardId}}>
+                <AutocompleteInput optionText="name" />
+            </StandardCategoriesReferenceInput>
             <TextInput source="description" multiline rows={5} />
-            <StandardGradesReferenceInput source="standard_grade_id" />
-            <StandardCategoriesReferenceInput source="standard_category_id" />
-            <StandardsReferenceInput source="standard_id" />
         </SimpleForm>
     )
 }
 
-const StandardSectionEdit = (props: any) => {
+const SectionEdit = (sectionId: any) => {
     return (
-        <Edit {...editDefaults(props)}>
-            <StandardSectionForm />
+        <Edit resource="standard_sections" title={false} id={sectionId} redirect={false}  mutationMode='pessimistic'>
+            <SectionForm />
         </Edit>
     )
 }
 
-const StandardSectionCreate = (props: any) => {
+export const SectionCreate = ({ props }: any) => {
+
     return (
-    	<Create {...createDefaults(props)}>
-            <StandardSectionForm />
+        <Create resource="standard_sections" redirect={false} title={false}>
+            <SectionForm { ...props }/>
         </Create>
     )
 }
@@ -129,14 +152,13 @@ export const StandardSectionsResource = (
         searchableFields={ standardSectionsSearchableFields}
         filters={filters}
         filtersPlacement="top"
-        list={<StandardSectionsList/>}
-        create={<StandardSectionCreate/>}
-        edit={<StandardSectionEdit/>}
+        list={<SectionList/>}
+        create={<SectionCreate/>}
+        edit={<SectionEdit/>}
         show={<StandardSectionShow/>}
         hasDialog
         hasLiveUpdate
         hasFilterChooser
-        cardList={<StandardSectionsCardList/>}
         hasColumnChooser
         sort={{ field: 'standard_grade.name', order: 'ASC' }}
     />
