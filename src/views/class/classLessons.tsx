@@ -14,7 +14,7 @@ import {useNotify,
 import {openDialog, closeDialog, remoteLog, DataTable} from "@mahaswami/vc-frontend";
 import {assignAssignments, sendStudentsAssignmentEmail} from "../../backend/assignments.ts";
 import {ClassesStatus, ClassProgressStatus, TeachingMode} from "../../helpers/constants.ts";
-import {isExecutiveCoachingFlavored} from "../../businessLogic.ts";
+import {isExecutiveCoachingFlavored} from "../../backend/common_logics.ts";
 import { Info } from "@mui/icons-material";
 import {getStudentIdsByEnrollments} from "../../backend/classLessons.ts";
 import {UsersReferenceField} from "../users.tsx";

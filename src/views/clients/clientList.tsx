@@ -12,7 +12,7 @@ import {
     isRegularSchoolFlavored,
     isSchoolStandardLinked,
     isExecutiveCoachingFlavored, getStandardId
-} from "../../businessLogic.ts";
+} from "../../backend/common_logics.ts";
 import {getSetupLabel, getClientLabel} from "../../helpers/constants.ts";
 import {StandardsReferenceField} from "../standards.tsx";
 import {StandardGradesReferenceInput} from "../standard_grades.tsx";

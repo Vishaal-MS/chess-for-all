@@ -1,13 +1,12 @@
 import { RESOURCE } from "../views/subscribers"
+import {filterByDivisionId} from "../backend/common_logics.ts";
 
 export const SubscribersLogic: any = {
     resource: RESOURCE,
     afterCreate: [],
     afterDelete: [],
     afterDeleteMany: [],
-    afterGetList: [(params: any) => {
-        return params;
-    }],
+    afterGetList: [],
     afterGetMany: [],
     afterGetManyReference: [],
     afterGetOne: [],
@@ -16,7 +15,7 @@ export const SubscribersLogic: any = {
     beforeCreate: [],
     beforeDelete: [],
     beforeDeleteMany: [],
-    beforeGetList: [],
+    beforeGetList: [filterByDivisionId],
     beforeGetMany: [],
     beforeGetManyReference: [],
     beforeGetOne: [],

@@ -6,7 +6,7 @@ import {useEffect, useState} from "react";
 import {Button, Card, CardContent, CardHeader, Grid, Tooltip, Typography} from "@mui/material";
 import AccordionSection from "../../components/AccordionSection.tsx";
 import SchedulePreview from "./SchedulePreview.tsx";
-import {isCoach, isStudent} from "../../businessLogic.ts";
+import {isCoach, isStudent} from "../../backend/common_logics.ts";
 import {DBCard} from "../../components/DBCard.tsx";
 import DiscussionBoard from "../discussion/DiscussionBoard.tsx";
 import {AssignmentList} from "./assignmentList.tsx";

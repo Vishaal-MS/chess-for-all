@@ -6,7 +6,7 @@ import {ChessAIField} from "../../fields/ai_lesson/ChessAIField";
 import Typography from "@mui/material/Typography";
 import {StarRating} from "../../components/NumberedStar.tsx";
 import ConnectWithoutContactSharpIcon from '@mui/icons-material/ConnectWithoutContactSharp';
-import {currentTenantId, getUserId} from "../../businessLogic.ts";
+import {currentTenantId, getUserId} from "../../backend/common_logics.ts";
 
 export const PublisherProfileDialog = ({record}) => {
     const [hovered, setHovered] = useState();

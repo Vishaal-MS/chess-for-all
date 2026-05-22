@@ -1,7 +1,7 @@
 import { useListContext, useRecordContext, WrapperField, Pagination } from "react-admin";
 import {Empty} from "../common/empty.tsx";
 import {Box} from "@mui/material";
-import {isExecutiveCoachingFlavored, isParent, isStudent} from "../../businessLogic.ts";
+import {isExecutiveCoachingFlavored, isParent, isStudent} from "../../backend/common_logics.ts";
 import React, {useState} from "react";
 import {DataTable, remoteLog, useRealtimeComms} from "@mahaswami/vc-frontend";
 import {AssignmentStatus} from "../../helpers/constants.ts";

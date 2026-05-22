@@ -5,7 +5,8 @@ import {ClassesStatus, TeachingMode} from "../helpers/constants.ts";
 import {studentEnrolledEmail} from "../views/class/create/Create.tsx";
 import {differenceInDays, isBefore, parseISO, startOfToday } from "date-fns";
 import {getLocalStorage, remoteLog, removeLocalStorage} from "@mahaswami/vc-frontend";
-import {getCurrentUserCoachId, isOrgCoach} from "../businessLogic.ts";
+import {isOrgCoach} from "./common_logics.ts";
+import {getCurrentUserCoachId} from "./coaches.ts";
 
 export async function getClassesForCoachByStatus(dataProvider,currentCoachId,status) {
     try {
@@ -40,24 +41,6 @@ export async function  getAllClassesForTenant(dataProvider) {
         return classes;
     } catch(error) {
         remoteLog("Error sending getAllClassesForTenant: ", error);
-    }
-}
-
-export async function  getClassesForClient(dataProvider, clientId) {
-    try {
-        const students = await getStudentsForClient(dataProvider, clientId);
-        const studentIds = Array.from(students);
-        const enrollments = await getEnrollmentsForStudents(dataProvider, studentIds);
-        const classes = new Set(enrollments.map(enrollment => enrollment.class_id));
-        const classIds = Array.from(classes);
-        const {data: clientClasses} = await dataProvider.getList('classes', {
-            filter: {id: classIds},
-            sort: {field: 'id', order: 'ASC'},
-            pagination: { page: 1, perPage: 1000 },
-        });
-        return clientClasses;
-    } catch(error) {
-        remoteLog("Error sending getClassesForClient: ", error);
     }
 }
 

@@ -16,7 +16,7 @@ import {GenericBarChart} from "../../components/BarChart";
 import {groupByClient, groupByMonth} from "../../helpers/payments";
 import {getActiveClientsCount, getAllClients} from "../../backend/clients";
 import {getEnrollmentsByStatusAndClass} from  "../../backend/enrollments";
-import { currentTenantId, getCurrentUserCoachId } from "../../businessLogic";
+import { currentTenantId } from "../../backend/common_logics";
 import {addClientDetails} from "../../backend/dashboard.ts";
 import {getCertificatesByCoach, getTrophiesByCoach} from "../../backend/certificates.ts";
 import {getPaymentsForTenant} from "../../backend/payments.ts";
@@ -26,6 +26,7 @@ import {EnrolmentStatus, ClassesStatus, CertificateStatus, TrophiesStatus, Invoi
 import {DataTable, remoteLog} from '@mahaswami/vc-frontend';
 import {ClientsReferenceField} from "../clients.tsx";
 import {CurriculumsReferenceField} from "../curriculums.tsx";
+import {getCurrentUserCoachId} from "../../backend/coaches.ts";
 
 export const CoachDashBoard = () =>{
     const dataProvider = window.swanAppFunctions.dataProvider;

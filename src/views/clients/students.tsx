@@ -19,7 +19,7 @@ import {
 } from "../../helpers/constants.ts";
 import { StudentClasses } from "./studentClasses.tsx";
 import {useEffect, useState} from "react";
-import {isRegularSchoolFlavored} from "../../businessLogic.ts";
+import {isRegularSchoolFlavored} from "../../backend/common_logics.ts";
 import {ExtendedStudentFields} from "../students/extendedStudentFields.tsx";
 import {UsersReferenceField} from "../users.tsx";
 import {ClientsReferenceField} from "../clients.tsx";

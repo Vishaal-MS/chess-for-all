@@ -1,3 +1,4 @@
+import { filterByDivisionId } from "../backend/common_logics"
 import { RESOURCE } from "../views/snippets_libraries"
 
 export const SnippetsLibrariesLogic: any = {
@@ -5,9 +6,7 @@ export const SnippetsLibrariesLogic: any = {
     afterCreate: [],
     afterDelete: [],
     afterDeleteMany: [],
-    afterGetList: [(params: any) => {
-        return params;
-    }],
+    afterGetList: [],
     afterGetMany: [],
     afterGetManyReference: [],
     afterGetOne: [],
@@ -16,7 +15,7 @@ export const SnippetsLibrariesLogic: any = {
     beforeCreate: [],
     beforeDelete: [],
     beforeDeleteMany: [],
-    beforeGetList: [],
+    beforeGetList: [filterByDivisionId],
     beforeGetMany: [],
     beforeGetManyReference: [],
     beforeGetOne: [],

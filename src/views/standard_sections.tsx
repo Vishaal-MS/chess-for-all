@@ -20,7 +20,7 @@ import {
 import { StandardGradesReferenceField, StandardGradesReferenceInput } from './standard_grades.js';
 import { StandardCategoriesReferenceField, StandardCategoriesReferenceInput } from './standard_categories.js';
 import { StandardsReferenceField } from './standards.js';
-import {isSuperAdmin} from "../businessLogic.ts";
+import {isSuperAdmin} from "../backend/common_logics.ts";
 import AddIcon from "@mui/icons-material/Add";
 
 export const RESOURCE = "standard_sections"

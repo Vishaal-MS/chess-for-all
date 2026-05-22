@@ -1,10 +1,10 @@
 import { useState,useEffect } from 'react';
-import {getCurrentUserStudentId} from "../../businessLogic";
 import {Loading} from "react-admin";
 import {Box, Card, CardContent, Grid,  Typography} from '@mui/material';
 import { useShowController,SimpleShowLayout,ImageField } from 'react-admin';
 import {CertificateStatus, TrophiesStatus} from "../../helpers/constants.ts";
 import { remoteLog } from '@mahaswami/vc-frontend';
+import {getCurrentUserStudentId} from "../../backend/students.ts";
 
 export const AchievementsShow = ({ id,resource }) => {
         const { isPending, error, record } = useShowController({ resource: resource, id });

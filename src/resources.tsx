@@ -16,7 +16,6 @@ import { StandardGradesResource } from './views/standard_grades.tsx';
 import { StandardCategoriesResource } from './views/standard_categories.tsx';
 import { StandardSectionsResource } from './views/standard_sections.tsx';
 import {CognitiveSkillsMenu, CognitiveSkillsResource} from './views/cognitive_skills.tsx';
-import { AcademyTypesResource } from './views/academy_types.tsx';
 import { CertificateTemplatesResource } from './views/certificate_templates.tsx';
 import { ScheduleTypesResource } from './views/schedule_types.tsx';
 import { TeachingModesResource } from './views/teaching_modes.tsx';
@@ -25,23 +24,20 @@ import {DivisionsMenu, DivisionsResource} from './views/divisions.tsx';
 import { ClientsResource, ClientsMenu } from './views/clients.tsx';
 import { LessonBlocksResource, LessonBlocksMenu } from './views/lesson_blocks.tsx';
 import { LessonsResource, LessonsMenu } from './views/lessons.tsx';
-import { LessonBlockMappingsResource } from './views/lesson_block_mappings.tsx';
 import { TagsResource } from './views/tags.tsx';
 import { LevelsResource } from './views/levels.tsx';
 import { TrophyTypesResource } from './views/trophy_types.tsx';
 import {BackgroundMusicsMenu, BackgroundMusicsResource} from './views/background_musics.tsx';
 import {AiBlockLogsMenu, AiBlockLogsResource} from './views/ai_block_logs.tsx';
 import {CoachesMenu, CoachesResource} from './views/coaches.tsx';
-import { CurriculumsResource, CurriculumsMenu, CurriculumLessonsResource} from './views/curriculums.tsx';
+import { CurriculumsResource, CurriculumsMenu} from './views/curriculums.tsx';
 import { ClassesResource, ClassesMenu } from './views/classes.tsx';
 import { StudentsResource } from './views/students.tsx';
 import { GamesResource, GamesMenu } from './views/games.tsx';
 import { DiscussionTopicsResource } from './views/discussion_topics.tsx';
-import { RepliesResource } from './views/replies.tsx';
 import { DiscussionReadStatusesResource } from './views/discussion_read_statuses.tsx';
 import { ParentNotesResource } from './views/parent_notes.tsx';
 import { AssignmentsResource } from './views/assignments.tsx';
-import { AssignmentBlocksResource } from './views/assignment_blocks.tsx';
 import {CertificatesMenu, CertificatesResource} from './views/certificates.tsx';
 import { ClassProgressesResource } from './views/class_progresses.tsx';
 import { ClassSchedulesResource } from './views/class_schedules.tsx';
@@ -70,7 +66,7 @@ import {
     isSchoolStandardLinked,
     isShowLargeAcademyMenus,
     isTenantAllowedCoaching
-} from "./businessLogic.ts";
+} from "./backend/common_logics.ts";
 import Dashboard from "./views/dashboard/dashboard.tsx";
 import {CoachDashBoard} from "./views/dashboard/coachmaindashboard.tsx";
 import {OrgAdminMainDashBoard} from "./views/dashboard/orgadmindashboard.tsx";
@@ -134,7 +130,6 @@ export const configureResources = (permissions: any) => {
         StandardCategoriesResource,
         StandardSectionsResource,
         CognitiveSkillsResource,
-        AcademyTypesResource,
         CertificateTemplatesResource,
         ScheduleTypesResource,
         TeachingModesResource,
@@ -143,7 +138,6 @@ export const configureResources = (permissions: any) => {
         ClientsResource,
         LessonBlocksResource,
         LessonsResource,
-        LessonBlockMappingsResource,
         TagsResource,
         LevelsResource,
         TrophyTypesResource,
@@ -151,7 +145,6 @@ export const configureResources = (permissions: any) => {
         AiBlockLogsResource,
         CoachesResource,
         CurriculumsResource,
-        CurriculumLessonsResource,
         ClassesResource,
         StudentsResource,
         GamesResource,
@@ -159,7 +152,6 @@ export const configureResources = (permissions: any) => {
         DiscussionReadStatusesResource,
         ParentNotesResource,
         AssignmentsResource,
-        AssignmentBlocksResource,
         CertificatesResource,
         ClassProgressesResource,
         ClassSchedulesResource,

@@ -1,8 +1,8 @@
 import React, { useMemo, useEffect, useState } from "react";
 import { getLocalStorage, remoteLog } from "@mahaswami/vc-frontend";
-import { applyHashToTenant } from "../../businessLogic";
 import {Button, Loading} from "react-admin";
 import {Box} from "@mui/material";
+import {applyHashToTenant} from "../../backend/users.ts";
 
 export const ApplyHashTenant = () => {
     const [tenantId, setTenantId] = useState(getLocalStorage('tenant_id'));

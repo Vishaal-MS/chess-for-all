@@ -16,7 +16,7 @@ import {useRedirect} from "react-admin";
 import {
     currentTenantId,
     isDivisionAdmin
-} from "../../businessLogic";
+} from "../../backend/common_logics";
 import {DataTable, PER_PAGE, SensibleDefaultPagination} from "@mahaswami/vc-frontend";
 import {ListTitle} from "../../components/Title.tsx";
 import {CurriculumListView} from "../curriculum/curriculumListView.tsx";

@@ -1,4 +1,4 @@
-import {isAcademy, isExecutiveCoachingFlavored} from "../../../businessLogic.ts";
+import {isAcademy, isExecutiveCoachingFlavored} from "../../../backend/common_logics.ts";
 import {
     AutocompleteInput,
     DateInput,

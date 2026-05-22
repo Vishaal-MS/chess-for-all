@@ -5,9 +5,7 @@ export const ClassProgressesLogic: any = {
     afterCreate: [],
     afterDelete: [],
     afterDeleteMany: [],
-    afterGetList: [(params: any) => {
-        return params;
-    }],
+    afterGetList: [],
     afterGetMany: [],
     afterGetManyReference: [],
     afterGetOne: [],
@@ -20,7 +18,7 @@ export const ClassProgressesLogic: any = {
     beforeGetMany: [],
     beforeGetManyReference: [],
     beforeGetOne: [],
-    beforeUpdate: [(params) => {
+    beforeUpdate: [(params: any) => {
         const data = params?.data;
         data.__index__ = undefined;
         return params;

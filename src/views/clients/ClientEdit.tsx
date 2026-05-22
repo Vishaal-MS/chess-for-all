@@ -20,7 +20,7 @@ import {ExtendedClientFields} from "./ExtendedClientFields.tsx";
 import {Empty} from "../common/empty.tsx";
 import {UsersReferenceField} from "../users.tsx";
 import {AvatarField} from "../../fields/AvatarField.tsx";
-import {isSchoolStandardLinked} from "../../businessLogic.ts";
+import {isSchoolStandardLinked} from "../../backend/common_logics.ts";
 import {StandardGradesReferenceInput} from "../standard_grades.tsx";
 import {StudentClasses} from "./studentClasses.tsx";
 import {AddStudents} from "./addStudents.tsx";

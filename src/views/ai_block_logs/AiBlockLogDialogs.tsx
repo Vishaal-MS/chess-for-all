@@ -2,7 +2,7 @@ import {Box, Grid, Input, Typography} from '@mui/material';
 import { useState } from "react";
 import { closeDialog, remoteLog } from "@mahaswami/vc-frontend";
 import { UserRoles } from "../../helpers/constants";
-import { sendEmail } from "../../businessLogic";
+import { sendEmail } from "../../backend/common_logics";
 import { getAiBlockFeedbackEmailTemplate } from "../../helpers/emailTemplates";
 import SendIcon from '@mui/icons-material/Send';
 import { Button, useNotify, useRefresh } from 'react-admin';

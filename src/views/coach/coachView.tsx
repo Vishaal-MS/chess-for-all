@@ -1,15 +1,7 @@
 import {useEffect, useState} from "react";
-import {getCurrentUserCoachId, isExecutiveCoachingFlavored, isOrgCoach} from "../../businessLogic.ts";
+import {isExecutiveCoachingFlavored, isOrgCoach} from "../../backend/common_logics.ts";
 import {
-    ImageField,
-    List,
-    Loading,
-    ReferenceField,
-    ResourceContextProvider,
-    Show,
-    SimpleList,
-    TabbedShowLayout, TextField,
-    useGetRecordId
+    ImageField, List, Loading, ResourceContextProvider, Show, SimpleList, TabbedShowLayout, TextField, useGetRecordId
 } from "react-admin";
 import {getClassesForCoachByStatus} from "../../backend/classes.ts";
 import {getEnrollmentsByStatusAndClass} from "../../backend/enrollments.ts";
@@ -25,6 +17,7 @@ import ContactPhoneIcon from "@mui/icons-material/ContactPhone";
 import {EnrolmentStatus, ClassesStatus, CertificateStatus, TrophiesStatus} from "../../helpers/constants.ts";
 import {StudentsReferenceField} from "../students.tsx";
 import {UsersReferenceField} from "../users.tsx";
+import {getCurrentUserCoachId} from "../../backend/coaches.ts";
 
 const CoachCard = () => {
     return (

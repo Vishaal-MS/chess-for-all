@@ -23,7 +23,7 @@ import {
     isRegularSchoolFlavored,
     isSchoolStandardLinked,
     isAllowedVoiceOver
-} from "../../businessLogic.ts";
+} from "../../backend/common_logics.ts";
 import EditIcon from '@mui/icons-material/Edit';
 import {StandardSectionsReferenceInput} from "../standard_sections.tsx";
 import {CognitiveSkillsReferenceInput} from "../cognitive_skills.tsx";

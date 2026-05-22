@@ -12,7 +12,7 @@ import {
 import {Fragment, useState} from "react";
 import {Box, Grid} from '@mui/material';
 import {validatePhoneNumber} from "../../helpers/phoneNumberValidation.ts";
-import {isExecutiveCoachingFlavored, isSchoolStandardLinked} from "../../businessLogic.ts";
+import {isExecutiveCoachingFlavored, isSchoolStandardLinked} from "../../backend/common_logics.ts";
 import {getLocalStorage} from "@mahaswami/vc-frontend";
 import {ClientTypes, genderChoices} from "./../../helpers/constants.ts";
 import {countryChoices} from "../../helpers/AllCountries.ts";

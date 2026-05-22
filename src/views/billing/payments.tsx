@@ -2,7 +2,7 @@ import {DateField, List, ResourceContextProvider, TextField} from 'react-admin';
 import {formatAmount} from "../../utils";
 import {DataTable, PER_PAGE, SensibleDefaultPagination} from "@mahaswami/vc-frontend";
 import React, {useEffect} from "react";
-import {getCurrentUserCoachId} from "../../businessLogic";
+import {getCurrentUserCoachId} from "../../backend/coaches.ts";
 import {CoachesReferenceField} from "../coaches.tsx";
 
 export const CoachPaymentsList = () => {

@@ -1,7 +1,15 @@
 import { remoteLog } from "@mahaswami/vc-frontend";
 import {uniqueEmailValidation} from "./clients.ts";
 import {UserRoles} from "../helpers/constants.ts";
-import {getDivisionId, isDivisionAdmin, isLargeAcademy, isOrgAdmin} from "../businessLogic.ts";
+import {
+    getDivisionId,
+    getUserId,
+    isDivisionAdmin,
+    isLargeAcademy,
+    isOrgAdmin,
+    isOrgCoach,
+    isProCoach
+} from "./common_logics.ts";
 import {createUser} from "./users.ts";
 
 export const coachEmailValidation = async (value, allValue) => {
@@ -88,5 +96,18 @@ export async function getAllCoaches(dataProvider) {
     } catch (error) {
         console.error("Error on getAllCoaches: ", error);
         remoteLog("Error on getAllCoaches: ", error);
+    }
+}
+
+export async function getCurrentUserCoachId(dataProvider) {
+    try {
+        if(!isProCoach() && !isOrgCoach()) return;
+        const {data: coaches} = await dataProvider.getList('coaches', {
+            filter: {user_id: getUserId()},
+            sort: {field: 'id', order: 'ASC'}
+        });
+        return coaches.map(coachRecord => coachRecord.id);
+    } catch (error) {
+        remoteLog("Error sending on getCurrentUserCoachId: ", error);
     }
 }

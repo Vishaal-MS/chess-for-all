@@ -1,32 +1,28 @@
 import { AutocompleteArrayInput, BooleanField, BooleanInput, Create, Edit, List,
-    NumberField, NumberInput, ReferenceArrayField, ReferenceArrayInput, SearchInput, SelectInput, Show,
+    NumberField, NumberInput, ReferenceArrayField, ReferenceArrayInput, SelectInput, Show,
     SimpleShowLayout, SingleFieldList, TextField, TextInput,
 } from "react-admin";
-import {DataTable, editDefaults, PER_PAGE, SensibleDefaultPagination, showDefaults, SimpleForm} from "@mahaswami/vc-frontend";
+import {
+    DataTable,
+    editDefaults,
+    listDefaults,
+    showDefaults,
+    SimpleForm, tableDefaults
+} from "@mahaswami/vc-frontend";
 import {Grid} from "@mui/material";
+import {RESOURCE} from "../snippets_libraries.tsx";
 
-export const SnippetsLibraryList = () => {
-    const choices = [{id: true, name: 'Yes'}, {id: false, name: 'No'}];
-    const filters = [
-        <SearchInput source="q" alwaysOn/>,
-        <SelectInput source="type" choices={getTypeChoices()} alwaysOn/>,
-        <SelectInput label="Active?" source={"is_active"} choices={choices} alwaysOn/>,
-        <SelectInput label="Advanced?" source={"is_advanced"} choices={choices} alwaysOn/>,
-        <ReferenceArrayInput source="tag_ids" reference="tags" alwaysOn queryOptions={{meta: {scopingEscapeHatch:true}}} perPage={1000} sort={{ field: 'name', order: 'ASC' }}>
-            <AutocompleteArrayInput label="Tags" />
-        </ReferenceArrayInput>
-    ];
-
+export const SnippetsLibraryList = (props: any) => {
     return (
-        <List pagination={<SensibleDefaultPagination/>} disableSyncWithLocation perPage={PER_PAGE}
-              resource="snippets_library" filters={filters} exporter={false} sort={{field: 'position_number', order: "ASC"}}
-              queryOptions={{meta: {scopingEscapeHatch: true}}}>
-            <DataTable bulkActionButtons={false}>
+        <List { ...listDefaults(props)} disableSyncWithLocation exporter={false}
+              sort={{ field: 'position_number', order: "ASC" }} queryOptions={{ meta: {scopingEscapeHatch: true }}}>
+            <DataTable { ...tableDefaults(RESOURCE)} bulkActionButtons={false}>
                 <DataTable.Col source="title"/>
                 <DataTable.Col source="type"/>
-                <DataTable.Col label="Tags" field={() => <ReferenceArrayField source="tag_ids" reference="tags" perPage={1000}>
-                    <SingleFieldList linkType={false} />
-                </ReferenceArrayField>} />
+                <DataTable.Col label="Tags" field={() =>
+                    <ReferenceArrayField source="tag_ids" reference="tags" perPage={1000}>
+                        <SingleFieldList linkType={false} />
+                    </ReferenceArrayField>} />
                 <DataTable.Col source="position_number" field={NumberField}/>
                 <DataTable.Col label="Active?" source="is_active" field={BooleanField}/>
                 <DataTable.Col label="Advanced?" source="is_advanced" field={BooleanField}/>

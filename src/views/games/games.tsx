@@ -22,17 +22,15 @@ import {
     GameStatusLabels
 } from "../../helpers/constants";
 import {
-    getCurrentUserStudentId, getDivisionId,
-    isCoach,
-    isLargeAcademy,
-    isStudent,
-} from "../../businessLogic.ts";
+    getDivisionId, isCoach, isLargeAcademy, isStudent,
+} from "../../backend/common_logics.ts";
 import FilterMultiChoiceInput from "../common/FilterMultiChoiceInput.tsx";
 import {ListTitle, RecordTitle} from "../../components/Title.tsx";
 import PlayWithBotView from "./PlayWithBotView.tsx";
 import {ClassesReferenceField, ClassesReferenceInput} from "../classes.tsx";
 import {GamePlayView} from "./GamePlayView.tsx";
 import {StudentsReferenceInput} from "../students.tsx";
+import {getCurrentUserStudentId} from "../../backend/students.ts";
 
 export const GameList = () => {
     const location = useLocation();

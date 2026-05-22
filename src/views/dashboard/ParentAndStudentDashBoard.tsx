@@ -6,7 +6,7 @@ import {Box, Card, CardContent, CardHeader, Grid, IconButton, Typography, Toolti
 import {formatDateWithShortYear, formatStatus} from "../../utils.ts";
 import {Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, XAxis, YAxis, Tooltip as TooltipRechart} from "recharts";
 import {useEffect, useState} from "react";
-import {isCoach} from "../../businessLogic.ts";
+import {isCoach} from "../../backend/common_logics.ts";
 import ParentNoteList, {ParentNoteCreate, ParentNotesForm} from "../parent_notes/parentNotes.tsx";
 import {AssignmentStatus} from "../../helpers/constants.ts";
 import AddIcon from "@mui/icons-material/Add";

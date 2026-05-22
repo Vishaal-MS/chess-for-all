@@ -1,7 +1,7 @@
 import { AutocompleteInput, required} from "react-admin";
 import {Fragment, useEffect, useState} from "react";
 import {useWatch} from "react-hook-form";
-import {isRegularSchoolFlavored} from "../../businessLogic.ts";
+import {isRegularSchoolFlavored} from "../../backend/common_logics.ts";
 import {ClientsReferenceInput} from "../clients.tsx";
 import {StandardSectionsReferenceInput} from "../standard_sections.tsx";
 

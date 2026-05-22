@@ -1,5 +1,5 @@
 import {UserRoles} from "./constants.ts";
-import {getTenantName, isCoach, isExecutiveCoachingFlavored, isProCoachByTenantId, getUserFullName} from "../businessLogic.ts";
+import {getTenantName, isCoach, isExecutiveCoachingFlavored, isProCoachByTenantId, getUserFullName} from "../backend/common_logics.ts";
 import {getLocalStorage} from "@mahaswami/vc-frontend";
 
 export const getCoachEmailTemplate = async (user) => {

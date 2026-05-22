@@ -4,8 +4,8 @@ import {
     required, SaveButton, SelectInput, SimpleForm, SimpleShowLayout, TextField, TextInput, Toolbar, TopToolbar,
 } from 'react-admin';
 import {
-    getCurrentUserCoachId, isAcademy, isDivisionAdmin, isDivisionCoach, isOrgAdmin, isOrgCoach,
-} from "../../businessLogic";
+    isAcademy, isDivisionAdmin, isDivisionCoach, isOrgAdmin, isOrgCoach,
+} from "../../backend/common_logics";
 import {useEffect, useState} from "react";
 import {DataTable, PER_PAGE, remoteLog, SensibleDefaultPagination} from "@mahaswami/vc-frontend";
 import FilterMultiChoiceInput from "../common/FilterMultiChoiceInput.tsx";
@@ -18,6 +18,7 @@ import {formatDateWithShortYear} from "../../utils.ts";
 import ArchiveIcon from '@mui/icons-material/Archive';
 import {ClassesReferenceField, ClassesReferenceInput} from "../classes.tsx";
 import {CoachesReferenceField, CoachesReferenceInput} from "../coaches.tsx";
+import { getCurrentUserCoachId } from '../../backend/coaches.ts';
 
 export const TimeSheetList = () => {
     const dataProvider = window.swanAppFunctions.dataProvider;

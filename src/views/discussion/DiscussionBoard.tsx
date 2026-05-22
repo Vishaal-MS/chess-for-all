@@ -16,7 +16,7 @@ import {
     useListContext,
     useRefresh
 } from 'react-admin';
-import {getUserId} from '../../businessLogic';
+import {getUserId} from '../../backend/common_logics';
 import { Empty } from '../common/empty';
 import DiscussionPostCreate from './DiscussionPostCreate';
 import ReplyLineItem from './ReplyLineItem';

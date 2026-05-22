@@ -20,7 +20,7 @@ import {  getActiveClientsCount,getAllClients} from "../../backend/clients";
 import {getEnrollmentsByStatusAndClass} from  "../../backend/enrollments";
 import {
     currentTenantId,
-} from "../../businessLogic";
+} from "../../backend/common_logics";
 import {addClientDetails, addCoachDetails} from "./../../backend/dashboard.ts";
 import { getAllCertificates, getAllTrophies } from "./../../backend/certificates.ts";
 import { getPaymentsForTenant} from "./../../backend/payments.ts";

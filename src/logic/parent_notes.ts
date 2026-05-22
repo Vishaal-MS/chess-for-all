@@ -1,13 +1,12 @@
 import { RESOURCE } from "../views/parent_notes"
+import {sendEmailToParentAfterCreateNote} from "../backend/users.ts";
 
 export const ParentNotesLogic: any = {
     resource: RESOURCE,
-    afterCreate: [],
+    afterCreate: [sendEmailToParentAfterCreateNote],
     afterDelete: [],
     afterDeleteMany: [],
-    afterGetList: [(params: any) => {
-        return params;
-    }],
+    afterGetList: [],
     afterGetMany: [],
     afterGetManyReference: [],
     afterGetOne: [],

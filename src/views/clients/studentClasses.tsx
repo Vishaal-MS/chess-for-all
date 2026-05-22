@@ -5,7 +5,7 @@ import {
    isExecutiveCoachingFlavored,
    isOrgAdmin,
    isRegularSchoolFlavored,
-} from "../../businessLogic";
+} from "../../backend/common_logics";
 import {Fragment, useEffect, useState} from "react";
 import { getClassIdByStudentId } from "../../backend/clients";
 import {Empty} from "../common/empty.tsx";

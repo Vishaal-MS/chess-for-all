@@ -15,32 +15,15 @@ import {
 } from '@mahaswami/vc-frontend';
 import { ViewComfy } from '@mui/icons-material';
 import {
-    Create,
-    Edit,
-    List,
-    Menu,
-    type ListProps,
-    TextInput,
-    BooleanField,
-    BooleanInput,
-    ReferenceArrayInput,
-    AutocompleteArrayInput,
-    SelectField,
-    TopToolbar,
-    Button,
-    SelectInput,
-    WithRecord,
-    FormDataConsumer,
-    NumberInput,
-    TextField,
-    ReferenceArrayField, SingleFieldList
+    Create, Edit, List, Menu, type ListProps, TextInput, BooleanField, BooleanInput, ReferenceArrayInput,
+    AutocompleteArrayInput, SelectField, TopToolbar, Button, SelectInput, WithRecord, FormDataConsumer,
+    NumberInput, TextField, ReferenceArrayField, SingleFieldList
 } from "react-admin";
 import {useLocation, useNavigate} from "react-router-dom";
 import AddIcon from '@mui/icons-material/Add';
 import {Typography, Box} from "@mui/material";
 import {LessonBlockForm} from "./curriculum/LessonBlockForm.tsx";
 import {getBlockTypeChoices, LessonBlockShow} from "./curriculum/lesson_blocks.tsx";
-import React from "react";
 
 export const RESOURCE = "lesson_blocks"
 export const ICON = ViewComfy
@@ -91,10 +74,10 @@ export const LessonBlocksList = (props: ListProps) => {
             <DataTable {...tableDefaults(RESOURCE)}>
                 <DataTable.Col source="name"/>
                 <DataTable.Col label="Block Type" field={() => <SelectField source="block_type" choices={getBlockTypeChoices()} />} />
-                <DataTable.Col label="Tags" field={() => <ReferenceArrayField source="tag_ids" reference="tags" perPage={1000}>
-                    <SingleFieldList linkType={false} />
-                </ReferenceArrayField>
-                } />
+                {/*<DataTable.Col label="Tags" field={() => <ReferenceArrayField source="tag_ids" reference="tags" perPage={1000}>*/}
+                {/*    <SingleFieldList linkType={false} />*/}
+                {/*</ReferenceArrayField>*/}
+                {/*} />*/}
             </DataTable>
         </List>
     )

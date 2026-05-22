@@ -11,15 +11,3 @@ export async function getInvoicesForTenantByStatus(dataProvider, status) {
         remoteLog("Error sending on getInvoicesForTenantByStatus: ", error);
     }
 }
-
-export async function getPendingInvoicesFromClient(dataProvider, clientId) {
-    try {
-        const {data: invoices} = await dataProvider.getList('invoices', {
-            filter: {status: "unpaid", client_id: clientId},
-            pagination: {page: 1, perPage: 1000},
-        });
-        return invoices;
-    } catch (error) {
-        remoteLog("Error sending on getPendingInvoicesFromClient: ", error);
-    }
-}

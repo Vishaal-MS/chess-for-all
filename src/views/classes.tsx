@@ -8,7 +8,7 @@ import {ClassEdit} from "./class/ClassEdit.tsx";
 import {MyClassesList} from "./class/ClassList.tsx";
 import {MyClassShow} from "./class/ClassShow.tsx";
 import {TeachingModesReferenceField} from "./teaching_modes.tsx";
-import {isCoach} from "../businessLogic.ts";
+import {isCoach} from "../backend/common_logics.ts";
 
 export const RESOURCE = "classes"
 export const ICON = CastForEducation

@@ -2,32 +2,6 @@ import { remoteLog } from "@mahaswami/vc-frontend";
 import { generateFileName, uploadFile } from "../utils";
 import { Identifier } from "react-admin";
 
-export const createGameWithPGN = async (pgn: string) => {
-    try {
-        const currentTimestamp = new Date().toLocaleTimeString()
-        if (pgn) {
-            const blob = new Blob([pgn], { type: "text/plain" });
-            const file = new File(
-                [blob], 
-                `capture_${currentTimestamp}.pgn`, 
-                { type: "text/plain" }
-            );
-            const fileId = await uploadFile(file, "games");
-            const dataProvider = window.swanAppFunctions.dataProvider;
-            await dataProvider.create("games", {
-                data: { 
-                    pgn_file_id: fileId,
-                    created_date: new Date()
-                }
-            })
-        }
-    } catch (error) {
-        const message = `Error: create game with captured pgn: ${error.message}`
-        console.log(message);
-        remoteLog(message, error)
-    }
-}
-
 export const updateGameById = async (gameId: Identifier | undefined, game: any) => {
     try {
         if (!gameId) {
@@ -107,3 +81,10 @@ export const initializeGame = async (params: any) => {
         remoteLog("Error: initialize game:", error)
     }
 }
+
+export const addPlayersFilter = async (params, dataProvider) => {
+    let newParams = params || {};
+    newParams.filter = {...newParams.filter};
+    delete newParams?.filter?.players_filter_by_ids; // Remove the temp filter field from payload.
+    return newParams;
+};

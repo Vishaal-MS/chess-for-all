@@ -15,7 +15,7 @@ import {
     inActivateSubscribablesByCurriculum, RichTextWithInlineReadMore,
     RoyaltyAmountDialog
 } from "./curriculum.tsx";
-import {isAllowPublishing} from "../../businessLogic.ts";
+import {isAllowPublishing} from "../../backend/common_logics.ts";
 import { openDialog} from "@mahaswami/vc-frontend";
 import React, {useEffect, useState} from "react";
 import UnpublishedIcon from "@mui/icons-material/UnpublishedSharp";
@@ -90,7 +90,7 @@ export const CurriculumListView = ({currentView, settings, subscribables, subscr
                 <Box sx={boxHeaderSx}>
                     <Grid container>
                         <Grid item md={11.5}>
-                            {name}
+                            {name} Test
                         </Grid>
                         <Grid item md={0.5}>
                             { isPublish &&

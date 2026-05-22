@@ -1,26 +1,5 @@
 import { remoteLog } from "@mahaswami/vc-frontend";
 
-export async function updateResourceOrder (dataProvider,resource,data) {
-    try {
-        //For each record in data call dataProvider.update
-        const promises = data.map(record => {
-            return dataProvider.update(resource, {
-                id: record.id,
-                data: {
-                    ...record,
-                    order: record.order
-                }
-            });
-        });
-        //Wait for all promises to resolve
-        const results = await Promise.all(promises);
-        //Return the results
-        return results.map(result => result.data);
-    } catch (error) {
-        remoteLog("Error sending on updateResourceOrder: ", error);
-    }
-}
-
 export async function getCurriculumLessons(dataProvider) {
     try {
         const { data: curriculumLessons } = await dataProvider.getList('curriculum_lessons', {
@@ -98,4 +77,35 @@ export async function handleLessonDuplicate(dataProvider, record, navigation) {
     }).catch(error => {
         remoteLog("Error copying lesson: ", error);
     });
+}
+
+export async function prefetchSubscribables(result: any) {
+    try {
+        const dataProvider = window.swanAppFunctions.dataProvider;
+        const currLessonsLessonIds = result?.data?.map((currLesson: any) => currLesson.lesson_id);
+        if (currLessonsLessonIds && currLessonsLessonIds.length > 0) {
+            const { data: subscribables } = await dataProvider.getList("subscribables", {
+                meta: { scopingEscapeHatch: true }
+            });
+            const subscribableCurrIds = subscribables.map((subscribable: any) => subscribable.curriculum_id);
+            const {data: subscribedCurrLessons} = await dataProvider.getList("curriculum_lessons", {
+                filter: { curriculum_id: subscribableCurrIds, lesson_id: currLessonsLessonIds },
+                meta: { scopingEscapeHatch: true }
+            });
+            if (subscribedCurrLessons && subscribedCurrLessons.length > 0) {
+                result.data = result.data.map((currLesson: any) => {
+                    subscribableCurrIds.forEach((subscribableCurrId: any) => {
+                        if (subscribedCurrLessons.some((scl: any) => scl.curriculum_id === subscribableCurrId && scl.lesson_id === currLesson.lesson_id)) {
+                            currLesson.subscribable = subscribables.find((subscribable: any) => subscribable.curriculum_id === subscribableCurrId);
+                        }
+                    });
+                    return currLesson;
+                });
+            }
+        }
+        return result;
+    } catch (error) {
+        console.error(`Error sending on prefetchSubscribable: ${error}`)
+        remoteLog(`Error sending on prefetchSubscribable: ${error}`)
+    }
 }

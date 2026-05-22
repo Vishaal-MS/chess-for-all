@@ -8,7 +8,7 @@ import {
 import {closeDialog, DataTable, openDialog, PER_PAGE, SensibleDefaultPagination} from "@mahaswami/vc-frontend";
 import {Box, Typography} from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import {isSuperAdmin} from "../../businessLogic.ts";
+import {isSuperAdmin} from "../../backend/common_logics.ts";
 
 export const CategoryList = ({standardId}) => {
     const superAdmin = isSuperAdmin();

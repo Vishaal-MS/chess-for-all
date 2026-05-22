@@ -1,6 +1,6 @@
 import {remoteLog} from "@mahaswami/vc-frontend";
 import {getSettingsBasedOnEnv} from "../configuration";
-import { getUserEmail } from "../businessLogic";
+import { getUserEmail } from "./common_logics";
 
 export async function scanScoreSheet(scorecardBase64: string) {
     try {

@@ -31,7 +31,7 @@ import {
     getClassProgressWithClassIdAndLessonId,
     updateAssignment
 } from "../../backend/assignments";
-import { isCoach, isStudent } from "../../businessLogic";
+import { isCoach, isStudent } from "../../backend/common_logics";
 import { AssignmentBlockStatus } from "../../helpers/constants.ts";
 import { ChessBoard } from './ChessBoardTipTapExtension';
 import { ArrowLeft, ArrowRight, Replay } from "@mui/icons-material";

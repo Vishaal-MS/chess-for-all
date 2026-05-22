@@ -6,7 +6,7 @@ import {
 } from "react-admin";
 import {Typography} from "@mui/material";
 import { closeDialog } from "@mahaswami/vc-frontend";
-import {getStandardId, isRegularSchoolFlavored} from "../../businessLogic.ts";
+import {getStandardId, isRegularSchoolFlavored} from "../../backend/common_logics.ts";
 import {ExtendedStudentFields} from "../students/extendedStudentFields.tsx";
 
 export const AddStudents = (props: any) => {

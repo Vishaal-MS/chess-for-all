@@ -10,13 +10,7 @@ import {
     TextLiveFilter,
 } from '@mahaswami/vc-frontend';
 import { LibraryBooks } from '@mui/icons-material';
-import {
-    List,
-    Menu,
-    type ListProps,
-    TextField,
-    SelectField, ReferenceArrayInput, AutocompleteArrayInput
-} from "react-admin";
+import { List, Menu, type ListProps, TextField, SelectField } from "react-admin";
 import {LessonCreate, LessonEdit, LessonList, LessonShow} from "./curriculum/lessons.tsx";
 
 export const RESOURCE = "lessons"
@@ -34,21 +28,6 @@ const filters = [
     <TextLiveFilter source="search" show />,
     <ChoicesLiveFilter source="language" label="Language" choiceLabels={languageChoices} show />,
 ]
-
-// export const LessonsList = (props: ListProps) => {
-//     return (
-//         <List {...listDefaults(props)}>
-//             <DataTable {...tableDefaults(RESOURCE)}>
-//                 <DataTable.Col source="name" />
-//                 <DataTable.Col source="language" field={LanguageChoiceField} />
-//                 <DataTable.Col source="tag_ids" />
-//                 <DataTable.Col source="division_id" field={DivisionsReferenceField}/>
-//                 <DataTable.Col source="is_limit_to_show_single_section" field={BooleanField}/>
-//                 <RowActions/>
-//             </DataTable>
-//         </List>
-//     )
-// }
 
 export const LessonsCardList = (props: ListProps) => {
     return (

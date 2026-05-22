@@ -8,7 +8,7 @@ import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import SearchIcon from '@mui/icons-material/Search';
 import { useFormContext } from 'react-hook-form';
 import { useEffect, useState } from "react";
-import {getStandardId, isRegularSchoolFlavored} from "../../businessLogic.ts";
+import {getStandardId, isRegularSchoolFlavored} from "../../backend/common_logics.ts";
 import {CurriculumsReferenceInput} from "../curriculums.tsx";
 
 //TODO Clean up this code. Default Lesson Filter may not be needed.

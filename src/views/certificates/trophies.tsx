@@ -5,7 +5,7 @@ import {
 } from 'react-admin';
 import { Grid,Card, Box ,Typography} from '@mui/material';
 import {Toolbar, Button} from 'react-admin';
-import {isExecutiveCoachingFlavored, isProCoach} from "../../businessLogic";
+import {isExecutiveCoachingFlavored, isProCoach} from "../../backend/common_logics";
 import {DataTable, PER_PAGE, SensibleDefaultPagination, SimpleForm} from "@mahaswami/vc-frontend";
 import {TrophyTypesReferenceField} from "../trophy_types.tsx";
 import {CoachesReferenceField} from "../coaches.tsx";

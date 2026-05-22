@@ -1,7 +1,7 @@
 import {useRecordContext} from "react-admin";
 import {useNavigate} from "react-router-dom";
 import {IconButton, Typography} from "@mui/material";
-import {isTenantAllowedCoaching} from "../businessLogic.ts";
+import {isTenantAllowedCoaching} from "../backend/common_logics.ts";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 
 export const CustomLinkFieldWithState = ({state = {}}) => {
@@ -10,7 +10,6 @@ export const CustomLinkFieldWithState = ({state = {}}) => {
     const navigate = useNavigate();
     const isPublisherLogin = state?.isFromSubscribedCurriculum === undefined;
     if (!record) return null;
-    console.log("Lessson record: ", record);
 
     const lessonIds =  state.ids || [];
     if (!lessonIds.includes(record.lesson_id)) {

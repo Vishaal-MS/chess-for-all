@@ -15,7 +15,7 @@ import { LessonBlockField } from '../../fields/ai_lesson/lesson_block_field';
 import {useLocation, useNavigate} from "react-router-dom";
 import { SnippetsLibraryLookup} from "./SnippetsLibraryLookup.tsx";
 import { ThumbDown, ThumbUp } from "@mui/icons-material";
-import { getUserId } from "../../businessLogic.ts";
+import { getUserId } from "../../backend/common_logics.ts";
 import { aiBlockLogCreate } from "../../backend/aiBlockLogs.ts";
 import {SetupBoard} from "./SetupBoard.tsx";
 import {AiBlockFeedBackDialog} from "../ai_block_logs/AiBlockLogDialogs.tsx";

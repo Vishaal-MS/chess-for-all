@@ -2,7 +2,7 @@ import {useNavigate} from "react-router-dom";
 import {
     isAcademy, isDivisionAdmin, isDivisionCoach, isExecutiveCoachingFlavored,
     isOrgAdmin, isOrgCoach, isProCoach, isRegularSchoolFlavored, isSchoolStandardLinked
-} from "../../businessLogic.ts";
+} from "../../backend/common_logics.ts";
 import {Fragment, useEffect, useRef} from "react";
 import {DataTable, getLocalStorage, listDefaults, PER_PAGE, SensibleDefaultPagination} from "@mahaswami/vc-frontend";
 import {

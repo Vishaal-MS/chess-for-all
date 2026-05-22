@@ -16,7 +16,7 @@ import {AssignmentsLiveGrid} from "./assignmentsLiveGrid";
 import { Grid, Box, Typography } from "@mui/material";
 import {AssignmentStatus} from "../../helpers/constants.ts";
 import KeyboardReturnIcon from '@mui/icons-material/KeyboardReturn';
-import {isOrgAdmin, isOrgCoach, isProCoach, isRegularSchoolFlavored} from "../../businessLogic.ts";
+import {isOrgAdmin, isOrgCoach, isProCoach, isRegularSchoolFlavored} from "../../backend/common_logics.ts";
 import {formatDateWithShortYear} from "../../utils.ts";
 import {showDefaults} from "@mahaswami/vc-frontend";
 import {LessonsReferenceField} from "../lessons.tsx";

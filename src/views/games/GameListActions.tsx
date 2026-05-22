@@ -36,7 +36,7 @@ import {
     getUserId, isCoach,
     isStudent,
     sendEmail
-} from "../../businessLogic";
+} from "../../backend/common_logics";
 import { getGameInvitationEmailTemplate, getGamePlayInvitationEmailTemplate } from "../../helpers/emailTemplates";
 import {
     botChoices,

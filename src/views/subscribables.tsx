@@ -6,7 +6,7 @@ import { Resource, createDefaults, editDefaults, formDefaults, listDefaults, Sim
 import { Group } from '@mui/icons-material';
 import { Create, Edit, List, Menu,
     type ListProps, TextInput, DateField, DateInput, BooleanField, BooleanInput} from "react-admin";
-import {CurriculumLessonsReferenceInput, CurriculumsReferenceField} from "./curriculums.tsx";
+import {CurriculumsReferenceField} from "./curriculums.tsx";
 import {SubscribableList, SubscribableShow} from "./subscriptions/subscribables.tsx";
 
 export const RESOURCE = "subscribables"
@@ -45,7 +45,6 @@ export const SubscribablesCardList = (props: ListProps) => {
 const SubscribableForm = (props: any) => {
     return (
         <SimpleForm {...formDefaults(props)} display="grid"  gridTemplateColumns={{ xs: '1fr', md: '1fr 1fr' }}  gap="1rem" >
-            <CurriculumLessonsReferenceInput source="curriculum_id" />
             <DateInput source="published_date" />
             <BooleanInput source="is_active" />
             <MoneyInput source="one_time_amount" currency="USD" />

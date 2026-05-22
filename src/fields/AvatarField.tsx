@@ -22,15 +22,15 @@ export const AvatarField = (props: {
                 }}
                 title={props.title}
             >
-                {record.first_name?.charAt(0).toUpperCase()}
-                {record.last_name?.charAt(0).toUpperCase()}
+                {record?.first_name?.charAt(0).toUpperCase()}
+                {record?.last_name?.charAt(0).toUpperCase()}
             </MuiAvatar>
         );
     }
 
     return (
         <MuiAvatar
-            src={record.image_file_id[0]?.src ?? undefined}
+            src={record?.image_file_id[0]?.src ?? undefined}
             sx={{
                 width: props.width || defaultSize,
                 height: props.height || defaultSize,

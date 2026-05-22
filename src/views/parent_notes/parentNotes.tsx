@@ -4,7 +4,7 @@ import {
 } from "react-admin";
 import {closeDialog, DataTable, openDialog, SimpleForm} from "@mahaswami/vc-frontend";
 import {Box, Typography, Tooltip} from "@mui/material";
-import {isCoach, isRegularSchoolFlavored} from "../../businessLogic.ts";
+import {isCoach, isRegularSchoolFlavored} from "../../backend/common_logics.ts";
 import {formatDateWithShortYear} from "../../utils.ts";
 import {UsersReferenceField} from "../users.tsx";
 import {ClassesReferenceField} from "../classes.tsx";

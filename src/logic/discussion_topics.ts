@@ -1,6 +1,6 @@
 import { RESOURCE } from "../views/discussion_topics"
 import {getDiscussionTopicEmailTemplate, getGameDiscussionTopicTemplate} from "../helpers/emailTemplates.ts";
-import {sendEmail} from "../businessLogic.ts";
+import {sendEmail} from "../backend/common_logics.ts";
 import {remoteLog} from "@mahaswami/vc-frontend";
 
 export const DiscussionTopicsLogic: any = {

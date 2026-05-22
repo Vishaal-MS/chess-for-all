@@ -5,6 +5,7 @@ import {
     filterByStatus,
     removeTotalClassesCountAtLogin
 } from "../backend/classes.ts";
+import {addDivisionId, filterByDivisionId} from "../backend/common_logics.ts";
 
 export const ClassesLogic: any = {
     resource: RESOURCE,
@@ -17,10 +18,10 @@ export const ClassesLogic: any = {
     afterGetOne: [],
     afterUpdate: [removeTotalClassesCountAtLogin],
     afterUpdateMany: [],
-    beforeCreate: [],
+    beforeCreate: [addDivisionId],
     beforeDelete: [deleteCascadeClass],
     beforeDeleteMany: [],
-    beforeGetList: [filterByStatus, filterByCoachId],
+    beforeGetList: [filterByStatus, filterByCoachId, filterByDivisionId],
     beforeGetMany: [],
     beforeGetManyReference: [],
     beforeGetOne: [],

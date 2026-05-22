@@ -8,7 +8,7 @@ import {
     type ListProps, TextField, TextInput, DateField, DateInput, ReferenceField
 } from "react-admin";
 import { SubscribablesReferenceField, SubscribablesReferenceInput } from './subscribables.js';
-import { isSuperAdmin } from '../businessLogic.js';
+import { isSuperAdmin } from '../backend/common_logics.js';
 import {formatDateWithShortYear} from "../utils.ts";
 import {CurriculumsReferenceField} from "./curriculums.tsx";
 

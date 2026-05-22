@@ -15,7 +15,7 @@ import { createFileFromPGN, updateGameById } from "../../backend/games";
 import { GameContextType, GameEventType, GameStateType, GameResourceType, Player } from "./types";
 import { Dialog } from "@mui/material";
 import { Alert } from "@mui/material";
-import { getStudentId, getUserId, isCoach, isStudent} from "../../businessLogic"
+import { getStudentId, getUserId, isCoach, isStudent} from "../../backend/common_logics"
 import { getGameResult, parseGameFromPgnStr, updateGameHeader, updateResultForPGN } from "./gameUtils";
 import { getTimeControlText } from "../time_controls/timeControlUtils";
 

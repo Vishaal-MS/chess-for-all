@@ -4,7 +4,7 @@ import DateRangeIcon from "@mui/icons-material/DateRange";
 import GradeOutlinedIcon from "@mui/icons-material/GradeOutlined";
 import { Button, useTheme } from "react-admin";
 import CircularProgress from "@mui/material/CircularProgress";
-import {isIndianTenant, isRegularSchoolFlavored } from "../../businessLogic.ts";
+import {isIndianTenant, isRegularSchoolFlavored } from "../../backend/common_logics.ts";
 import TextField from '@mui/material/TextField';
 import { format } from "date-fns";
 import { PerformanceDateRange, ReportViewModes } from "../../helpers/constants.ts";

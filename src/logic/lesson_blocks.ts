@@ -1,6 +1,6 @@
 import { RESOURCE } from "../views/lesson_blocks"
 import {getLocalStorage} from "@mahaswami/vc-frontend";
-import {getDivisionId} from "../businessLogic.ts";
+import {getDivisionId} from "../backend/common_logics.ts";
 
 export const isLargeAcademy = () => {
     const largeAcademy = getLocalStorage("tenant_large_academy");
@@ -33,9 +33,7 @@ export const LessonBlocksLogic: any = {
     afterCreate: [],
     afterDelete: [],
     afterDeleteMany: [],
-    afterGetList: [(params: any) => {
-        return params;
-    }],
+    afterGetList: [],
     afterGetMany: [],
     afterGetManyReference: [],
     afterGetOne: [],

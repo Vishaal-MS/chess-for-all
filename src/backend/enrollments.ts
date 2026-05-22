@@ -3,13 +3,11 @@ import { triggerCalendarEventCreation } from "./classSchedule.ts";
 import { getClassById } from "./classes.ts";
 import {ClassesStatus, EPOCHE_ZERO_DATE, TeachingMode} from "../helpers/constants.ts";
 import {
-    getCurrentParentStudent,
-    getCurrentUserStudentId,
     getTeachingModes,
     isParent,
     isStudent
-} from "../businessLogic.ts";
-import {sendEmailToStudentAndParent} from "./students.ts";
+} from "./common_logics.ts";
+import {getCurrentParentStudent, getCurrentUserStudentId, sendEmailToStudentAndParent} from "./students.ts";
 
 export async function getEnrollmentsForStudents(dataProvider, studentIds) {
     try {
@@ -78,7 +76,7 @@ export const afterDeleteEnrollements = async (result, dataProvider, resource) =>
 const afterUpdateEnrollments = async (resData,dataProvider) => {
     try {
         const {data: scheduleData} = await dataProvider.getList('class_schedules', {filter: {class_id: resData.class_id}, pagination: {page: 1, perPage: 10000}});
-        if(scheduleData.length > 0) {
+        if (scheduleData.length > 0) {
             const classId = resData.class_id;
             const classData: any = await getClassById(dataProvider, classId);
             if (classData.status !== 'draft') {

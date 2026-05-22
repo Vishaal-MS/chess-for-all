@@ -1,7 +1,7 @@
 //Lets parametrise so that this can be used outside of assignments (do not refer to assignments in this file)
 import {AssignmentBlockStatus} from "../../helpers/constants.ts";
 import {handleEnableGameSound, playVoiceOverClip} from "../../helpers/sounds.ts";
-import {isRegularSchoolFlavored, isStudent} from "../../businessLogic.ts";
+import {isRegularSchoolFlavored, isStudent} from "../../backend/common_logics.ts";
 
 class CustomResultPostBack {
     constructor(updateFn?: UpdateFnType) {

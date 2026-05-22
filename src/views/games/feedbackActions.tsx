@@ -1,7 +1,7 @@
 import {useNotify, useRecordContext, useRefresh} from "react-admin";
 import {useState} from "react";
 import {getFeedbackCompletedTemplate, getFeedbackRequestTemplate} from "../../helpers/emailTemplates.ts";
-import {isCoach, sendEmail} from "../../businessLogic.ts";
+import {isCoach, sendEmail} from "../../backend/common_logics.ts";
 import {FeedbackStatus} from "../../helpers/constants.ts";
 import {remoteLog} from "@mahaswami/vc-frontend";
 import {Feedback, Grading} from "@mui/icons-material";

@@ -5,7 +5,7 @@ import {
     isIndianTenant,
     isLargeAcademy,
     isRegularSchoolFlavored
-} from "../businessLogic";
+} from "../backend/common_logics";
 
 export const AssignmentStatus = {
   NOT_STARTED: 'not_started',

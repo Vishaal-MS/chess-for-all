@@ -11,7 +11,7 @@ import {
     updateGameHeader, applyResult,
 } from "./gameUtils.ts";
 import { createPGNFileAndUpdateGame, updateGameById } from "../../backend/games.ts";
-import { getStudentId, getUserId } from "../../businessLogic.ts";
+import { getStudentId, getUserId } from "../../backend/common_logics.ts";
 import {GAME_STATUS, GameModes, BotDifficulty, GAME_ACTIONS, GameEndResult, GAME_RESULTS, GameEntryMethods} from "../../helpers/constants.ts";
 import { GameEventType, GameResourceType, Player } from "./types.ts";
 import { displayTimeWithMillisecond, formatMillisecondsToTime, formatTime } from "../../utils.ts";

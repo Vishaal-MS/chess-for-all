@@ -1,13 +1,12 @@
 import { RESOURCE } from "../views/standards"
+import {addEscapeTenantScoping} from "../backend/common_logics.ts";
 
 export const StandardsLogic: any = {
     resource: RESOURCE,
     afterCreate: [],
     afterDelete: [],
     afterDeleteMany: [],
-    afterGetList: [(params: any) => {
-        return params;
-    }],
+    afterGetList: [],
     afterGetMany: [],
     afterGetManyReference: [],
     afterGetOne: [],
@@ -16,10 +15,10 @@ export const StandardsLogic: any = {
     beforeCreate: [],
     beforeDelete: [],
     beforeDeleteMany: [],
-    beforeGetList: [],
-    beforeGetMany: [],
-    beforeGetManyReference: [],
-    beforeGetOne: [],
+    beforeGetList: [addEscapeTenantScoping],
+    beforeGetMany: [addEscapeTenantScoping],
+    beforeGetManyReference: [addEscapeTenantScoping],
+    beforeGetOne: [addEscapeTenantScoping],
     beforeUpdate: [],
     beforeUpdateMany: [],
     beforeSave: [],

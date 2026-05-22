@@ -1,5 +1,5 @@
 import {remoteLog} from "@mahaswami/vc-frontend";
-import {currentTenantId, getDivisionId, isLargeAcademy} from "../businessLogic.ts";
+import {currentTenantId} from "./common_logics.ts";
 
 export const updateLessonBlockMappings = async (record, dataProvider, resource) => {
     try {
@@ -33,16 +33,4 @@ export const updateLessonBlockMappings = async (record, dataProvider, resource) 
     } catch (error) {
         remoteLog("Error sending on updateLessonBlockMappings: ", error);
     }
-}
-
-export const filterByDivisionId = async (params, dataProvider) => {
-    let newParams = params;
-    if(!newParams) {
-        newParams = {};
-    }
-    if (!isLargeAcademy()) return newParams;
-    if (newParams.meta?.scopingEscapeDivision) return newParams;
-    const divisionId = await getDivisionId();
-    newParams.filter = {...newParams.filter, division_id: divisionId};
-    return newParams;
 }

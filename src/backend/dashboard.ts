@@ -1,6 +1,6 @@
-import { getStudentsForClient} from "../../src/backend/students";
-import {getClassesForCoach} from "../../src/backend/classes";
-import {getEnrollmentsForStudents, getStudentsForClasses} from "../../src/backend/enrollments";
+import { getStudentsForClient} from "./students";
+import {getClassesForCoach} from "./classes";
+import {getEnrollmentsForStudents, getStudentsForClasses} from "./enrollments";
 import { remoteLog } from "@mahaswami/vc-frontend";
 
 export async function addClientDetails(dataProvider, topClients) {

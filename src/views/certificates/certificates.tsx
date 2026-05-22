@@ -2,7 +2,7 @@ import {
     TextInput, FileInput, FileField, Toolbar, Button,
     ImageInput, ImageField, SimpleShowLayout, TextField, Edit, Show, List, DateField
 } from 'react-admin';
-import {isExecutiveCoachingFlavored, isProCoach} from "../../businessLogic";
+import {isExecutiveCoachingFlavored, isProCoach} from "../../backend/common_logics";
 import {DataTable, PER_PAGE, SensibleDefaultPagination, SimpleForm} from "@mahaswami/vc-frontend";
 import {CertificateTemplatesReferenceField, CertificateTemplatesReferenceInput} from "../certificate_templates.tsx";
 import {CoachesReferenceField} from "../coaches.tsx";

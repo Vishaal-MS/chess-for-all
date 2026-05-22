@@ -1,4 +1,4 @@
-import {getStudentId, isStudent} from "../../businessLogic.ts";
+import {getStudentId, isStudent} from "../../backend/common_logics.ts";
 
 export const validateGameCreation = (values: any) => {
     const errors: Record<string, string> = {};

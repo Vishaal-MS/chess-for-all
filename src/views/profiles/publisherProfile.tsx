@@ -7,7 +7,7 @@ import {
     SimpleShowLayout, TopToolbar,
 } from "react-admin";
 import {remoteLog} from "@mahaswami/vc-frontend";
-import {currentTenantId} from "../../businessLogic.ts";
+import {currentTenantId} from "../../backend/common_logics.ts";
 import {useEffect, useState} from "react";
 import {ChessAIField} from "../../fields/ai_lesson/ChessAIField.tsx";
 import {ModeEditTwoTone} from "@mui/icons-material";

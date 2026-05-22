@@ -32,7 +32,7 @@ import { Button } from "@mui/material";
 import Toolbar from '@mui/material/Toolbar';
 import { useEffect, useState } from "react";
 import { SearchInput, TextInput } from 'react-admin';
-import {currentTenantId, isStudent} from "../../businessLogic";
+import {currentTenantId, isStudent} from "../../backend/common_logics";
 import { AssignmentShow } from "../class/assignments.tsx";
 import { Empty } from '../common/empty.tsx';
 import {FullscreenPortal} from "../../components/FullscreenPortal.tsx";

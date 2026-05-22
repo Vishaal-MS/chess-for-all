@@ -1,9 +1,8 @@
 import {getClassById} from "./classes.ts";
-import {ScheduleTypes, UserRoles} from "../helpers/constants.ts";
-import {constructDateTime, convertToIso8601BasicUtc} from "../utils.ts";
-import appConfigOptions from "../../app_config.json";
-import {currentTenantId, getGoogleCalendarId, getTenantName, getUserEmail, isOrgAdmin, isProCoach} from "../businessLogic.ts";
-import {getLocalStorage, remoteLog, swanAPI} from "@mahaswami/vc-frontend";
+import {ScheduleTypes} from "../helpers/constants.ts";
+import {convertToIso8601BasicUtc} from "../utils.ts";
+import {currentTenantId, getGoogleCalendarId, getTenantName, getUserEmail, isOrgAdmin, isProCoach} from "./common_logics.ts";
+import {remoteLog, swanAPI} from "@mahaswami/vc-frontend";
 
 export const beforeCreateClassSchedule = async (params: any, dataProvider: any, resource: string) => {
     const classId = params.data.class_id;
@@ -115,7 +114,7 @@ export const triggerCalendarEventCreation = async (data, classData, actionType) 
             recurrence:[recurrenceRule]
         }
         let response;
-        if(actionType === "create") {
+        if (actionType === "create") {
             response = await createEventInGoogleCalendar(eventDetails);
         } else if(actionType === "update") {
             const calenderId = data?.google_calendar_id_value;

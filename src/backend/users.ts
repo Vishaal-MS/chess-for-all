@@ -1,22 +1,16 @@
 import {getLocalStorage, remoteLog} from "@mahaswami/vc-frontend";
 import {TenantConfigNames, TenantTypes, UserRoles, UserStatus} from "../helpers/constants.ts";
-import {getRole, sendEmail} from "../businessLogic.ts";
-import {getCoachEmailTemplate} from "../helpers/emailTemplates.ts";
-import {isDateExpired} from "../utils.ts";
+import {getRole, sendEmail} from "./common_logics.ts";
+import {getCoachEmailTemplate, getParentNoteEmailTemplate} from "../helpers/emailTemplates.ts";
+import {addAliasToEmail, isDateExpired} from "../utils.ts";
 
 export const createUser = async (userDetails: any) => {
     try {
-        console.log("createUser start: ", userDetails)
         userDetails.email = userDetails?.email?.toLowerCase();
         const dataProvider = window.swanAppFunctions.dataProvider;
-        console.log("userDetails: ", userDetails)
         const { data: userData } = await dataProvider.create('users', {
-            data: {
-                ...userDetails,
-                creation_date: new Date(),
-            }
+            data: { ...userDetails, creation_date: new Date() }
         });
-        console.log("userData: ", userData)
         return userData;
     } catch (error) {
         remoteLog("Error sending on createUser: ", error);
@@ -151,21 +145,10 @@ const addBuiltInSubscriptionsForTenant = async (userTenantId: number, dataProvid
     }
 };
 
-export const addPasswordAuth = async (result: any) => {
-    try {
-        const dataProvider = window.swanAppFunctions.dataProvider;
-        const userData = result.data;
-        await dataProvider.create('password_auths', {
-            data: {
-                user_id: userData.id,
-                password_hash: "",
-            }
-        });
-    } catch (error) {
-        console.error(`Error addind dummy user: ${error}`);
-    } finally {
-        return result;
-    }
+export const addAuthPolicy = (params) => {
+    const { data } = params;
+    data.auth_policy_id = 1;
+    return params;
 }
 
 export const sendUserCreatedEmail = async (response, dataProvider, resource) => {
@@ -319,3 +302,43 @@ export const syncProfileAfterSave = async (result: any, dataProvider: any) => {
     }
     return result;
 };
+
+export const sendEmailToParentAfterCreateNote = async (response, resource) => {
+    try {
+        const parentNoteRecord = response.data;
+        const dataProvider = window.swanAppFunctions.dataProvider;
+        const {data: parentData} = await dataProvider.getOne('users', {id: parentNoteRecord.parent_user_id});
+        const messageTemplate = getParentNoteEmailTemplate(parentData?.fullName);
+        await sendEmail({
+            to: parentData.email,
+            ...messageTemplate
+        })
+        return response;
+    } catch (error) {
+        remoteLog("Error sending on sendEmailToParentAfterCreateNote: ", error);
+    }
+}
+
+export const applyHashToTenant = async (hash: string, tenantId: number, tenantName: string) => {
+    try {
+        const dataProvider = window.swanAppFunctions.dataProvider;
+        const time = new Date().toLocaleString("en-IN",{timeStyle: 'short'});
+        await dataProvider.update("tenants", {
+            id: tenantId,
+            data: { name: `${tenantName} ${time}` }
+        })
+        const { data: users } = await dataProvider.getList("users", {
+            filter: { tenant_id: tenantId }
+        });
+        users.forEach(async (user) => {
+            const emailWithAlias = addAliasToEmail(user.email, hash);
+            await dataProvider.update("users", {
+                id: user.id,
+                data: { email: emailWithAlias }
+            })
+        })
+    } catch (error) {
+        console.error("Failed to apply Hash: ", error);
+        remoteLog("Failed to apply Hash: ", error);
+    }
+}

@@ -1,17 +1,18 @@
 import { useState } from "react";
-import { isSuperAdmin } from "../../businessLogic";
+import { isSuperAdmin } from "../../backend/common_logics";
 import JSZip from "jszip";
 import { saveAs } from "file-saver";
 import categoriesCsv from '../sample_files/standard_sample_files/categories.csv?raw';
 import gradesCsv from '../sample_files/standard_sample_files/grades.csv?raw';
 import sectionsCsv from '../sample_files/standard_sample_files/sections.csv?raw';
-import {closeDialog, DataTable, listDefaults, openDialog} from "@mahaswami/vc-frontend";
+import {closeDialog, DataTable, listDefaults, openDialog, tableDefaults} from "@mahaswami/vc-frontend";
 import {Button, Empty, List, Loading, TextField, TopToolbar, useNotify} from "react-admin";
 import {Typography, TextField as MUITextField, Box} from "@mui/material";
 import {DragAndDropCsvFile} from "../common/dragAndDropCsvFile.tsx";
 import DownloadIcon from '@mui/icons-material/Download';
 import FileUploadRoundedIcon from '@mui/icons-material/FileUploadRounded';
 import { RecordTitle } from "../../components/Title.tsx";
+import {RESOURCE} from "../standards.tsx";
 
 export const StandardList = (props) => {
     const superAdmin = isSuperAdmin();
@@ -48,9 +49,9 @@ export const StandardList = (props) => {
 
 
     return (
-        <List {...listDefaults(props)} resource="standards" empty={<Empty actions={superAdmin ? <ImportButtonToolBar isEmpty/> : false} emptyText={""} />}
+        <List {...listDefaults(props)} empty={<Empty actions={superAdmin ? <ImportButtonToolBar isEmpty/> : false} emptyText={""} />}
                   title={<RecordTitle resourceName={"Standard"}/>} exporter={false} actions={superAdmin ? <ImportButtonToolBar /> : false} sx={{mt: superAdmin ? 0 : 4}}>
-            <DataTable bulkActionButtons={false}>
+            <DataTable { ...tableDefaults(RESOURCE)} bulkActionButtons={false}>
                 <DataTable.Col source="name"/>
             </DataTable>
         </List>

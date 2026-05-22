@@ -15,7 +15,7 @@ import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
 import PlayCircleFilledRoundedIcon from "@mui/icons-material/PlayCircleFilledRounded";
 import {showDefaults} from "@mahaswami/vc-frontend";
 import {RecordTitle} from "../../components/Title.tsx";
-import {isOrgCoach, isProCoach, isStudent} from "../../businessLogic.ts";
+import {isOrgCoach, isProCoach, isStudent} from "../../backend/common_logics.ts";
 import {ClassLessons} from "./classLessons.tsx";
 import AccordionSection from "../../components/AccordionSection.tsx";
 import SchedulePreview from "./SchedulePreview.tsx";

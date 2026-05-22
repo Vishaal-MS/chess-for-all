@@ -1,4 +1,4 @@
-import {isStudent, sendEmail } from "../businessLogic";
+import {isStudent, sendEmail } from "./common_logics.ts";
 import {remoteLog} from "@mahaswami/vc-frontend";
 import {v4 as uuidv4} from "uuid";
 import {AssignmentBlockStatus, AssignmentStatus, TeachingMode} from "../helpers/constants.ts";
@@ -209,41 +209,6 @@ export const assignAssignments = async (classProgress: any, classData: any, teac
         await sendStudentsAssignmentEmail(teachingMode, classData.name, students, assignments);
     } catch (error) {
         remoteLog("Error sending on assignAssignments: ", error);
-    }
-}
-
-export function filterValidLessonBlocks(lessonBlocks: any) {
-    return lessonBlocks.filter(block => {
-        if (!block) return false;
-        if (block.block_type === 'pgn') {
-            return false;
-        }
-        if (block.block_type === 'animated_tutorial') {
-            return block.animated_tutorial && block.animated_tutorial.trim() !== "";
-        }
-        return true;
-    });
-}
-
-export async function retrieveAssignmentWithId(lessonBlockId, assignmentId) {
-    try {
-        const dataProvider = window.swanAppFunctions.dataProvider;
-
-        const {data: assignmentBlocks} = await dataProvider.getList('assignment_blocks', {
-            filter: {
-                assignment_id: Number(assignmentId),
-                lesson_block_id: lessonBlockId,
-            }
-        })
-
-        if (!assignmentBlocks || assignmentBlocks.length === 0) {
-            console.error('Assignment detail not found.');
-            return;
-        }
-        return assignmentBlocks[0];
-    } catch (err) {
-        console.error("Failed to retrieveStudentAssignmentProgress: ", err)
-        remoteLog("Error sending on retrieveStudentAssignmentProgress: ", err);
     }
 }
 

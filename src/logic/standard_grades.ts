@@ -1,3 +1,4 @@
+import {addEscapeTenantScoping, sortByCode} from "../backend/common_logics"
 import { RESOURCE } from "../views/standard_grades"
 
 export const StandardGradesLogic: any = {
@@ -5,9 +6,7 @@ export const StandardGradesLogic: any = {
     afterCreate: [],
     afterDelete: [],
     afterDeleteMany: [],
-    afterGetList: [(params: any) => {
-        return params;
-    }],
+    afterGetList: [],
     afterGetMany: [],
     afterGetManyReference: [],
     afterGetOne: [],
@@ -16,10 +15,10 @@ export const StandardGradesLogic: any = {
     beforeCreate: [],
     beforeDelete: [],
     beforeDeleteMany: [],
-    beforeGetList: [],
-    beforeGetMany: [],
-    beforeGetManyReference: [],
-    beforeGetOne: [],
+    beforeGetList: [addEscapeTenantScoping, sortByCode],
+    beforeGetMany: [addEscapeTenantScoping],
+    beforeGetManyReference: [addEscapeTenantScoping],
+    beforeGetOne: [addEscapeTenantScoping],
     beforeUpdate: [],
     beforeUpdateMany: [],
     beforeSave: [],

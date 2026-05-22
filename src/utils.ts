@@ -3,7 +3,7 @@ import {StatusLabel, StatusValue} from "./helpers/constants.ts";
 import { getEmailsBasedOnEnv } from "./configuration.tsx";
 import { format } from "date-fns";
 import { FunctionComponent, memo } from 'react';
-import {sendEmail} from "./businessLogic.ts";
+import {sendEmail} from "./backend/common_logics.ts";
 import { extractDetailsFromPGNStr } from "./views/games/gameUtils.ts";
 
 export const formatStatus = (status) => {
@@ -602,11 +602,11 @@ export const initServiceWorkerMessageListener = () => {
                 new Error(urls)
             )
             const { supportTeamEmail } = getEmailsBasedOnEnv()
-            sendEmail({
-                to: supportTeamEmail,
-                subject: "CCAI: ChessBoard File Not Found",
-                message: `Here is the missing file urls ${urls}`
-            })
+            // sendEmail({
+            //     to: supportTeamEmail,
+            //     subject: "CCAI: ChessBoard File Not Found",
+            //     message: `Here is the missing file urls ${urls}`
+            // })
         }
     });
 };

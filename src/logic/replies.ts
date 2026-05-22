@@ -1,6 +1,6 @@
 import { RESOURCE } from "../views/replies"
 import {getDiscussionReplyEmailTemplate, getGameDiscussionReplyEmailTemplate} from "../helpers/emailTemplates.ts";
-import {sendEmail} from "../businessLogic.ts";
+import {sendEmail} from "../backend/common_logics.ts";
 import {remoteLog} from "@mahaswami/vc-frontend";
 
 export const RepliesLogic: any = {

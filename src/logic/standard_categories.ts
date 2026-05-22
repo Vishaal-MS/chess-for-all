@@ -1,13 +1,12 @@
 import { RESOURCE } from "../views/standard_categories"
+import {addEscapeTenantScoping, sortByCode} from "../backend/common_logics.ts";
 
 export const StandardCategoriesLogic: any = {
     resource: RESOURCE,
     afterCreate: [],
     afterDelete: [],
     afterDeleteMany: [],
-    afterGetList: [(params: any) => {
-        return params;
-    }],
+    afterGetList: [],
     afterGetMany: [],
     afterGetManyReference: [],
     afterGetOne: [],
@@ -16,10 +15,10 @@ export const StandardCategoriesLogic: any = {
     beforeCreate: [],
     beforeDelete: [],
     beforeDeleteMany: [],
-    beforeGetList: [],
-    beforeGetMany: [],
-    beforeGetManyReference: [],
-    beforeGetOne: [],
+    beforeGetList: [addEscapeTenantScoping, sortByCode],
+    beforeGetMany: [addEscapeTenantScoping],
+    beforeGetManyReference: [addEscapeTenantScoping],
+    beforeGetOne: [addEscapeTenantScoping],
     beforeUpdate: [],
     beforeUpdateMany: [],
     beforeSave: [],

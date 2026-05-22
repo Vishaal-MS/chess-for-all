@@ -18,7 +18,7 @@ import {useEffect, useState} from "react";
 import {TenantConfigNames} from "../../helpers/constants.ts";
 import {StarRating} from "../../components/NumberedStar.tsx";
 import { useLocation } from "react-router-dom";
-import {currentTenantId, getUserId} from "../../businessLogic.ts";
+import {currentTenantId, getUserId} from "../../backend/common_logics.ts";
 import {Empty} from "../common/empty.tsx";
 import {ReviewDetail} from "../reviews/Reviews.tsx";
 import {UsersReferenceField} from "../users.tsx";

@@ -14,7 +14,7 @@ import { ClientsReferenceField, ClientsReferenceInput } from './clients.js';
 import { DivisionsReferenceField, DivisionsReferenceInput } from './divisions.js';
 import { StandardGradesReferenceField, StandardGradesReferenceInput } from './standard_grades.js';
 import { ClientTypes, UserStatus, EPOCHE_ZERO_DATE, studentStatusChoices } from "../helpers/constants.ts";
-import {getStandardId, isRegularSchoolFlavored} from "../businessLogic.ts";
+import {getStandardId, isRegularSchoolFlavored} from "../backend/common_logics.ts";
 import {ExtendedStudentFields} from "./students/extendedStudentFields.tsx";
 import {MyStudentsList} from "./clients/students.tsx";
 import {AddStudents} from "./clients/addStudents.tsx";

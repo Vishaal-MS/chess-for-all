@@ -14,7 +14,7 @@ import {
 import {IconButton, Rating, Tooltip} from "@mui/material";
 import {MarkEmailReadRounded, MarkEmailUnreadRounded} from "@mui/icons-material";
 import {formatDateWithShortYear} from "../../utils.ts";
-import {currentTenantId, isSuperAdmin} from "../../businessLogic";
+import {currentTenantId, isSuperAdmin} from "../../backend/common_logics";
 import {UserRoles} from "../../helpers/constants.ts";
 import {Empty} from "../common/empty.tsx";
 import {SubscribablesReferenceField} from "../subscribables.tsx";

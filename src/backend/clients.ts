@@ -1,5 +1,5 @@
 import { remoteLog } from "@mahaswami/vc-frontend";
-import { getDivisionId, isLargeAcademy } from "../businessLogic.ts";
+import { getDivisionId, isLargeAcademy } from "./common_logics.ts";
 import { ClientTypes } from "../helpers/constants.ts";
 import {DataProvider} from "react-admin";
 
@@ -68,7 +68,9 @@ export const afterCreateClient = async (response: any) => {
                 student = {...student, division_id: getDivisionId()};
             }
             student = {...student, client_id : clientData.id}
-            await dataProvider.create('students', { data: student })
+            student.user = { first_name: meta?.first_name, last_name: meta?.last_name, email: clientData?.email };
+            student.parentUser = meta?.parent_user;
+            await dataProvider.create('students', { data: student });
         }
         const { client_type, ...newData } = clientData
         response.data = newData;

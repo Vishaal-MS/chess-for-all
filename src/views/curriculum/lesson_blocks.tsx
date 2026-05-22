@@ -17,7 +17,7 @@ import {useLocation, useNavigate} from "react-router-dom";
 import React, { useEffect, useMemo, useState, useCallback } from "react";
 import { extractMessageAndConstructKeyMap } from '../../utils.ts';
 import {voiceChoices, VoiceStatus} from "../../helpers/constants.ts";
-import { isAllowedVoiceOver, sendEmail } from '../../businessLogic.ts';
+import { isAllowedVoiceOver, sendEmail } from '../../backend/common_logics.ts';
 import { GraphicEq } from '@mui/icons-material';
 import {generateVoiceOverMessages} from "../../backend/voiceOver.ts";
 

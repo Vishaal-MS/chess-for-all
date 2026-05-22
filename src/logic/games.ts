@@ -1,22 +1,21 @@
 import { RESOURCE } from "../views/games"
+import {addPlayersFilter, initializeGame} from "../backend/games.ts";
 
 export const GamesLogic: any = {
     resource: RESOURCE,
     afterCreate: [],
     afterDelete: [],
     afterDeleteMany: [],
-    afterGetList: [(params: any) => {
-        return params;
-    }],
+    afterGetList: [],
     afterGetMany: [],
     afterGetManyReference: [],
     afterGetOne: [],
     afterUpdate: [],
     afterUpdateMany: [],
-    beforeCreate: [],
+    beforeCreate: [initializeGame],
     beforeDelete: [],
     beforeDeleteMany: [],
-    beforeGetList: [],
+    beforeGetList: [addPlayersFilter],
     beforeGetMany: [],
     beforeGetManyReference: [],
     beforeGetOne: [],

@@ -4,7 +4,7 @@ import {
     useRecordContext, FormDataConsumer, BooleanInput, Edit, Create
 } from "react-admin";
 import {Box, Grid, Typography} from "@mui/material";
-import { isDivisionAdmin, isExecutiveCoachingFlavored, isRegularSchoolFlavored } from "../../businessLogic";
+import { isDivisionAdmin, isExecutiveCoachingFlavored, isRegularSchoolFlavored } from "../../backend/common_logics";
 import {DataTable, editDefaults, formDefaults, listDefaults} from "@mahaswami/vc-frontend";
 import {ListTitle} from "../../components/Title.tsx";
 import {UserRoles, getRoleChoices} from "../../helpers/constants.ts";

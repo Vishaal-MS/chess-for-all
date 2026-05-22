@@ -1,7 +1,7 @@
 import { useRealtimeComms } from "@mahaswami/vc-frontend";
 import { useCallback, useEffect } from "react";
 import { NotificationType, useNotify, useRedirect, Button } from "react-admin";
-import { getUserId } from "../../businessLogic";
+import { getUserId } from "../../backend/common_logics";
 import { SnackbarContent } from '@mui/material';
 
 type ActionType = "offer_draw" | "abandand" | "accepted" | 

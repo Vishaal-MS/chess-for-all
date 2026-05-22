@@ -20,7 +20,7 @@ import DiscussionBoard from "../discussion/DiscussionBoard.tsx";
 import {ClassesStatus, TeachingMode} from "../../helpers/constants.ts";
 import {RecordTitle} from "../../components/Title.tsx";
 import StopCircleIcon from '@mui/icons-material/StopCircle';
-import {isExecutiveCoachingFlavored, isRegularSchoolFlavored} from "../../businessLogic.ts";
+import {isExecutiveCoachingFlavored, isRegularSchoolFlavored} from "../../backend/common_logics.ts";
 import {remoteLog, setLocalStorage} from "@mahaswami/vc-frontend";
 import { AvatarField } from "../../fields/AvatarField.tsx";
 import {useNavigate} from "react-router-dom";

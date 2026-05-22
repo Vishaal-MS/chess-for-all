@@ -11,7 +11,7 @@ import {
     useCreate,
     useNotify,
 } from "react-admin";
-import { getUserId } from "../../businessLogic";
+import { getUserId } from "../../backend/common_logics";
 
 type RecordType = {
     referencesData?: Record<string, number>;

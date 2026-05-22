@@ -16,7 +16,7 @@ import {useState} from "react";
 import {validatePhoneNumber} from "../../helpers/phoneNumberValidation.ts";
 import {getLocalStorage} from "@mahaswami/vc-frontend";
 import {getDOBDateRange} from "../../backend/students.ts";
-import {isRegularSchoolFlavored} from "../../businessLogic.ts";
+import {isRegularSchoolFlavored} from "../../backend/common_logics.ts";
 import {StudentStatusSelect} from "./../students.tsx";
 import {StandardGradesReferenceInput} from "../standard_grades.tsx";
 

@@ -7,7 +7,7 @@ import {
     getStandardId,
     isAnySchoolFlavorActive,
     isRegularSchoolFlavored, isSchoolStandardLinked
-} from "../../businessLogic.ts";
+} from "../../backend/common_logics.ts";
 import {removeLocalStorage, setLocalStorage} from "@mahaswami/vc-frontend";
 import DownloadIcon from "@mui/icons-material/Download";
 import { saveAs } from "file-saver";

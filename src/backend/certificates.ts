@@ -45,27 +45,3 @@ export async function getTrophiesByCoach(dataProvider, currentCoachId) {
         remoteLog("Error sending on getTrophiesByCoach: ", error);
     }
 }
-
-export async function getCertificatesByClient(dataProvider, clientId) {
-    try {
-        const {data: certificates} = await dataProvider.getList('certificates', {
-            filter: {client_id: clientId},
-            pagination: {page: 1, perPage: 1000},
-        });
-        return certificates;
-    } catch (error) {
-        remoteLog("Error sending on getCertificatesByClient: ", error);
-    }
-}
-
-export async function getTrophiesByClient(dataProvider, clientId) {
-    try {
-        const {data: trophies} = await dataProvider.getList('trophies', {
-            filter: {client_id: clientId},
-            pagination: {page: 1, perPage: 1000},
-        });
-        return trophies;
-    } catch (error) {
-        remoteLog("Error sending on getTrophiesByClient: ", error);
-    }
-}

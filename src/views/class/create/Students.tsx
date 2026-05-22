@@ -4,7 +4,7 @@ import {
 import {Box} from "@mui/material";
 import {EnrollStudentsButton, EnrollStudentsDialog} from "../addStudents.tsx";
 import {DataTable, PER_PAGE, SensibleDefaultPagination} from "@mahaswami/vc-frontend";
-import {isExecutiveCoachingFlavored} from "../../../businessLogic.ts";
+import {isExecutiveCoachingFlavored} from "../../../backend/common_logics.ts";
 import { AvatarField } from "../../../fields/AvatarField.tsx";
 import {Empty} from "../../common/empty.tsx";
 import {useEffect} from "react";
@@ -36,33 +36,37 @@ const Students = ({showStudentList, setShowStudentList, classRecord }) => {
     }
 
     return (
-    <Box sx={{ height: 'calc(100vh - 15rem)', overflow: 'auto'}}>
+        <Box sx={{ height: 'calc(100vh - 15rem)', overflow: 'auto'}}>
             <ReferenceManyField reference="enrollments" perPage={PER_PAGE} target={"class_id"} record={{ id: recordId }}
                                 pagination={<SensibleDefaultPagination />} queryOptions={{meta: {prefetch: ['students']}}}>
                 <DataTable empty={<Empty emptyText={'No students yet'}/>} bulkActionButtons={false} rowClick={false} >
-                    <UsersReferenceField source="student.user_id" label={isExecutiveCoachingFlavor ? "Executive" : "Student"}
-                                         link={false} sx={{display: "flex", alignItems: "center", gap: 1}}>
-                        <AvatarField/>
-                    </UsersReferenceField>
+                    <DataTable.Col label={isExecutiveCoachingFlavor ? "Executive" : "Student"} source='student.user_id' field={() =>
+                        <UsersReferenceField source="student.user_id" link={false} sx={{display: "flex", alignItems: "center", gap: 1}}>
+                            <AvatarField/>
+                            <TextField source="fullName"/>
+                        </UsersReferenceField>
+                    } />
                     {!(isSchoolClass || isExecutiveCoachingFlavor) &&
-                        <ClientsReferenceField label="Type" source="student.client_id" link={false}>
-                            <TextField source="client_type.name" />
-                        </ClientsReferenceField>
+                        <DataTable.Col label="Type" source="student.client_id" field={() =>
+                            <ClientsReferenceField label="Type" source="student.client_id" link={false}>
+                                <TextField source="client_type.name" />
+                            </ClientsReferenceField>
+                        } />
                     }
                     {!(isSchoolClass || isExecutiveCoachingFlavor) &&
-                        <ClientsReferenceField source="student.client_id" label="Client" link={false}/>}
-                    <TextField source="student.emergency_contact" label="Emergency Contact"/>
+                        <DataTable.Col source="student.client_id" label="Client" field={() =>
+                            <ClientsReferenceField source="student.client_id" label="Client" link={false}/>} /> }
+                    <DataTable.Col source="student.emergency_contact" label="Emergency Contact"/>
                     {!isExecutiveCoachingFlavor && (
                         !isSchoolClass ?
-                            <TextField source="student.grade" label="Grade"/> :
-                            <StandardGradesReferenceField source="student.standard_grade_id" label="Grade" link={false} />
+                            <DataTable.Col source="student.grade" label="Grade"/> :
+                            <DataTable.Col source="student.standard_grade_id" label="Grade" field={StandardGradesReferenceField} />
                     )}
-                    <DeleteButton label={false} redirect={'/classes/create'}/>
+                    <DataTable.Col label={false} field={() => <DeleteButton label={false} redirect={'/classes/create'}/> } />
                 </DataTable>
             </ReferenceManyField>
             <EnrollStudentsButton classRecord={classRecord} refreshFn={refresh}/>
         </Box>
-
     )
 }
 

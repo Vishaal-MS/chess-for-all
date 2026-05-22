@@ -1,5 +1,5 @@
 import { useState } from "react";
-import {currentTenantId} from "../../businessLogic.ts";
+import {currentTenantId} from "../../backend/common_logics.ts";
 import {Box, Card, CardContent, Typography} from "@mui/material";
 import {Button, useNotify} from "react-admin";
 import { remoteLog } from "@mahaswami/vc-frontend";

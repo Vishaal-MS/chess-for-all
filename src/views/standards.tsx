@@ -4,8 +4,7 @@ import { Resource, createDefaults,
 	type ResourceActionDefs, type FieldSchema, CardGrid, createReferenceField, createReferenceInput, TextLiveFilter} from '@mahaswami/vc-frontend';
 import { Description } from '@mui/icons-material';
 import {
-    Create, Edit, List, Menu, Show,
-    type ListProps, TextField, TextInput, required, TabbedForm, useGetRecordId
+    Create, Edit, Menu, Show, TextField, TextInput, required, TabbedForm, useGetRecordId
 } from "react-admin";
 import {StandardList} from "./standards/StandardList.tsx";
 import { CategoryList } from './categories/Categories.tsx';

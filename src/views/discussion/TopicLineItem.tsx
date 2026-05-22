@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Typography, Tooltip } from "@mui/material";
 import { dataProvider, remoteLog } from "@mahaswami/vc-frontend";
-import { getUserId } from "../../businessLogic";
+import { getUserId } from "../../backend/common_logics";
 
 type TopicLineItemProps = {
     text: string;

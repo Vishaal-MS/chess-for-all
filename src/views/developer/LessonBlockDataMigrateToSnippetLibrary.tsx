@@ -1,7 +1,7 @@
 import {useState} from "react";
 import {Grid, Card, CardContent, CircularProgress} from "@mui/material";
 import {Button} from "react-admin";
-import {currentTenantId} from "../../businessLogic.ts";
+import {currentTenantId} from "../../backend/common_logics.ts";
 import { remoteLog } from "@mahaswami/vc-frontend";
 
 export const LessonBlockDataMigrateToSnippetLibrary = () => {

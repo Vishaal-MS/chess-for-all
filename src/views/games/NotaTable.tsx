@@ -6,7 +6,7 @@ import { Info, OutlinedFlag } from "@mui/icons-material";
 import { closeDialog, openDialog, remoteLog, useRealtimeComms } from "@mahaswami/vc-frontend";
 import { getGamePGN, parseGameFromPgnStr, scrollToMove } from "./gameUtils.ts";
 import { GAME_ACTIONS, GameModes } from "../../helpers/constants.ts";
-import { getStudentId, isCoach, getUserId } from "../../businessLogic.ts";
+import { getStudentId, isCoach, getUserId } from "../../backend/common_logics.ts";
 import { useGamePlay } from "./GamePlayView.tsx";
 import MovesTable from "./MovesTable.tsx";
 import { Chess } from "chess.js";

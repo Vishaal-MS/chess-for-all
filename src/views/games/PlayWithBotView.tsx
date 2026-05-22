@@ -5,7 +5,7 @@ import { GameEndModal } from "./GameEndModal";
 import { GAME_RESULTS, GAME_STATUS, GameEndResult, GameModes } from "../../helpers/constants";
 import { useNavigate } from "react-router-dom";
 import { applyResult, disableBoard, getGamePGN, parseGameFromPgnStr } from "./gameUtils";
-import { getStudentId } from "../../businessLogic";
+import { getStudentId } from "../../backend/common_logics";
 import { createPGNFileAndUpdateGame } from "../../backend/games";
 
 export type Player = {

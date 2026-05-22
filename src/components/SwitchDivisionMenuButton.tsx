@@ -3,10 +3,10 @@ import { Box, Button, Menu, MenuItem, styled } from '@mui/material';
 import FolderIcon from '@mui/icons-material/Folder';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { getLocalStorage, setLocalStorage, useRealtimeComms } from '@mahaswami/vc-frontend';
-import { getDivisionId, isLargeAcademy, isDivisionAdmin, isDivisionCoach } from "../businessLogic.ts";
+import { getDivisionId, isLargeAcademy, isDivisionAdmin, isDivisionCoach } from "./../backend/common_logics.ts";
 import { useNavigate } from 'react-router-dom';
 import { useRefresh } from "react-admin";
-import { isOrgAdmin } from '../businessLogic.ts';
+import { isOrgAdmin } from '../backend/common_logics.ts';
 
 export const SwitchDivisionMenuButton = (props: SwitchProjectMenuButtonProps) => {
     const {icon = DefaultIcon} = props;

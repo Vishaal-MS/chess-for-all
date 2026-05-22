@@ -1,9 +1,10 @@
 import {Fragment, useEffect, useState} from "react";
 import {Loading, Title, useSidebarState} from "react-admin";
-import {getCurrentParentStudent, getParentId} from "../../businessLogic";
+import {getParentId} from "../../backend/common_logics";
 import {ListTitle} from "../../components/Title.tsx";
 import ParentStudentDashboard from "./ParentAndStudentDashBoard.tsx";
 import { remoteLog } from "@mahaswami/vc-frontend";
+import {getCurrentParentStudent} from "../../backend/students.ts";
 
 export const Parentmaindashboard = () => {
 

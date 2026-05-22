@@ -1,6 +1,21 @@
-import { getLocalStorage, setLocalStorage, removeLocalStorage, OmniSearchBox, dataProvider as vcDataProvider } from "@mahaswami/vc-frontend";
-
+import { getLocalStorage, setLocalStorage, removeLocalStorage, dataProvider as vcDataProvider } from "@mahaswami/vc-frontend";
+import polyglotI18nProvider from 'ra-i18n-polyglot';
+import englishMessages from './i18n/en';
+import frenchMessages from './i18n/fr';
+import {ClassesStatus, TenantConfigNames, TenantTypeLookup, UserRoles} from "./helpers/constants.ts";
+import {
+    getUserId,
+    isCoach,
+    isDivisionAdmin,
+    isDivisionCoach,
+    isLargeAcademy,
+    isOrgAdmin,
+    isProCoach
+} from "./backend/common_logics.ts";
+import {getRemoteAndHybridClassEnrollments} from "./backend/enrollments.ts";
+import {SwitchDivisionMenuButton} from "./components/SwitchDivisionMenuButton.tsx";
 import appConfigOptions from '../vegacore.json';
+
 export const appTitlePrefix = () => {
     const appTitle = appConfigOptions.title;
     return appTitle;
@@ -33,7 +48,6 @@ export const postLogin = async (dataProvider: any, user: any) => {
     if (getLocalStorage("role") === "super_admin") {
         return;
     }
-    console.log("Role: ", getLocalStorage("role"));
     const isStudent = getLocalStorage("role") === "student";
     const postLoginPromises = [
         dataProvider.getList('classes'),
@@ -145,9 +159,7 @@ export const postLogout = () => {
     removeLocalStorage('tenant_school_standard_linked');
     removeLocalStorage('is_app_sound_enabled');
     removeLocalStorage('class_game_state');
-    const keysToRemove = [
-        'student_id',
-    ]
+    const keysToRemove = ['student_id']
     keysToRemove.forEach(key => removeLocalStorage(key));
 }
 
@@ -227,22 +239,6 @@ export const themes = (defaultThemes: any) => {
 export const wrapCustomDataProvider = (queryClient: any, dataProvider: any) => {
     return dataProvider;
 }
-
-import polyglotI18nProvider from 'ra-i18n-polyglot';
-import englishMessages from './i18n/en';
-import frenchMessages from './i18n/fr';
-import {ClassesStatus, TenantConfigNames, TenantTypeLookup, UserRoles} from "./helpers/constants.ts";
-import {
-    getUserId,
-    isCoach,
-    isDivisionAdmin,
-    isDivisionCoach,
-    isLargeAcademy,
-    isOrgAdmin,
-    isProCoach
-} from "./businessLogic.ts";
-import {getRemoteAndHybridClassEnrollments} from "./backend/enrollments.ts";
-import {SwitchDivisionMenuButton} from "./components/SwitchDivisionMenuButton.tsx";
 
 const messages = {
     fr: frenchMessages,

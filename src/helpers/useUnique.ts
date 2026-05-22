@@ -1,7 +1,7 @@
 import {useCallback} from 'react';
 import merge from 'lodash/merge';
 import {InputProps, isEmpty, useRecordContext, useResourceContext, useTranslate, useTranslateLabel,} from 'ra-core';
-import {currentTenantId} from "../businessLogic.ts";
+import {currentTenantId} from "../backend/common_logics.ts";
 import {dataProvider} from "@mahaswami/vc-frontend";
 
 

@@ -1,8 +1,10 @@
 import { RESOURCE } from "../views/reviews"
+import {filterByDivisionId} from "../backend/common_logics.ts";
+import {createOrUpdatePublisherRating, sendReviewAddedEmail, updateAvgRating} from "../backend/reviews.ts";
 
 export const ReviewsLogic: any = {
     resource: RESOURCE,
-    afterCreate: [],
+    afterCreate: [sendReviewAddedEmail, updateAvgRating, createOrUpdatePublisherRating],
     afterDelete: [],
     afterDeleteMany: [],
     afterGetList: [],
@@ -14,7 +16,7 @@ export const ReviewsLogic: any = {
     beforeCreate: [],
     beforeDelete: [],
     beforeDeleteMany: [],
-    beforeGetList: [],
+    beforeGetList: [filterByDivisionId],
     beforeGetMany: [],
     beforeGetManyReference: [],
     beforeGetOne: [],

@@ -4,7 +4,7 @@ import {useEffect, useState} from "react";
 import {
     isAcademy,
     isExecutiveCoachingFlavored,
-} from "../../businessLogic.ts";
+} from "../../backend/common_logics.ts";
 import {formatDateWithShortYear} from "../../utils.ts";
 import { remoteLog } from "@mahaswami/vc-frontend";
 

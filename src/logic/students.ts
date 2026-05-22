@@ -1,5 +1,11 @@
 import { RESOURCE } from "../views/students"
-import {beforeCreateStudentUserAndParentUser, populateMultipleUser, populateSingleUser} from "../backend/students.ts";
+import {
+    beforeCreateStudentUserAndParentUser,
+    beforeUpdateStudent,
+    populateMultipleUser,
+    populateSingleUser
+} from "../backend/students.ts";
+import {addDivisionId, filterByDivisionId} from "../backend/common_logics.ts";
 
 export const StudentsLogic: any = {
     resource: RESOURCE,
@@ -12,14 +18,14 @@ export const StudentsLogic: any = {
     afterGetOne: [populateSingleUser],
     afterUpdate: [],
     afterUpdateMany: [],
-    beforeCreate: [beforeCreateStudentUserAndParentUser],
+    beforeCreate: [addDivisionId, beforeCreateStudentUserAndParentUser],
     beforeDelete: [],
     beforeDeleteMany: [],
-    beforeGetList: [],
+    beforeGetList: [filterByDivisionId],
     beforeGetMany: [],
     beforeGetManyReference: [],
     beforeGetOne: [],
-    beforeUpdate: [],
+    beforeUpdate: [beforeUpdateStudent],
     beforeUpdateMany: [],
     beforeSave: [(data) => {
         data.client_type = undefined;

@@ -7,7 +7,7 @@ import { ChessAIField } from '../../fields/ai_lesson/ChessAIField';
 import {Box, Button, IconButton, Paper, Tooltip} from "@mui/material";
 import {StudentProgressField} from "./assignmentList.tsx";
 import { updateAssignmentTimeSpent } from '../../backend/assignments.ts';
-import {isCoach, isStudent} from "../../businessLogic.ts";
+import {isCoach, isStudent} from "../../backend/common_logics.ts";
 import KeyboardReturnIcon from "@mui/icons-material/KeyboardReturn";
 import {Celebration} from "../../helpers/Celebration.tsx";
 import { useLocation, useNavigate } from 'react-router-dom';

@@ -10,7 +10,7 @@ import {Fragment, useEffect, useState} from "react";
 import {
     currentTenantId,
     isExecutiveCoachingFlavored,
-} from "../../businessLogic.ts";
+} from "../../backend/common_logics.ts";
 import {EnrolmentStatus} from "../../helpers/constants.ts";
 import { FilterButtons } from './AddLessonFilterForm.tsx';
 import { getUnEnrollmentStudents } from '../../backend/students.ts';

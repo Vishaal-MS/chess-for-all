@@ -5,7 +5,6 @@ import {ResourceContextProvider,Link,TextField,List,
 import {CardWithBGIconOnRight} from "../../components/CardWithIcon";
 import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
 import CastForEducationIcon from '@mui/icons-material/CastForEducation';
-import {getCurrentUserStudentId} from "../../businessLogic";
 import {DBCard} from "../../components/DBCard";
 import {formatStatus} from "../../utils";
 import StackedProgressBar from "../../components/StackedProgressBar";
@@ -13,6 +12,7 @@ import {DataTable, remoteLog} from "@mahaswami/vc-frontend";
 import {AssignmentStatus, ClassesStatus, CertificateStatus, TrophiesStatus} from "../../helpers/constants.ts";
 import {ClassesReferenceField} from "../classes.tsx";
 import {UsersReferenceField} from "../users.tsx";
+import {getCurrentUserStudentId} from "../../backend/students.ts";
 
 export const Studentmaindashboard = () =>{
     const dataProvider = window.swanAppFunctions.dataProvider;

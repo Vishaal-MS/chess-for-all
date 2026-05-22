@@ -4,8 +4,8 @@ import {
 } from '@mahaswami/vc-frontend';
 import { Category } from '@mui/icons-material';
 import {Menu} from "react-admin";
-import {isSuperAdmin} from "../businessLogic.ts";
 import {ReviewsList} from "./reviews/Reviews.tsx";
+import {isSuperAdmin} from "../backend/common_logics.ts";
 
 export const RESOURCE = "reviews"
 export const ICON = Category

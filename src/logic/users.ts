@@ -1,15 +1,12 @@
 import { RESOURCE } from "../views/users"
 import {
-    addPasswordAuth,
-    afterGetMultipleUser,
-    afterGetOneUser,
-    completeTenantSetup, mergeProfileOnRead,
+    addAuthPolicy, afterGetMultipleUser, afterGetOneUser, completeTenantSetup, mergeProfileOnRead,
     sendUserCreatedEmail, stripProfileFieldsBeforeSave, syncProfileAfterCreate, syncProfileAfterSave, updateClientEmail
 } from "../backend/users.ts";
 
 export const UsersLogic: any = {
     resource: RESOURCE,
-    afterCreate: [addPasswordAuth, syncProfileAfterCreate, sendUserCreatedEmail, completeTenantSetup, afterGetOneUser],
+    afterCreate: [syncProfileAfterCreate, sendUserCreatedEmail, completeTenantSetup, afterGetOneUser],
     afterDelete: [],
     afterDeleteMany: [],
     afterGetList: [afterGetMultipleUser],
@@ -18,7 +15,7 @@ export const UsersLogic: any = {
     afterGetOne: [afterGetOneUser],
     afterUpdate: [syncProfileAfterSave, afterGetOneUser],
     afterUpdateMany: [],
-    beforeCreate: [],
+    beforeCreate: [addAuthPolicy],
     beforeDelete: [],
     beforeDeleteMany: [],
     beforeGetList: [],

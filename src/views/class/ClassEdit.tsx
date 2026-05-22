@@ -5,7 +5,7 @@ import {
 } from "react-admin";
 import {
     isAcademy, isRegularSchoolFlavored, isExecutiveCoachingFlavored
-} from "../../businessLogic";
+} from "../../backend/common_logics";
 import { Box } from "@mui/material";
 import {useNavigate} from "react-router-dom";
 import {

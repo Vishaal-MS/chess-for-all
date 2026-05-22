@@ -5,16 +5,10 @@ import {Button, useGetRecordId, useRecordContext} from "react-admin";
 import {Box, Typography, Menu, MenuItem, Fade, Backdrop, CircularProgress} from "@mui/material";
 import {Create,SimpleForm,TextInput,useRedirect,useNotify} from "react-admin"
 import {
-    closeDialog,
-    DataTable,
-    getLocalStorage,
-    openDialog,
-    remoteLog,
-    showDefaults,
-    tableDefaults
+    closeDialog, DataTable, getLocalStorage, openDialog, remoteLog, showDefaults
 } from "@mahaswami/vc-frontend";
 import RateReviewRoundedIcon from '@mui/icons-material/RateReviewRounded';
-import {currentTenantId, getUserId, isSuperAdmin} from "../../businessLogic";
+import {currentTenantId, getUserId, isSuperAdmin} from "../../backend/common_logics";
 import nlp from 'compromise';
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import {DuplicateDialog} from "../../components/DuplicateDialog.tsx";
@@ -31,7 +25,6 @@ import {CurriculumListView} from "../curriculum/curriculumListView.tsx";
 import {CurriculumShowView} from "../curriculum/curriculumShowView.tsx";
 import {formatCurrency } from "../../utils.ts";
 import FuzzySearchBox from "../common/FuzzySearchBox.tsx";
-import {RESOURCE} from "../subscribables.tsx";
 
 export const SubscribableList = () => {
     const dataProvider = window.swanAppFunctions.dataProvider;

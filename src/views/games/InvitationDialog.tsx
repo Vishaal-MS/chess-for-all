@@ -1,5 +1,5 @@
 
-import { getUserId } from "../../businessLogic";
+import { getUserId } from "../../backend/common_logics";
 import { useEffect, useState } from "react";
 import { Confirm, useRecordContext } from "react-admin";
 import { GAME_ACTIONS, GAME_STATUS } from "../../helpers/constants";

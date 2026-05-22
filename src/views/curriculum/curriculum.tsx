@@ -1,27 +1,9 @@
 import {
-    AutocompleteInput,
-    Button,
-    EditButton, FunctionField,
-    ReferenceManyField,
-    required,
-    SearchInput,
-    ShowButton,
-    TextInput,
-    TopToolbar,
-    useGetRecordId, useNotify,
-    useRecordContext,
-    useRefresh, SelectInput, useSidebarState, Link,
+    AutocompleteInput, Button, EditButton, FunctionField, ReferenceManyField, required, ShowButton, TextInput,
+    TopToolbar, useGetRecordId, useNotify, useRecordContext, useRefresh, SelectInput, useSidebarState, Link,
     BooleanInput, FormDataConsumer, useGetList, List, Edit, Show, Create
 } from 'react-admin';
-import {
-    Box,
-    Typography,
-    TextField as MUITextField,
-    Divider,
-    Grid,
-    Switch,
-    FormControlLabel,
-} from '@mui/material';
+import {Box, Typography, TextField as MUITextField, Divider, Grid, Switch, FormControlLabel,} from '@mui/material';
 import chessbackground from '../../images/chessbackground.jpeg';
 import React, {useEffect, useState} from "react";
 import {
@@ -29,13 +11,11 @@ import {
     getStandardId, isAllowPublishing,
     isRegularSchoolFlavored,
     isSchoolStandardLinked
-} from "../../businessLogic";
+} from "../../backend/common_logics";
 import {
     closeDialog, createDefaults, DataTable,
     editDefaults, formDefaults, listDefaults,
-    openDialog,
-    PER_PAGE,
-    remoteLog,
+    openDialog, remoteLog,
     SensibleDefaultPagination, showDefaults,
     SimpleFileInput, SimpleForm,
     SimpleImageField
@@ -66,17 +46,6 @@ export const CurriculumList = (props: any) => {
         setDefaultFilter({tenant_id: currentTenantId()});
     },[]);
 
-    const filters = [
-        <SearchInput source="q" alwaysOn sx={{
-            '& .MuiFilledInput-input': {
-                height: '2em',
-            }}}/>,
-        <SelectInput source="language" alwaysOn choices={getLanguagesMap()} sx={{
-            '& .MuiFilledInput-input': {
-                minWidth: '160px',
-            }}} />,
-    ];
-
     useEffect(() => {
         const dataProvider = window.swanAppFunctions.dataProvider;
         const isPublish =  isAllowPublishing()
@@ -95,8 +64,7 @@ export const CurriculumList = (props: any) => {
 
     return(
         <List {...listDefaults(props)} title={<ListTitle resourceName="Curriculum List"/>} resource={"curriculum"} filter={defaultFilter} disableSyncWithLocation
-              pagination={<SensibleDefaultPagination />}  sort={{field: "name", order: "ASC"}}
-              perPage={PER_PAGE} exporter={false} empty={<Empty emptyText="No Curriculum found." showCreateIfApplicable={true}/>}>
+              sort={{field: "name", order: "ASC"}} exporter={false} empty={<Empty emptyText="No Curriculum found." showCreateIfApplicable={true}/>}>
             <DataTable bulkActionButtons={false}>
                 <CurriculumListView currentView={"curriculum"} subscribables={subscribableList} setRefreshState={setRefreshState} />
             </DataTable>
@@ -331,16 +299,6 @@ export const CurriculumShow = (props: any) => {
             <CurriculumShowView currentView={"curriculum"}/>
         </Show>
     )};
-
-const AddButton = ({onSelect}) => {
-    const record = useRecordContext();
-
-    const callSelection = (event) => {
-        event.stopPropagation();
-        onSelect(record);
-    }
-    return <Button  variant="contained" label="Add" onClick={callSelection}></Button>
-}
 
 export const CurriculumCreate = (props) => {
     const unique = useUnique();

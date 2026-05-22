@@ -4,7 +4,7 @@ import {
     TextInput,
     TopToolbar, useNotify, useUnique
 } from "react-admin"
-import {isSuperAdmin} from "../../businessLogic.ts";
+import {isSuperAdmin} from "../../backend/common_logics.ts";
 import {
     closeDialog,
     DataTable,

@@ -15,10 +15,8 @@ import {Box} from "@mui/material";
 import {useFormContext} from "react-hook-form";
 import {
     getTeachingModes,
-    isExecutiveCoachingFlavored,
-    sendEmailToStudentAndParent,
-    updateUsersInActiveStatusByCreateEnrollments
-} from "../../../businessLogic.ts";
+    isExecutiveCoachingFlavored
+} from "../../../backend/common_logics.ts";
 import {createDefaults, formDefaults, getLocalStorage, remoteLog, SimpleForm} from "@mahaswami/vc-frontend";
 import ClassDetails from "./ClassDetails.tsx";
 import Lessons from "./Lessons.tsx";
@@ -29,6 +27,7 @@ import {deleteClassAndRelationships, updateClassAndSchedule} from "../../../back
 import {ClassesStatus, getStepsLabel, EPOCHE_ZERO_DATE} from "../../../helpers/constants.ts";
 import {Summary} from "../summary.tsx";
 import {useSearchParams} from "react-router-dom";
+import {sendEmailToStudentAndParent} from "../../../backend/students.ts";
 
 const CreateClass = (props: any) => {
     const dataProvider = window.swanAppFunctions.dataProvider;
@@ -53,23 +52,7 @@ const CreateClass = (props: any) => {
         if (sidebarOpen) {
             setSidebarVisibility(false);
         }
-    }, [])
-
-    // useEffect(() => {
-    //     return () => {
-    //         if(!isFinishedRef.current && classRecordRef.current) {
-    //             setIsDirty(true);
-    //         }
-    //     }
-    // }, []);
-    //
-    // useNavigationPrompt({
-    //     when: isDirty,
-    //     message: "Some of your changes weren't saved. Are you sure you want to ignore them?",
-    //     onConfirm: async () => {
-    //         await handleOnCancel();
-    //     },
-    // })
+    }, []);
 
     const handleOnCancel = async (callback?: () => void) => {
         if(!classRecordRef.current || !classRecordRef.current.id) return;
